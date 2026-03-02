@@ -1,0 +1,920 @@
+html<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAN — Disability Access Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:      #1F3864;
+    --teal:      #1A7A7A;
+    --teal-lt:   #e8f4f4;
+    --sand:      #F5F1EB;
+    --sand-dk:   #EDE8DF;
+    --ink:       #1a1a1a;
+    --muted:     #6b7280;
+    --border:    #d9d3c8;
+    --white:     #ffffff;
+    --danger:    #c0392b;
+    --success:   #1A7A7A;
+    --advisor-accent: #1F3864;
+    --family-accent:  #1A7A7A;
+    --radius:    12px;
+    --radius-sm: 6px;
+    --shadow:    0 2px 12px rgba(31,56,100,0.10);
+    --shadow-lg: 0 8px 32px rgba(31,56,100,0.14);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  #landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--sand);
+  }
+  .landing-inner { max-width: 560px; width: 100%; text-align: center; }
+  .dan-wordmark {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: var(--navy);
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: .25rem;
+  }
+  .dan-tagline {
+    font-size: .875rem;
+    color: var(--teal);
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  .landing-intro {
+    font-size: 1.0625rem;
+    color: var(--ink);
+    line-height: 1.65;
+    margin-bottom: 2.5rem;
+  }
+  .flow-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .flow-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.25rem;
+    cursor: pointer;
+    background: var(--white);
+    transition: all .18s ease;
+    text-align: left;
+  }
+  .flow-card:hover { border-color: var(--navy); box-shadow: var(--shadow); transform: translateY(-2px); }
+  .flow-card.advisor:hover { border-color: var(--advisor-accent); }
+  .flow-card.family:hover  { border-color: var(--family-accent); }
+  .flow-card-label {
+    font-size: .6875rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+  .flow-card.advisor .flow-card-label { color: var(--advisor-accent); }
+  .flow-card.family  .flow-card-label { color: var(--family-accent); }
+  .flow-card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin-bottom: .5rem;
+    line-height: 1.2;
+  }
+  .flow-card-desc { font-size: .8125rem; color: var(--muted); line-height: 1.5; }
+  .landing-note { font-size: .8125rem; color: var(--muted); line-height: 1.6; }
+  #chat-shell {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 760px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .875rem 1.25rem;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .chat-header-left { display: flex; align-items: center; gap: .75rem; }
+  .header-wordmark {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.375rem;
+    color: var(--navy);
+    letter-spacing: -.5px;
+  }
+  .flow-badge {
+    font-size: .6875rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .25rem .625rem;
+    border-radius: 99px;
+  }
+  .flow-badge.advisor { background: #e8ecf4; color: var(--advisor-accent); }
+  .flow-badge.family  { background: var(--teal-lt); color: var(--teal); }
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background: var(--sand);
+  }
+  .msg-row { display: flex; gap: .75rem; max-width: 640px; }
+  .msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg-row.dan  { align-self: flex-start; }
+  .msg-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .75rem; font-weight: 700;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .dan  .msg-avatar { background: var(--navy); color: var(--white); }
+  .user .msg-avatar { background: var(--teal-lt); color: var(--teal); font-size: .6875rem; }
+  .msg-content { display: flex; flex-direction: column; gap: .375rem; }
+  .msg-bubble {
+    padding: .875rem 1rem;
+    border-radius: var(--radius);
+    font-size: .9375rem;
+    line-height: 1.6;
+  }
+  .dan  .msg-bubble { background: var(--white); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
+  .user .msg-bubble { background: var(--navy); color: var(--white); border-bottom-right-radius: 3px; }
+  .msg-feedback {
+    display: flex; align-items: center; gap: .5rem;
+    padding: 0 .25rem;
+    opacity: 0;
+    animation: fadeIn .3s ease .4s forwards;
+  }
+  @keyframes fadeIn { to { opacity: 1; } }
+  .fb-label { font-size: .75rem; color: var(--muted); }
+  .fb-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 99px; padding: .2rem .625rem;
+    font-size: .75rem; cursor: pointer; color: var(--muted);
+    transition: all .15s; display: flex; align-items: center; gap: .3rem;
+  }
+  .fb-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .fb-btn.active-helpful  { background: var(--teal-lt); border-color: var(--teal); color: var(--teal); }
+  .fb-btn.active-nothelpful { background: #fdf0ee; border-color: #e07060; color: #c0392b; }
+  .fb-followup {
+    margin-top: .375rem;
+    display: flex; gap: .5rem; align-items: flex-start;
+  }
+  .fb-followup textarea {
+    flex: 1; font-family: inherit; font-size: .8125rem;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: .5rem .75rem; resize: none; background: var(--white);
+    color: var(--ink); outline: none; line-height: 1.5;
+    transition: border .15s;
+  }
+  .fb-followup textarea:focus { border-color: var(--teal); }
+  .fb-followup textarea::placeholder { color: #aaa; }
+  .btn-send-fb {
+    background: var(--teal); color: var(--white);
+    border: none; border-radius: var(--radius-sm);
+    padding: .5rem .875rem; font-size: .8125rem; font-weight: 500;
+    cursor: pointer; white-space: nowrap; transition: background .15s;
+  }
+  .btn-send-fb:hover { background: #155f5f; }
+  .typing-indicator {
+    display: flex; gap: 4px; padding: .875rem 1rem;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius); border-bottom-left-radius: 3px;
+    width: fit-content;
+  }
+  .typing-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--muted);
+    animation: bounce .9s ease infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: .15s; }
+  .typing-dot:nth-child(3) { animation-delay: .3s; }
+  @keyframes bounce {
+    0%,60%,100% { transform: translateY(0); }
+    30% { transform: translateY(-5px); }
+  }
+  .chat-input-area {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+  }
+  .input-row-wrap { padding: 1rem 1.25rem .625rem; }
+  .input-row {
+    display: flex; gap: .75rem; align-items: flex-end;
+    background: var(--sand);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: .625rem .75rem;
+    transition: border .15s;
+  }
+  .input-row:focus-within { border-color: var(--teal); }
+  #user-input {
+    flex: 1; background: none; border: none; outline: none;
+    font-family: inherit; font-size: .9375rem; color: var(--ink);
+    line-height: 1.5; resize: none; max-height: 140px;
+  }
+  #user-input::placeholder { color: #aaa; }
+  .btn-send {
+    background: var(--navy); color: var(--white);
+    border: none; border-radius: var(--radius-sm);
+    width: 36px; height: 36px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background .15s;
+  }
+  .btn-send:hover:not(:disabled) { background: #162a4e; }
+  .btn-send:disabled { background: var(--border); cursor: default; }
+  .btn-send svg { width: 16px; height: 16px; }
+  .input-hint { font-size: .75rem; color: var(--muted); margin-top: .375rem; padding: 0 .25rem; }
+  .end-session-bar { padding: .625rem 1.25rem 1.25rem; }
+  .btn-end-big {
+    width: 100%;
+    display: flex; align-items: center; justify-content: center; gap: .625rem;
+    background: linear-gradient(135deg, var(--teal) 0%, #155f5f 100%);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    padding: .875rem 1.5rem;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.125rem;
+    cursor: pointer;
+    transition: opacity .18s, transform .12s, box-shadow .18s;
+    box-shadow: 0 4px 16px rgba(26,122,122,0.28);
+    letter-spacing: .01em;
+  }
+  .btn-end-big:hover { opacity: .92; transform: translateY(-1px); box-shadow: 0 6px 22px rgba(26,122,122,0.36); }
+  .btn-end-big:active { transform: translateY(0); }
+  #session-survey {
+    display: none;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--sand);
+  }
+  .survey-inner {
+    max-width: 520px; width: 100%;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    box-shadow: var(--shadow-lg);
+  }
+  .survey-inner h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.625rem;
+    color: var(--navy);
+    margin-bottom: .5rem;
+  }
+  .survey-inner .survey-sub { font-size: .9rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.5; }
+  .survey-field { margin-bottom: 1.5rem; }
+  .survey-field label { display: block; font-size: .875rem; font-weight: 500; color: var(--ink); margin-bottom: .5rem; }
+  .survey-field textarea, .survey-field select {
+    width: 100%; font-family: inherit; font-size: .9rem;
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    padding: .625rem .875rem; color: var(--ink); background: var(--white);
+    outline: none; resize: vertical; transition: border .15s;
+  }
+  .survey-field textarea:focus, .survey-field select:focus { border-color: var(--teal); }
+  .star-row { display: flex; gap: .5rem; }
+  .star-btn {
+    background: none; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: .375rem .75rem;
+    font-size: 1.125rem; cursor: pointer; transition: all .15s; color: var(--muted);
+  }
+  .star-btn:hover, .star-btn.active { border-color: var(--teal); background: var(--teal-lt); color: var(--teal); }
+  .yn-row { display: flex; gap: .75rem; }
+  .yn-btn {
+    flex: 1; background: none; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: .5rem;
+    font-size: .875rem; font-weight: 500; cursor: pointer;
+    color: var(--muted); transition: all .15s; text-align: center;
+  }
+  .yn-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .yn-btn.active { border-color: var(--teal); background: var(--teal-lt); color: var(--teal); }
+  .btn-submit-survey {
+    width: 100%; background: var(--navy); color: var(--white);
+    border: none; border-radius: var(--radius-sm);
+    padding: .875rem; font-family: inherit; font-size: .9375rem;
+    font-weight: 600; cursor: pointer; transition: background .15s; margin-top: .5rem;
+  }
+  .btn-submit-survey:hover { background: #162a4e; }
+  .btn-submit-survey:disabled { background: var(--border); cursor: default; }
+  #thankyou {
+    display: none;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .ty-inner { max-width: 440px; text-align: center; }
+  .ty-inner h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--navy); margin-bottom: 1rem; }
+  .ty-inner p { font-size: 1rem; color: var(--muted); line-height: 1.7; }
+  .system-msg {
+    align-self: center;
+    font-size: .8125rem; color: var(--muted);
+    background: var(--sand-dk); border-radius: 99px;
+    padding: .375rem 1rem;
+    text-align: center;
+  }
+  .chat-messages::-webkit-scrollbar { width: 5px; }
+  .chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  @media (max-width: 520px) {
+    .flow-cards { grid-template-columns: 1fr; }
+    .dan-wordmark { font-size: 2.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="landing">
+  <div class="landing-inner">
+    <div class="dan-wordmark">DAN</div>
+    <div class="dan-tagline">Disability Access Navigator</div>
+    <p class="landing-intro">
+      DAN helps families navigate California's Regional Center system — what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time.
+    </p>
+    <div class="flow-cards">
+      <div class="flow-card advisor" onclick="startFlow('advisor')">
+        <div class="flow-card-label">For Advisors</div>
+        <div class="flow-card-title">Test & give feedback</div>
+        <div class="flow-card-desc">Evaluate DAN's accuracy and identify gaps from a practitioner perspective.</div>
+      </div>
+      <div class="flow-card family" onclick="startFlow('family')">
+        <div class="flow-card-label">For Families</div>
+        <div class="flow-card-title">Get navigation help</div>
+        <div class="flow-card-desc">Ask DAN about your Regional Center situation and get plain-language guidance.</div>
+      </div>
+    </div>
+    <p class="landing-note">
+      DAN is a navigation tool, not legal advice. Responses are for information only.<br>
+      This is a pilot version — your feedback shapes what it becomes.
+    </p>
+  </div>
+</div>
+
+<div id="chat-shell">
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <span class="header-wordmark">DAN</span>
+      <span class="flow-badge" id="flow-badge"></span>
+    </div>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-input-area">
+    <div class="input-row-wrap">
+      <div class="input-row">
+        <textarea id="user-input" rows="1" placeholder="Tell me about your situation…"></textarea>
+        <button class="btn-send" id="send-btn" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      <p class="input-hint" id="input-hint"></p>
+    </div>
+    <div class="end-session-bar">
+      <button class="btn-end-big" onclick="endSession()">
+        Share your feedback &nbsp;<span class="btn-end-arrow">→</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="session-survey" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:2rem; background:var(--sand);">
+  <div class="survey-inner">
+    <h2>Before you go</h2>
+    <p class="survey-sub" id="survey-sub"></p>
+    <div class="survey-field">
+      <label>Overall, how useful was DAN in this session?</label>
+      <div class="star-row" id="star-row">
+        <button class="star-btn" data-v="1" onclick="setStar(1)">1</button>
+        <button class="star-btn" data-v="2" onclick="setStar(2)">2</button>
+        <button class="star-btn" data-v="3" onclick="setStar(3)">3</button>
+        <button class="star-btn" data-v="4" onclick="setStar(4)">4</button>
+        <button class="star-btn" data-v="5" onclick="setStar(5)">5</button>
+      </div>
+    </div>
+    <div class="survey-field">
+      <label id="useful-label"></label>
+      <textarea id="survey-useful" rows="3" placeholder="…"></textarea>
+    </div>
+    <div class="survey-field">
+      <label id="missing-label"></label>
+      <textarea id="survey-missing" rows="3" placeholder="…"></textarea>
+    </div>
+    <div class="survey-field">
+      <label>Would you use DAN again — or recommend it to someone?</label>
+      <div class="yn-row">
+        <button class="yn-btn" onclick="setYN('Yes')">Yes</button>
+        <button class="yn-btn" onclick="setYN('Maybe')">Maybe</button>
+        <button class="yn-btn" onclick="setYN('No')">No</button>
+      </div>
+    </div>
+    <div class="survey-field">
+      <label>Anything else you want us to know?</label>
+      <textarea id="survey-other" rows="2" placeholder="Optional"></textarea>
+    </div>
+    <button class="btn-submit-survey" onclick="submitSurvey()">Submit feedback</button>
+  </div>
+</div>
+
+<div id="thankyou" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:2rem;">
+  <div class="ty-inner">
+    <h2>Thank you.</h2>
+    <p id="ty-text"></p>
+  </div>
+</div>
+
+<script>
+// ── CONFIG (no keys here — they live on Netlify's server) ──
+const CONFIG = {
+  AIRTABLE_BASE_ID:       "applBHiDsZwGSmFS8",
+  AIRTABLE_MSG_TABLE:     "tblU3BtbYzyjF6PrI",
+  AIRTABLE_SESSION_TABLE: "tblbD7M4U56FMlZwE",
+};
+
+// ── SYSTEM PROMPT ──
+const DAN_SYSTEM_PROMPT = `You are DAN — the Disability Access Navigator. You are a free navigation tool built by the Self Determination Tech Alliance (SDTA) and Captain's View Advocacy to help families navigate California's Regional Center system for adults with developmental disabilities.
+
+You are not a lawyer, not a therapist, and not a service coordinator. You are a knowledgeable guide — the equivalent of having a well-informed friend who knows the Lanterman Act, understands how the system actually works (not just how it's supposed to work), and can help families figure out what to ask for and how to ask for it.
+
+WHO YOU SERVE:
+- Adults who are current California Regional Center clients (typically age 22+, or 18+ with certificate of completion)
+- Family members and supporters acting on behalf of a qualifying adult RC client
+- Individuals exploring the Self-Determination Program (SDP) or currently enrolled in it
+
+You do NOT serve children still in school-based services (IDEA/IEP). If someone asks about school-age services, acknowledge warmly and explain DAN is built for adult RC clients.
+
+YOUR VOICE — follow these rules in every response:
+- Always start with brief validation: acknowledge what the person said before moving forward
+- Always end with one clear next step, framed as their choice: "One option you may want to consider is..."
+- Agency stays with the person — never say what they should do; say what they CAN do
+
+- Plain language always — short sentences, one idea at a time; explain any policy term the first time you use it
+- Never predict outcomes or promise results
+- Never assign blame to Regional Centers
+- ONE QUESTION AT A TIME — this is a hard rule, not a suggestion. Never ask more than one question in a single response. Never list the questions you would ask. Pick the single most important thing you need to know and ask only that. If you catch yourself writing "I have a few questions" or "To help you better, I need to know: 1)..." — stop. Delete it. Ask one question. Wait for the answer. Then ask the next one if needed.
+
+  Example — family says "I want my son to learn to cook." WRONG: listing all the things you need to know. RIGHT: ask the single most grounding question first — "Is he currently getting any Independent Living Services (ILS) through his Regional Center?" — because the answer to that one question determines everything else. If yes, cooking may already fit within existing services. If no, you need to understand what IS in the IPP before suggesting next steps.
+
+- Permission before depth — give the direct answer first, offer to go deeper after
+
+WHAT YOU KNOW (key areas):
+- The Lanterman Act: RC is legally required to provide services based on need. Services are an entitlement. RC must use "every possible means" to fulfill the IPP. (WIC §4500 et seq.)
+- The IPP: legal foundation for every service request. Services must connect to: (1) qualifying disability, (2) IPP goal or documented need, (3) functional limitation or safety concern. Families can request IPP review anytime — RC must schedule within 30 days (7 days for health/safety).
+- Writing as protection: written requests start the regulatory clock. Verbal requests create no legal obligation. "If it's not in writing, it doesn't exist."
+- SDP: gives individual budget (based on prior 12 months authorized services) and control over how it's spent. Does NOT give more money automatically. Does NOT remove RC. Required first step: Orientation Training (cannot skip). IF comes before FMS. RC cannot decide whether SDP is right for a family — that's the family's choice.
+- Generic vs. natural resources: RC must check generic resources (Medi-Cal, insurance, Medicare) first — but cannot use mere possibility as a denial. Natural resources (family, volunteers) are NOT the same — RC cannot require unpaid family labor.
+- When things go wrong: NOA (Notice of Action) = formal written denial, starts 30-day appeal clock. Three appeal options (check all three when filing): Informal Meeting, Mediation, Fair Hearing. OCRA = free advocate: 1-800-390-7032. DDS SDP Ombudsperson: SDP.Ombudsperson@dds.ca.gov / 877-658-9731. Right to audio-record RC meetings with 24 hours written notice.
+- Legal status: conservatorship is not the only option. Limited Conservatorship (California-specific). Supported Decision-Making (SDM) — person keeps rights, named supporters help them decide, no court required (WIC §4787). Authorized Representative (DS 1819) — RC-specific, not a court process. A conserved person CAN be in SDP.
+- Shadow rules: when RC cites a rule, ask for the DDS directive or statute. If they can't produce one, it may be local interpretation, not law.
+
+NEVER: predict what RC will decide, promise outcomes, recommend specific providers by name, give legal advice (give legal information and point to resources), write the IPP for the family, tell a family their situation is hopeless, or use more than one technical term in a sentence without explaining both.
+
+DIAGNOSTIC SEQUENCING — before jumping to "request an IPP meeting," DAN first tries to understand what's already in place. The right order when a family wants a new service or skill:
+1. Is it already in the IPP? (if yes, work from what's there)
+2. Are there existing services that could cover it? ILS (Independent Living Services) teaches skills like cooking, budgeting, personal care, community navigation. SLS (Supported Living Services) supports people living independently. If someone already has ILS or SLS, a new skill may already fit within those existing hours — no IPP change needed.
+3. If no ILS or SLS yet: suggest a direct informal request to the SC first — "ask your SC whether this could be added to your current services." Sometimes RC approves this without a formal IPP meeting. Only move to "request an IPP meeting in writing" if the informal ask gets a no or no response.
+4. Do NOT ask whether the person lives at home — ILS and SLS are already the right service frame regardless of living situation.
+
+KEY SERVICE TYPES TO KNOW:
+- ILS (Independent Living Services): skill-building support — cooking, cleaning, budgeting, transportation, community participation. One of the most common services for adults. If someone has ILS, many practical life skills goals already fit within it.
+- SLS (Supported Living Services): for people living in their own home who need ongoing support to live independently.
+- Respite: relief for caregivers, not skill-building.
+- Personal Assistance (PA): hands-on support for daily tasks — different from skill-building.
+- Social Recreation (331): community activities with a developmental purpose — interactive, not entertainment.
+- The distinction between ILS (teaching skills) and PA (doing tasks for someone) matters — families sometimes have one when they need the other.
+
+ALWAYS CLOSE WITH AN OFFER TO DRAFT — when DAN reaches a clear next step (write to your SC, request an IPP meeting, appeal a denial, etc.), always end by offering to draft the email or talking points: "Would it help if I drafted an email to your SC that you could send or adapt?" This is one of DAN's most practical tools — don't skip it. The family should leave every conversation with something they can use immediately, not just information about what to do.
+
+Always close by acknowledging what the person came with and what they're leaving with.`;
+
+const DAN_SYSTEM_ADVISOR = DAN_SYSTEM_PROMPT + `
+
+ADDITIONAL CONTEXT FOR THIS SESSION:
+You are being evaluated by a practitioner or advisor in a pilot review. Answer as you would for any family — do not change your approach because you know you're being evaluated. The advisor is testing whether your guidance is accurate, complete, and useful. Be yourself.`;
+
+const DAN_SYSTEM_FAMILY = DAN_SYSTEM_PROMPT + `
+
+ADDITIONAL CONTEXT FOR THIS SESSION:
+You are speaking with a family member or supporter navigating the Regional Center system. This is a pilot — at the end, they'll be asked a few questions about whether DAN was helpful. Your goal is to be genuinely useful to them right now.`;
+
+// ── STATE ──
+let currentFlow  = null;
+let sessionId    = null;
+let messages     = [];
+let surveyData   = { rating: null, yn: null };
+let sessionTopic = null;
+let msgCounter   = 0;
+
+// ── FLOW START ──
+function startFlow(flow) {
+  currentFlow = flow;
+  sessionId   = `${flow}-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+
+  document.getElementById('landing').style.display    = 'none';
+  document.getElementById('chat-shell').style.display = 'flex';
+
+  const badge = document.getElementById('flow-badge');
+  badge.textContent = flow === 'advisor' ? 'Advisor Review' : 'Family';
+  badge.className   = `flow-badge ${flow}`;
+
+  const hint = document.getElementById('input-hint');
+  if (flow === 'advisor') {
+    hint.textContent = 'Test any scenario. Rate each response. End session to share overall feedback.';
+  } else {
+    hint.textContent = 'Tell DAN about your situation — no question is too basic.';
+  }
+
+  const welcome = flow === 'advisor'
+    ? `Hi — thanks for taking the time to review DAN. I'll respond the same way I would with any family. Try any scenario that's relevant to your practice, and use the thumbs up/down after each response to flag what's working and what isn't.\n\nWhat area would you like to test?\n\n• SDP — enrollment, spending plans, IF/FMS\n• Getting services — IPP, service requests, denials\n• Appeals — NOA, fair hearings, OCRA\n• Legal status — conservatorship, SDM, authorized representative\n• Something else`
+    : `Hi — I'm DAN, a free navigation tool for families with a loved one in California's Regional Center system.\n\nI can help you figure out what to ask for, how to ask for it, and what to do when the first answer is no. Everything you share stays in this conversation — I don't store your information.\n\nTo help me point you in the right direction — what brings you here today?\n\n• The Self-Determination Program (SDP)\n• Getting a specific service approved\n• Appealing a denial\n• Decision-making and legal authority\n• Something else`;
+
+  appendDanMessage(welcome, false);
+}
+
+// ── SEND MESSAGE ──
+async function sendMessage() {
+  const input = document.getElementById('user-input');
+  const text  = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('send-btn').disabled = true;
+
+  appendUserMessage(text);
+  messages.push({ role: 'user', content: text });
+
+  if (!sessionTopic) {
+    const t = text.toLowerCase();
+    if      (t.match(/sdp|self.?deter|spending plan|facilitator|fms|enroll/)) sessionTopic = 'SDP';
+    else if (t.match(/appeal|hearing|noa|ocra|deny|denial|denied/))           sessionTopic = 'Appeals';
+    else if (t.match(/conservator|sdm|supported decision|authorized rep|ds.?1819/)) sessionTopic = 'Legal Status';
+    else if (t.match(/service|ipp|iep|request|dental|therapy|respite|ihss/))  sessionTopic = 'Getting Services';
+    else                                                                        sessionTopic = 'Other';
+  }
+
+  const typingId = showTyping();
+
+  try {
+    const systemPrompt = currentFlow === 'advisor' ? DAN_SYSTEM_ADVISOR : DAN_SYSTEM_FAMILY;
+
+    const response = await fetch('/.netlify/functions/proxy', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-target': 'anthropic',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: messages,
+      }),
+    });
+
+    const data = await response.json();
+    removeTyping(typingId);
+
+    if (data.content && data.content[0]) {
+      const reply = data.content[0].text;
+      messages.push({ role: 'assistant', content: reply });
+      appendDanMessage(reply, true);
+    } else {
+      appendSystemMessage('Something went wrong — please try again.');
+    }
+  } catch (err) {
+    removeTyping(typingId);
+    appendSystemMessage('Connection error — please check your internet and try again.');
+    console.error(err);
+  }
+
+  document.getElementById('send-btn').disabled = false;
+  scrollToBottom();
+}
+
+// ── DOM HELPERS ──
+function appendUserMessage(text) {
+  const container = document.getElementById('chat-messages');
+  const initials   = currentFlow === 'advisor' ? 'ADV' : 'YOU';
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  row.innerHTML = `
+    <div class="msg-avatar">${initials}</div>
+    <div class="msg-content">
+      <div class="msg-bubble">${escHtml(text)}</div>
+    </div>`;
+  container.appendChild(row);
+  scrollToBottom();
+}
+
+function appendDanMessage(text, showFeedback) {
+  const container = document.getElementById('chat-messages');
+  const msgId     = `msg-${++msgCounter}`;
+  const row       = document.createElement('div');
+  row.className   = 'msg-row dan';
+
+  const fbHtml = showFeedback ? `
+    <div class="msg-feedback" id="fb-${msgId}">
+      <span class="fb-label">Helpful?</span>
+      <button class="fb-btn" id="fb-up-${msgId}"   onclick="rateDan('${msgId}','Helpful')">👍</button>
+      <button class="fb-btn" id="fb-down-${msgId}" onclick="rateDan('${msgId}','Not Helpful')">👎</button>
+    </div>
+    <div id="fb-follow-${msgId}" style="display:none;" class="fb-followup">
+      <textarea rows="2" placeholder="What were you expecting? (optional)" id="fb-text-${msgId}"></textarea>
+      <button class="btn-send-fb" onclick="sendFbComment('${msgId}')">Send</button>
+    </div>` : '';
+
+  row.innerHTML = `
+    <div class="msg-avatar">D</div>
+    <div class="msg-content">
+      <div class="msg-bubble" id="bubble-${msgId}">${formatDanText(text)}</div>
+      ${fbHtml}
+    </div>`;
+  container.appendChild(row);
+  scrollToBottom();
+
+  row.dataset.text  = text;
+  row.dataset.msgId = msgId;
+
+  if (msgCounter === 3) {
+    const nudge = document.createElement('div');
+    nudge.className = 'system-msg';
+    nudge.innerHTML = `When you're ready, use the <strong>Share your feedback</strong> button below to share your overall thoughts.`;
+    container.appendChild(nudge);
+  }
+}
+
+function appendSystemMessage(text) {
+  const container = document.getElementById('chat-messages');
+  const el = document.createElement('div');
+  el.className = 'system-msg';
+  el.textContent = text;
+  container.appendChild(el);
+  scrollToBottom();
+}
+
+function showTyping() {
+  const container = document.getElementById('chat-messages');
+  const id = `typing-${Date.now()}`;
+  const row = document.createElement('div');
+  row.className = 'msg-row dan';
+  row.id = id;
+  row.innerHTML = `
+    <div class="msg-avatar">D</div>
+    <div class="msg-content">
+      <div class="typing-indicator">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    </div>`;
+  container.appendChild(row);
+  scrollToBottom();
+  return id;
+}
+
+function removeTyping(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function formatDanText(text) {
+  return escHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function scrollToBottom() {
+  const c = document.getElementById('chat-messages');
+  c.scrollTop = c.scrollHeight;
+}
+
+// ── IN-CONVERSATION FEEDBACK ──
+const fbState = {};
+
+function rateDan(msgId, rating) {
+  fbState[msgId] = fbState[msgId] || {};
+  fbState[msgId].rating = rating;
+
+  const upBtn   = document.getElementById(`fb-up-${msgId}`);
+  const downBtn = document.getElementById(`fb-down-${msgId}`);
+  upBtn.className   = `fb-btn${rating === 'Helpful'     ? ' active-helpful'   : ''}`;
+  downBtn.className = `fb-btn${rating === 'Not Helpful' ? ' active-nothelpful': ''}`;
+
+  const followup = document.getElementById(`fb-follow-${msgId}`);
+  if (followup) {
+    followup.style.display = rating === 'Not Helpful' ? 'flex' : 'none';
+  }
+
+  fbState[msgId].airtableId = null;
+  const msgRow  = document.querySelector(`[data-msg-id="${msgId}"]`);
+  const msgText = msgRow ? msgRow.dataset.text : '';
+  sendMsgFeedback(msgId, rating, '', msgText).then(id => {
+    if (id) fbState[msgId].airtableId = id;
+  });
+}
+
+function sendFbComment(msgId) {
+  const comment  = document.getElementById(`fb-text-${msgId}`).value.trim();
+  const rating   = (fbState[msgId] || {}).rating || 'Not Helpful';
+  const recordId = (fbState[msgId] || {}).airtableId;
+
+  if (recordId) {
+    patchMsgFeedback(recordId, comment);
+  } else {
+    const msgRow  = document.querySelector(`[data-msg-id="${msgId}"]`);
+    const msgText = msgRow ? msgRow.dataset.text : '';
+    sendMsgFeedback(msgId, rating, comment, msgText);
+  }
+
+  const followup = document.getElementById(`fb-follow-${msgId}`);
+  if (followup) {
+    followup.innerHTML = `<span style="font-size:.8125rem;color:var(--teal);">✓ Feedback captured — thank you</span>`;
+  }
+}
+
+// ── AIRTABLE WRITES (through proxy) ──
+async function sendMsgFeedback(msgId, rating, comment, msgText) {
+  try {
+    const res = await fetch('/.netlify/functions/proxy', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-target': 'airtable-post',
+      },
+      body: JSON.stringify({
+        url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_MSG_TABLE)}`,
+        fields: {
+          'Session ID':               sessionId,
+          'Flow Type':                currentFlow === 'advisor' ? 'Advisor' : 'Family',
+          'Timestamp':                new Date().toISOString(),
+          'Message (DAN response)':   msgText,
+          'Rating':                   rating,
+          'What were you expecting?': comment,
+        }
+      }),
+    });
+    const data = await res.json();
+    return data.id || null;
+  } catch (e) {
+    console.error('Airtable msg feedback error', e);
+    return null;
+  }
+}
+
+async function patchMsgFeedback(recordId, comment) {
+  try {
+    await fetch('/.netlify/functions/proxy', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-target': 'airtable-patch',
+      },
+      body: JSON.stringify({
+        url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_MSG_TABLE)}/${recordId}`,
+        fields: { 'What were you expecting?': comment }
+      }),
+    });
+  } catch (e) {
+    console.error('Airtable patch error', e);
+  }
+}
+
+async function sendSessionFeedback(fields) {
+  try {
+    await fetch('/.netlify/functions/proxy', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-target': 'airtable-post',
+      },
+      body: JSON.stringify({
+        url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}`,
+        fields,
+      }),
+    });
+  } catch (e) {
+    console.error('Airtable session feedback error', e);
+  }
+}
+
+// ── END SESSION ──
+function endSession() {
+  document.getElementById('chat-shell').style.display = 'none';
+
+  if (currentFlow === 'advisor') {
+    document.getElementById('survey-sub').textContent    = "Your practitioner perspective helps us improve DAN's accuracy and identify gaps.";
+    document.getElementById('useful-label').textContent  = 'What did DAN get right — or what was most useful?';
+    document.getElementById('missing-label').textContent = 'What was missing, inaccurate, or unclear?';
+  } else {
+    document.getElementById('survey-sub').textContent    = "Your feedback helps us make DAN more useful for families like yours.";
+    document.getElementById('useful-label').textContent  = 'What was most helpful about this conversation?';
+    document.getElementById('missing-label').textContent = "Was there anything you expected to see that wasn't there?";
+  }
+
+  const survey = document.getElementById('session-survey');
+  survey.style.display        = 'flex';
+  survey.style.minHeight      = '100vh';
+  survey.style.alignItems     = 'center';
+  survey.style.justifyContent = 'center';
+}
+
+function setStar(v) {
+  surveyData.rating = v;
+  document.querySelectorAll('.star-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.v) <= v);
+  });
+}
+
+function setYN(v) {
+  surveyData.yn = v;
+  document.querySelectorAll('.yn-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === v);
+  });
+}
+
+async function submitSurvey() {
+  const btn = document.querySelector('.btn-submit-survey');
+  btn.disabled    = true;
+  btn.textContent = 'Submitting…';
+
+  await sendSessionFeedback({
+    'Session ID':                  sessionId,
+    'Flow Type':                   currentFlow === 'advisor' ? 'Advisor' : 'Family',
+    'Timestamp':                   new Date().toISOString(),
+    'Topic':                       sessionTopic || 'Unknown',
+    'Overall Rating':              surveyData.rating ? String(surveyData.rating) : '',
+    'Most useful part':            document.getElementById('survey-useful').value,
+    'What was missing or unclear': document.getElementById('survey-missing').value,
+    'Would you use this again':    surveyData.yn || '',
+    'Other comments':              document.getElementById('survey-other').value,
+  });
+
+  document.getElementById('session-survey').style.display = 'none';
+  const ty = document.getElementById('thankyou');
+  ty.style.display        = 'flex';
+  ty.style.minHeight      = '100vh';
+  ty.style.alignItems     = 'center';
+  ty.style.justifyContent = 'center';
+  ty.style.background     = 'var(--sand)';
+
+  document.getElementById('ty-text').textContent = currentFlow === 'advisor'
+    ? "Your practitioner review goes directly into the next version of DAN. We'll be in touch as the pilot develops."
+    : 'Your feedback helps make DAN more useful for every family that comes after you. Thank you for being part of this.';
+}
+
+// ── TEXTAREA AUTO-RESIZE + ENTER TO SEND ──
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('user-input');
+
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+});
+</script>
+</body>
+</html>
