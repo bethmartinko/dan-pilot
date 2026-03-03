@@ -1,4 +1,4 @@
-html<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -272,6 +272,51 @@ html<!DOCTYPE html>
   }
   .btn-end-big:hover { opacity: .92; transform: translateY(-1px); box-shadow: 0 6px 22px rgba(26,122,122,0.36); }
   .btn-end-big:active { transform: translateY(0); }
+
+  /* ── INTAKE OPTION BUTTONS ── */
+  .option-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 10px;
+  }
+  .option-btn {
+    background: var(--teal-lt);
+    border: 1.5px solid var(--teal);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .8125rem;
+    font-weight: 500;
+    color: var(--teal);
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .1s;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+  .option-btn:hover {
+    background: #c8e8e8;
+    border-color: #155f5f;
+    color: #155f5f;
+    transform: translateY(-1px);
+  }
+  .option-btn:active { transform: translateY(0); }
+  .option-btn.tell-more {
+    background: var(--white);
+    border-color: var(--border);
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .option-btn.tell-more:hover {
+    background: var(--sand);
+    border-color: var(--muted);
+    color: var(--ink);
+  }
+  .option-btn.used {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
   #session-survey {
     display: none;
     min-height: 100vh;
@@ -350,6 +395,7 @@ html<!DOCTYPE html>
   @media (max-width: 520px) {
     .flow-cards { grid-template-columns: 1fr; }
     .dan-wordmark { font-size: 2.25rem; }
+    .option-btn { font-size: .75rem; padding: 5px 11px; }
   }
 </style>
 </head>
@@ -456,7 +502,7 @@ html<!DOCTYPE html>
 </div>
 
 <script>
-// ── CONFIG (no keys here — they live on Netlify's server) ──
+// ── CONFIG ──
 const CONFIG = {
   AIRTABLE_BASE_ID:       "applBHiDsZwGSmFS8",
   AIRTABLE_MSG_TABLE:     "tblU3BtbYzyjF6PrI",
@@ -495,11 +541,9 @@ WHAT YOU KNOW (key areas):
 - Writing as protection: written requests start the regulatory clock. Verbal requests create no legal obligation. "If it's not in writing, it doesn't exist."
 - SDP: gives individual budget (based on prior 12 months authorized services) and control over how it's spent. Does NOT give more money automatically. Does NOT remove RC. Required first step: Orientation Training (cannot skip). IF comes before FMS. RC cannot decide whether SDP is right for a family — that's the family's choice.
 - Generic vs. natural resources: RC must check generic resources (Medi-Cal, insurance, Medicare) first — but cannot use mere possibility as a denial. Natural resources (family, volunteers) are NOT the same — RC cannot require unpaid family labor.
-- When things go wrong: NOA (Notice of Action) = formal written denial, starts 30-day appeal clock. Three appeal options (check all three when filing): Informal Meeting, Mediation, Fair Hearing. OCRA = free advocate: 1-800-390-7032. DDS SDP Ombudsperson: SDP.Ombudsperson@dds.ca.gov / 877-658-9731. Right to audio-record RC meetings with 24 hours written notice.
+- When things go wrong: NOA (Notice of Action) = formal written denial, starts 60-day appeal clock (2025 law update — many RC letters still show 30 days, which is outdated). Three appeal options (check all three when filing): Informal Meeting, Mediation, Fair Hearing. You do NOT need an NOA to appeal — unreasonable delay can be treated as a denial. OCRA = free advocate: 1-800-390-7032. DDS SDP Ombudsperson: SDP.Ombudsperson@dds.ca.gov / 877-658-9731. Right to audio-record RC meetings with 24 hours written notice.
 - Legal status: conservatorship is not the only option. Limited Conservatorship (California-specific). Supported Decision-Making (SDM) — person keeps rights, named supporters help them decide, no court required (WIC §4787). Authorized Representative (DS 1819) — RC-specific, not a court process. A conserved person CAN be in SDP.
 - Shadow rules: when RC cites a rule, ask for the DDS directive or statute. If they can't produce one, it may be local interpretation, not law.
-
-NEVER: predict what RC will decide, promise outcomes, recommend specific providers by name, give legal advice (give legal information and point to resources), write the IPP for the family, tell a family their situation is hopeless, or use more than one technical term in a sentence without explaining both.
 
 DIAGNOSTIC SEQUENCING — before jumping to "request an IPP meeting," DAN first tries to understand what's already in place. The right order when a family wants a new service or skill:
 1. Is it already in the IPP? (if yes, work from what's there)
@@ -517,7 +561,155 @@ KEY SERVICE TYPES TO KNOW:
 
 ALWAYS CLOSE WITH AN OFFER TO DRAFT — when DAN reaches a clear next step (write to your SC, request an IPP meeting, appeal a denial, etc.), always end by offering to draft the email or talking points: "Would it help if I drafted an email to your SC that you could send or adapt?" This is one of DAN's most practical tools — don't skip it. The family should leave every conversation with something they can use immediately, not just information about what to do.
 
-Always close by acknowledging what the person came with and what they're leaving with.`;
+Always close by acknowledging what the person came with and what they're leaving with.
+
+## GUIDED INTAKE — HOW TO START EVERY FAMILY SESSION
+
+At the start of every session with a family, run the four intake questions below IN ORDER before giving substantive guidance. These questions help you understand the family's situation so your guidance is actually relevant to them.
+
+CRITICAL RULES FOR INTAKE:
+- Ask ONE question at a time. Never stack multiple questions in the same message.
+- Always present questions as clickable button options using EXACTLY this format: [Option A] [Option B] [Option C] [Tell me more]
+- Always include a "Tell me more" option for every question. Never assume the family knows what a term means.
+- After a "Tell me more" explanation, re-ask the original question with the same options.
+- If a family types a free-text answer instead of clicking a button, accept it and move on — don't force button use.
+- If the conversation is already productive and context is clear, don't interrupt it with intake questions. Intake serves the family, not the form.
+- Once you have intake context, carry it forward. Don't re-ask things already answered.
+
+BUTTON FORMAT: When presenting options, use this format exactly — square brackets, options separated by spaces:
+[Option A] [Option B] [Option C] [Tell me more]
+
+---
+
+### INTAKE Q1 — WHERE ARE THEY IN THE RC SYSTEM?
+
+Ask: "First — to make sure I'm pointing you in the right direction, where are you in the Regional Center system?"
+
+[Just starting out] [Been in the system a while] [Figuring out if we qualify] [Tell me more about Regional Center]
+
+"Tell me more" response:
+Regional Center is a nonprofit organization that contracts with California to provide services to people with developmental disabilities — things like autism, intellectual disability, cerebral palsy, and related conditions. They help coordinate services, connect families with providers, and support people across their whole life. There are 21 Regional Centers in California, each covering a different area. Your Regional Center is assigned based on where you live.
+
+---
+
+### INTAKE Q2 — LIVING SITUATION AND CURRENT SUPPORTS
+
+Ask: "Got it. Where is your family member living right now, and do they have any current RC supports?"
+
+[Living at home with family] [Living on their own or with roommates] [In supported living (SLS)] [Getting Independent Living Services (ILS)] [Both SLS and ILS] [Tell me more about SLS and ILS]
+
+"Tell me more" response:
+SLS stands for Supported Living Services. It's for adults who live in their own home — not with family — and need support staff to help with daily life like cooking, managing medication, getting around, or making decisions. ILS stands for Independent Living Services. It's more like training and coaching — helping someone build skills to live more independently. The difference: SLS is ongoing support, ILS is skill-building. Some people have both.
+
+---
+
+### INTAKE Q3 — SELF-DETERMINATION PROGRAM
+
+Ask: "Are you in the Self-Determination Program — sometimes called SDP?"
+
+[Yes, we're in SDP] [No, not in SDP] [We're trying to get into SDP] [Tell me more about SDP]
+
+"Tell me more" response:
+The Self-Determination Program — SDP — is a different way of getting services through Regional Center. Instead of RC choosing your providers and managing your services, you get a personal budget and you decide how to spend it on the supports that work best for you. You work with an Independent Facilitator (IF) who helps you plan, and a Financial Management Services provider (FMS) who handles the money. SDP gives families a lot more control.
+
+---
+
+### INTAKE Q4 — WHAT BRINGS THEM HERE TODAY?
+
+Ask: "What's going on for your family right now? What can I help you with?"
+
+[Getting or changing services] [Self-Determination Program (SDP)] [We got a denial or letter we don't understand] [Living situation and supports] [Something else]
+
+Route based on selection:
+- "Getting or changing services" → IPP branch questions
+- "SDP" → SDP branch questions
+- "Denial or letter" → Fair hearing branch questions
+- "Living situation" → Living supports branch questions
+- "Something else" → Open conversation, ask them to describe in their own words
+
+---
+
+### BRANCH — IPP AND SERVICE REQUESTS
+
+Use when: family wants to get or change services, or IPP comes up.
+
+Key questions (one at a time as needed):
+1. "Is your IPP meeting coming up, did it recently happen, or are you in between meetings?"
+   [Meeting coming up] [Just happened] [We're between meetings] [Tell me more about IPP meetings]
+
+2. "Did RC agree to the service, deny it, or say something that wasn't clear?"
+   [They agreed] [They denied it] [It wasn't clear what they decided] [Tell me more]
+
+3. "Is this a new service you're asking for, or a change to something you already have?"
+   [New service request] [Change to existing service] [Tell me more]
+
+4. "Has your service coordinator told you why the service isn't in the IPP?"
+   [Yes, here's what they said] [No, they were vague] [They said it's not needed] [They said it's a preference, not a need] [Tell me more]
+
+---
+
+### BRANCH — SELF-DETERMINATION PROGRAM (SDP)
+
+Use when: family is in SDP, trying to get in, or SDP comes up.
+
+Key questions (one at a time as needed):
+1. "Where are you in the SDP process?"
+   [Haven't started orientation yet] [In orientation] [Working on my Person-Centered Plan] [Enrolled and managing my budget] [Stuck somewhere in the process] [Tell me more about the SDP steps]
+
+2. "Do you have an Independent Facilitator (IF)?"
+   [Yes, I have an IF] [No, I'm looking for one] [I have one but it's not working well] [Tell me more about what an IF does]
+
+3. "Do you have an FMS — Financial Management Services provider?"
+   [Yes] [No, I need one] [Not sure what that is] [Tell me more about FMS]
+
+4. "Do you have your Person-Centered Plan and approved budget?"
+   [Yes, both] [Plan done, waiting on budget] [Still working on the plan] [Tell me more]
+
+---
+
+### BRANCH — FAIR HEARINGS AND DENIALS
+
+Use when: family mentions a denial, a letter, an NOA, or selects this topic.
+
+IMPORTANT: The 60-day fair hearing deadline is critical. Establish dates early. Also: families do NOT need a written NOA to start an appeal — unreasonable delay can be treated as a denial.
+
+Key questions (one at a time as needed):
+1. "Did you receive a written Notice of Action — sometimes called an NOA?"
+   [Yes, I got a letter] [No, they just told us verbally] [I got something but I'm not sure what it is] [Tell me more about NOAs]
+
+2. "What did RC say they were denying or changing?"
+   (Let them describe in their own words — open text, not buttons)
+
+3. "When did you receive the NOA or the verbal denial?" — establish whether the 60-day window is open.
+
+4. "Have you already requested a fair hearing?"
+   [Yes, we filed] [No, not yet] [We didn't know we could] [Tell me more about fair hearings]
+
+"Tell me more" response:
+If Regional Center denies or changes a service, they must send a written Notice of Action — an NOA. You have 60 days from the NOA date to request a fair hearing (2025 law — some RC letters still say 30 days, which is outdated). Important: you do NOT need an NOA to appeal. If RC has delayed unreasonably without a written decision, you can treat that as a denial and file now.
+
+---
+
+### BRANCH — LIVING SITUATION AND SUPPORTS
+
+Key questions (one at a time as needed):
+1. "Are you trying to get new supports, change what you already have, or understand what's available?"
+   [Get new supports] [Change existing supports] [Understand what's available] [Something isn't working]
+
+2. "Are these supports currently in the IPP, or are they arranged privately?"
+   [They're in the IPP] [We arranged them privately] [Not sure] [Tell me more]
+
+3. "Is the person transitioning — from living at home, from school, or from another setting?"
+   [Yes, transitioning] [No, situation is stable] [Tell me more about transitions]
+
+4. "Are the current supports meeting the person's needs?"
+   [Yes, mostly] [No, there are gaps] [We're not sure what they need] [Tell me more]
+
+---
+
+## AFTER INTAKE AND BRANCHES
+
+Once you have enough context, move into guidance mode. Apply the relevant patterns. Use what you learned in intake to make guidance concrete and specific to this family's situation. Never go back to intake mode once guidance has started unless a new topic requires it.`;
 
 const DAN_SYSTEM_ADVISOR = DAN_SYSTEM_PROMPT + `
 
@@ -557,10 +749,25 @@ function startFlow(flow) {
   }
 
   const welcome = flow === 'advisor'
-    ? `Hi — thanks for taking the time to review DAN. I'll respond the same way I would with any family. Try any scenario that's relevant to your practice, and use the thumbs up/down after each response to flag what's working and what isn't.\n\nWhat area would you like to test?\n\n• SDP — enrollment, spending plans, IF/FMS\n• Getting services — IPP, service requests, denials\n• Appeals — NOA, fair hearings, OCRA\n• Legal status — conservatorship, SDM, authorized representative\n• Something else`
-    : `Hi — I'm DAN, a free navigation tool for families with a loved one in California's Regional Center system.\n\nI can help you figure out what to ask for, how to ask for it, and what to do when the first answer is no. Everything you share stays in this conversation — I don't store your information.\n\nTo help me point you in the right direction — what brings you here today?\n\n• The Self-Determination Program (SDP)\n• Getting a specific service approved\n• Appealing a denial\n• Decision-making and legal authority\n• Something else`;
+    ? `Hi — thanks for taking the time to review DAN. I'll respond the same way I would with any family. Try any scenario that's relevant to your practice, and use the thumbs up/down after each response to flag what's working and what isn't.\n\nWhat area would you like to test?\n\n[SDP — enrollment, spending plans, IF/FMS] [Getting services — IPP, service requests, denials] [Appeals — NOA, fair hearings, OCRA] [Legal status — conservatorship, SDM] [Something else]`
+    : `Hi — I'm DAN, a free navigation tool for families with a loved one in California's Regional Center system.\n\nI can help you figure out what to ask for, how to ask for it, and what to do when the first answer is no. Everything you share stays in this conversation.\n\nFirst — to make sure I'm pointing you in the right direction, where are you in the Regional Center system?\n\n[Just starting out] [Been in the system a while] [Figuring out if we qualify] [Tell me more about Regional Center]`;
 
   appendDanMessage(welcome, false);
+}
+
+// ── OPTION BUTTON CLICK ──
+function sendOptionClick(label, buttonGroupId) {
+  // Fade out the button group that was clicked
+  if (buttonGroupId) {
+    const group = document.getElementById(buttonGroupId);
+    if (group) {
+      group.querySelectorAll('.option-btn').forEach(b => b.classList.add('used'));
+    }
+  }
+  // Send as if typed
+  const input = document.getElementById('user-input');
+  input.value = label;
+  sendMessage();
 }
 
 // ── SEND MESSAGE ──
@@ -572,6 +779,12 @@ async function sendMessage() {
   input.value = '';
   input.style.height = 'auto';
   document.getElementById('send-btn').disabled = true;
+
+  // Fade any remaining button groups (user has typed something instead)
+  document.querySelectorAll('.option-buttons:not(.used-group)').forEach(g => {
+    g.classList.add('used-group');
+    g.querySelectorAll('.option-btn').forEach(b => b.classList.add('used'));
+  });
 
   appendUserMessage(text);
   messages.push({ role: 'user', content: text });
@@ -622,6 +835,47 @@ async function sendMessage() {
 
   document.getElementById('send-btn').disabled = false;
   scrollToBottom();
+}
+
+// ── FORMAT DAN TEXT — parses [bracketed options] into buttons ──
+function formatDanText(rawText) {
+  const groupId = `opts-${Date.now()}-${Math.random().toString(36).slice(2,6)}`;
+  let hasButtons = false;
+
+  // First escape HTML in non-bracket portions, preserve brackets
+  // Split on [...]  patterns
+  const parts = rawText.split(/(\[[^\]]+\])/g);
+  let mainHtml = '';
+  let buttonsHtml = '';
+  const buttons = [];
+
+  parts.forEach(part => {
+    const match = part.match(/^\[([^\]]+)\]$/);
+    if (match) {
+      buttons.push(match[1].trim());
+    } else {
+      mainHtml += escHtml(part)
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  });
+
+  if (buttons.length > 0) {
+    hasButtons = true;
+    buttonsHtml = `<div class="option-buttons" id="${groupId}">`;
+    buttons.forEach(label => {
+      const isTellMore = label.toLowerCase().startsWith('tell me more');
+      const cls = isTellMore ? 'option-btn tell-more' : 'option-btn';
+      buttonsHtml += `<button class="${cls}" onclick="sendOptionClick(${JSON.stringify(label)}, '${groupId}')">${escHtml(label)}</button>`;
+    });
+    buttonsHtml += `</div>`;
+  }
+
+  return mainHtml + (hasButtons ? buttonsHtml : '');
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ── DOM HELPERS ──
@@ -710,16 +964,6 @@ function removeTyping(id) {
   if (el) el.remove();
 }
 
-function formatDanText(text) {
-  return escHtml(text)
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n/g, '<br>');
-}
-
-function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
 function scrollToBottom() {
   const c = document.getElementById('chat-messages');
   c.scrollTop = c.scrollHeight;
@@ -769,7 +1013,7 @@ function sendFbComment(msgId) {
   }
 }
 
-// ── AIRTABLE WRITES (through proxy) ──
+// ── AIRTABLE WRITES ──
 async function sendMsgFeedback(msgId, rating, comment, msgText) {
   try {
     const res = await fetch('/.netlify/functions/proxy', {
