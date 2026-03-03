@@ -26,7 +26,7 @@
     --shadow-lg: 0 8px 32px rgba(31,56,100,0.14);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 18px; -webkit-font-smoothing: antialiased; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--sand);
@@ -44,7 +44,7 @@
     padding: 2rem;
     background: var(--sand);
   }
-  .landing-inner { max-width: 640px; width: 100%; text-align: center; }
+  .landing-inner { max-width: 560px; width: 100%; text-align: center; }
   .dan-wordmark {
     font-family: 'DM Serif Display', serif;
     font-size: 3rem;
@@ -107,7 +107,7 @@
     display: none;
     flex-direction: column;
     height: 100vh;
-    max-width: 960px;
+    max-width: 760px;
     margin: 0 auto;
     width: 100%;
   }
@@ -148,7 +148,7 @@
     gap: 1.25rem;
     background: var(--sand);
   }
-  .msg-row { display: flex; gap: .75rem; max-width: 820px; }
+  .msg-row { display: flex; gap: .75rem; max-width: 640px; }
   .msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
   .msg-row.dan  { align-self: flex-start; }
   .msg-avatar {
@@ -536,8 +536,8 @@ const DAN_SYSTEM_PROMPT = [
   'Q2 (ask after Q1): "Got it. Where is your family member living, and do they have any current RC supports?"',
   '[Living at home with family] [Living on their own] [Getting Supported Living Services (SLS)] [Getting Independent Living Services (ILS)] [Tell me more]',
   '',
-  'Q3 (ask after Q2): "Are you in the Self-Determination Program (SDP)?"',
-  '[Yes, in SDP] [No, not in SDP] [Trying to get into SDP] [Tell me more about SDP]',
+  'Q3 (ask after Q2): "Where are you with the Self-Determination Program -- sometimes called SDP?"',
+  '[I\'m already in SDP] [I\'m trying to get into SDP] [I\'m not interested in SDP] [Tell me more about SDP]',
   '',
   'Q4 (ask after Q3): "What can I help you with today?"',
   '[Getting or changing services] [Self-Determination Program] [We got a denial or letter] [Living situation and supports] [Something else]',
