@@ -450,7 +450,7 @@
     </div>
     <div class="end-session-bar">
       <button class="btn-end-big" onclick="endSession()">
-        Share your feedback &nbsp;<span class="btn-end-arrow">→</span>
+        Share your feedback &nbsp;<span class="btn-end-arrow">&rarr;</span>
       </button>
     </div>
   </div>
@@ -556,20 +556,22 @@ function startFlow(flow) {
   appendDanMessage(welcome, false);
 }
 
-// -- OPTION BUTTON CLICK --
-function sendOptionClick(label, buttonGroupId) {
-  // Fade out the button group that was clicked
-  if (buttonGroupId) {
-    const group = document.getElementById(buttonGroupId);
+// -- OPTION BUTTON CLICK (event delegation - no inline onclick) --
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.option-btn');
+  if (!btn) return;
+  var label = btn.getAttribute('data-label');
+  var groupId = btn.getAttribute('data-group');
+  if (!label) return;
+  if (groupId) {
+    var group = document.getElementById(groupId);
     if (group) {
-      group.querySelectorAll('.option-btn').forEach(b => b.classList.add('used'));
+      group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
     }
   }
-  // Send as if typed
-  const input = document.getElementById('user-input');
-  input.value = label;
+  document.getElementById('user-input').value = label;
   sendMessage();
-}
+});
 
 // -- SEND MESSAGE --
 async function sendMessage() {
@@ -640,18 +642,13 @@ async function sendMessage() {
 
 // -- FORMAT DAN TEXT -- parses [bracketed options] into buttons --
 function formatDanText(rawText) {
-  const groupId = `opts-${Date.now()}-${Math.random().toString(36).slice(2,6)}`;
-  let hasButtons = false;
+  var groupId = 'opts-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+  var parts = rawText.split(/(\[[^\]]+\])/g);
+  var mainHtml = '';
+  var buttons = [];
 
-  // First escape HTML in non-bracket portions, preserve brackets
-  // Split on [...]  patterns
-  const parts = rawText.split(/(\[[^\]]+\])/g);
-  let mainHtml = '';
-  let buttonsHtml = '';
-  const buttons = [];
-
-  parts.forEach(part => {
-    const match = part.match(/^\[([^\]]+)\]$/);
+  parts.forEach(function(part) {
+    var match = part.match(/^\[([^\]]+)\]$/);
     if (match) {
       buttons.push(match[1].trim());
     } else {
@@ -662,17 +659,16 @@ function formatDanText(rawText) {
   });
 
   if (buttons.length > 0) {
-    hasButtons = true;
-    buttonsHtml = `<div class="option-buttons" id="${groupId}">`;
-    buttons.forEach(label => {
-      const isTellMore = label.toLowerCase().startsWith('tell me more');
-      const cls = isTellMore ? 'option-btn tell-more' : 'option-btn';
-      buttonsHtml += `<button class="${cls}" onclick="sendOptionClick(${JSON.stringify(label)}, '${groupId}')">${escHtml(label)}</button>`;
+    mainHtml += '<div class="option-buttons" id="' + groupId + '">';
+    buttons.forEach(function(label) {
+      var isTellMore = label.toLowerCase().indexOf('tell me more') === 0;
+      var cls = isTellMore ? 'option-btn tell-more' : 'option-btn';
+      mainHtml += '<button class="' + cls + '" data-label="' + label.replace(/"/g, '&quot;') + '" data-group="' + groupId + '">' + escHtml(label) + '</button>';
     });
-    buttonsHtml += `</div>`;
+    mainHtml += '</div>';
   }
 
-  return mainHtml + (hasButtons ? buttonsHtml : '');
+  return mainHtml;
 }
 
 function escHtml(str) {
