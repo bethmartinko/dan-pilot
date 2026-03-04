@@ -103,6 +103,68 @@
   }
   .flow-card-desc { font-size: .8125rem; color: var(--muted); line-height: 1.5; }
   .landing-note { font-size: .8125rem; color: var(--muted); line-height: 1.6; }
+
+  /* PRIVACY BOX */
+  .privacy-box {
+    background: var(--sand-dk);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .875rem 1.125rem;
+    font-size: .8125rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+    text-align: left;
+  }
+  .privacy-box strong { color: var(--ink); }
+
+  /* STUCK POINT CARDS */
+  .stuck-prompt {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .stuck-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+    text-align: left;
+  }
+  .stuck-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.125rem;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+  }
+  .stuck-card:hover {
+    border-color: var(--teal);
+    box-shadow: 0 4px 16px rgba(26,122,122,0.12);
+    transform: translateY(-2px);
+  }
+  .stuck-card.featured {
+    border-color: var(--navy);
+    background: #f0f3f8;
+  }
+  .stuck-card.featured:hover {
+    border-color: var(--teal);
+    background: var(--teal-lt);
+  }
+  .stuck-quote {
+    font-weight: 600;
+    font-size: .875rem;
+    color: var(--navy);
+    margin-bottom: .35rem;
+    line-height: 1.4;
+  }
+  .stuck-desc {
+    font-size: .75rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
   #chat-shell {
     display: none;
     flex-direction: column;
@@ -402,27 +464,48 @@
 <body>
 
 <div id="landing">
-  <div class="landing-inner">
+  <div class="landing-inner" style="max-width:720px;">
     <div class="dan-wordmark">DAN</div>
     <div class="dan-tagline">Disability Access Navigator</div>
     <p class="landing-intro">
       DAN helps families navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time.
     </p>
-    <div class="flow-cards">
-      <div class="flow-card advisor" onclick="startFlow('advisor')">
-        <div class="flow-card-label">For Advisors</div>
-        <div class="flow-card-title">Test & give feedback</div>
-        <div class="flow-card-desc">Evaluate DAN's accuracy and identify gaps from a practitioner perspective.</div>
+
+    <div class="privacy-box">
+      <strong>Before we start:</strong> DAN is a navigation tool, not legal advice. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes.
+    </div>
+
+    <p class="stuck-prompt">Which of these sounds like your situation?</p>
+
+    <div class="stuck-grid">
+      <div class="stuck-card" onclick="startStuck('preference')">
+        <div class="stuck-quote">"That's a preference, not a need"</div>
+        <div class="stuck-desc">RC reframes a genuine support need as something your family just wants</div>
       </div>
-      <div class="flow-card family" onclick="startFlow('family')">
-        <div class="flow-card-label">For Families</div>
-        <div class="flow-card-title">Get navigation help</div>
-        <div class="flow-card-desc">Ask DAN about your Regional Center situation and get plain-language guidance.</div>
+      <div class="stuck-card" onclick="startStuck('ipp')">
+        <div class="stuck-quote">"That goal isn't in the IPP"</div>
+        <div class="stuck-desc">Service denied because the IPP language doesn't match what was requested</div>
+      </div>
+      <div class="stuck-card" onclick="startStuck('crisis')">
+        <div class="stuck-quote">"We can't fund that without a crisis"</div>
+        <div class="stuck-desc">Prevention denied because nothing bad has happened yet</div>
+      </div>
+      <div class="stuck-card featured" onclick="startStuck('delay')">
+        <div class="stuck-quote">Denial by delay</div>
+        <div class="stuck-desc">RC keeps requesting more info, moving the bar -- for months -- until the family is too burnt out to appeal</div>
+      </div>
+      <div class="stuck-card" onclick="startStuck('generic')">
+        <div class="stuck-quote">"There's a generic resource for that"</div>
+        <div class="stuck-desc">RC points to a community option that doesn't actually work for your person</div>
+      </div>
+      <div class="stuck-card" onclick="startStuck('sdp')">
+        <div class="stuck-quote">SDP renewal gap</div>
+        <div class="stuck-desc">RC waits for the family to notice the renewal is overdue -- when RC is supposed to initiate it</div>
       </div>
     </div>
-    <p class="landing-note">
-      DAN is a navigation tool, not legal advice. Responses are for information only.<br>
-      This is a pilot version -- your feedback shapes what it becomes.
+
+    <p class="landing-note" style="margin-top:1.5rem;">
+      Not sure which fits? <a href="#" onclick="startStuck('unsure'); return false;" style="color:var(--teal);text-decoration:underline;">Tell DAN what's happening</a> and we'll figure it out together.
     </p>
   </div>
 </div>
@@ -520,31 +603,29 @@ const DAN_SYSTEM_PROMPT = [
   'NEVER use: bullet points, numbered lists, radio buttons, emoji circles ((o)), dashes, or any other list format.',
   'The bracket format is what creates clickable buttons in the interface. Any other format breaks the UI.',
   '',
-  'Example of CORRECT output:',
-  'Where are you in the RC system? [Just starting out] [Been in system a while] [Figuring out if we qualify] [Tell me more]',
+  '=== STUCK POINT ENTRY -- WHEN A FAMILY ARRIVES VIA A STUCK POINT CARD ===',
+  'The family has already identified their stuck point. Skip the intake questions entirely.',
+  'Start with brief validation of the pattern they named, then ask ONE clarifying question to understand where they are in the situation.',
+  'Your job is to meet them exactly where they are.',
   '',
-  'Example of WRONG output (never do this):',
-  '(o) Just starting out',
-  '(o) Been in the system a while',
+  '=== DENIAL BY DELAY -- KNOW THIS COLD ===',
+  'Pattern: RC does not formally deny the request. Instead, they ask for more information, schedule more assessments, say they need to consult internally -- repeatedly, for months. The family eventually gives up. No NOA is ever issued. The clock never starts.',
   '',
-  '=== GUIDED INTAKE -- FOLLOW THIS SEQUENCE EXACTLY ===',
-  'Ask these 4 questions IN ORDER, ONE AT A TIME. Do not skip or reorder.',
+  'Why this works as a tactic: Without a formal denial (Notice of Action / NOA), there is no appeal clock. Families cannot request a fair hearing without a denial on record. RC knows this.',
   '',
-  'Q1 (ask first, always): "First -- to make sure I am pointing you in the right direction, where are you in the Regional Center system?"',
-  '[Just starting out] [Been in the system a while] [Figuring out if we qualify] [Tell me more about Regional Center]',
+  'What DAN tells families:',
+  '1. You do not need a formal denial to trigger your rights. Unreasonable delay is itself a basis for a fair hearing. Under the Lanterman Act, failure to act on a request within a reasonable timeframe can be treated as a denial.',
+  '2. Put the request in writing immediately if you have not already. Email your Service Coordinator directly. This starts a paper trail and creates a record of the date the request was made.',
+  '3. Request a written response with a specific timeline. Ask by email: "Can you confirm in writing when we will receive a decision on this request?"',
+  '4. If no response or continued delay after a written request: contact OCRA (1-800-390-7032). They can intervene on your behalf at no cost.',
+  '5. You can file for a fair hearing even without an NOA. The hearing request should state that the RC has failed to act on a request made on [date]. OCRA can help you file.',
+  '6. Fair hearing deadline: 60 days from the NOA -- but since there is no NOA here, the 60-day clock does not apply. File as soon as you decide delay is unreasonable. Do not wait.',
   '',
-  'Q2 (ask after Q1): "Got it. Where is your family member living, and do they have any current RC supports?"',
-  '[Living at home with family] [Living on their own] [Getting Supported Living Services (SLS)] [Getting Independent Living Services (ILS)] [Tell me more]',
+  'Tone for denial by delay: Validate that this is exhausting and intentionally confusing. The family is not imagining it. This is a documented pattern. They have more options than the RC has let on.',
   '',
-  'Q3 (ask after Q2): "Where are you with the Self-Determination Program -- sometimes called SDP?"',
-  '[I\'m already in SDP] [I\'m trying to get into SDP] [I\'m not interested in SDP] [Tell me more about SDP]',
+  'Draft offer: Always offer to draft the email to the SC requesting written confirmation of timeline. This is the highest-value next step.',
   '',
-  'Q4 (ask after Q3): "What can I help you with today?"',
-  '[Getting or changing services] [Self-Determination Program] [We got a denial or letter] [Living situation and supports] [Something else]',
-  '',
-  'After Q4, give guidance based on what they told you. Keep using [bracket] format for any follow-up choices.',
-  '',
-  '=== WHAT YOU KNOW ===',
+  '=== WHAT YOU KNOW (general) ===',
   '- Lanterman Act: RC must provide services based on need. Services are an entitlement (WIC sec. 4500).',
   '- IPP: the legal document listing all RC services. Families can request IPP review anytime.',
   '- Writing matters: verbal requests create no legal obligation. Always suggest putting requests in writing.',
@@ -563,11 +644,6 @@ const DAN_SYSTEM_PROMPT = [
   '- You serve adults 18+ with developmental disabilities and their families. Not children in school-based services.'
 ].join("\n");
 
-const DAN_SYSTEM_ADVISOR = DAN_SYSTEM_PROMPT + `
-
-ADDITIONAL CONTEXT FOR THIS SESSION:
-You are being evaluated by a practitioner or advisor in a pilot review. Answer as you would for any family -- do not change your approach because you know you're being evaluated. The advisor is testing whether your guidance is accurate, complete, and useful. Be yourself.`;
-
 const DAN_SYSTEM_FAMILY = DAN_SYSTEM_PROMPT + `
 
 ADDITIONAL CONTEXT FOR THIS SESSION:
@@ -581,30 +657,45 @@ let surveyData   = { rating: null, yn: null };
 let sessionTopic = null;
 let msgCounter   = 0;
 
-// -- FLOW START --
-function startFlow(flow) {
-  currentFlow = flow;
-  sessionId   = `${flow}-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+// -- STUCK POINT ENTRY --
+const STUCK_WELCOMES = {
+  delay: `That pattern has a name -- it's called denial by delay, and it's one of the most common and exhausting things families run into. The RC never officially says no, so you never get a formal denial to appeal. The requests just... keep circling.\n\nYou have more options here than the RC has let on.\n\nFirst -- how long has this been going on, and have you made the request in writing yet?\n\n[Less than 2 months] [2-6 months] [More than 6 months] [I've put it in writing] [Everything has been verbal so far]`,
+
+  preference: `"That's a preference, not a need" is one of the most common deflections families hear -- and it's often not accurate. The Lanterman Act says RC must fund services based on functional need, not just what the RC thinks is important.\n\nLet's figure out what's actually going on here.\n\nWhat did you ask for, and what reason did they give for calling it a preference?`,
+
+  ipp: `If the RC is saying "that goal isn't in the IPP," they may be right that the IPP needs updating -- but that's fixable, and it's not a reason to deny the service outright.\n\nThe IPP is a legal document and you have the right to request a planning meeting to update it at any time.\n\nWhat service were you asking for, and is there an IPP goal that seems related, even if the wording doesn't match exactly?`,
+
+  crisis: `"We can't fund that without a crisis" is a real pattern, and it conflicts directly with what the Lanterman Act says -- RC is supposed to fund services that prevent a crisis, not just respond after one.\n\nLet's look at what you're up against.\n\nWhat support were you asking for, and what did the RC say specifically?`,
+
+  generic: `The "generic resource" deflection is tricky because RC is allowed to consider community resources -- but only if those resources actually work for your person. "Generally available" doesn't mean "available to your family member specifically."\n\nWhat resource did they point to, and what makes it not workable for your situation?`,
+
+  sdp: `SDP renewals are supposed to be initiated by the RC -- not the family. If your renewal is overdue and they haven't started it, that's on them, not you.\n\nLet's figure out where things stand.\n\nDo you know when your current SDP agreement was supposed to renew?`,
+
+  unsure: `No problem -- let's figure it out together.\n\nTell me what's been happening with your Regional Center, and I'll help you identify what you're dealing with and what your options are.`
+};
+
+function startStuck(type) {
+  currentFlow = 'family';
+  sessionId   = 'family-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
+  sessionTopic = type;
 
   document.getElementById('landing').style.display    = 'none';
   document.getElementById('chat-shell').style.display = 'flex';
 
-  const badge = document.getElementById('flow-badge');
-  badge.textContent = flow === 'advisor' ? 'Advisor Review' : 'Family';
-  badge.className   = `flow-badge ${flow}`;
+  var badge = document.getElementById('flow-badge');
+  badge.textContent = 'Family';
+  badge.className   = 'flow-badge family';
 
-  const hint = document.getElementById('input-hint');
-  if (flow === 'advisor') {
-    hint.textContent = 'Test any scenario. Rate each response. End session to share overall feedback.';
-  } else {
-    hint.textContent = 'Tell DAN about your situation -- no question is too basic.';
-  }
+  var hint = document.getElementById('input-hint');
+  hint.textContent = 'Tell DAN about your situation -- no question is too basic.';
 
-  const welcome = flow === 'advisor'
-    ? `Hi -- thanks for taking the time to review DAN. I'll respond the same way I would with any family. Try any scenario that's relevant to your practice, and use the thumbs up/down after each response to flag what's working and what isn't.\n\nWhat area would you like to test?\n\n[SDP -- enrollment, spending plans, IF/FMS] [Getting services -- IPP, service requests, denials] [Appeals -- NOA, fair hearings, OCRA] [Legal status -- conservatorship, SDM] [Something else]`
-    : `Hi -- I'm DAN, a free navigation tool for families with a loved one in California's Regional Center system.\n\nI can help you figure out what to ask for, how to ask for it, and what to do when the first answer is no. Everything you share stays in this conversation.\n\nFirst -- to make sure I'm pointing you in the right direction, where are you in the Regional Center system?\n\n[Just starting out] [Been in the system a while] [Figuring out if we qualify] [Tell me more about Regional Center]`;
-
+  var welcome = STUCK_WELCOMES[type] || STUCK_WELCOMES['unsure'];
   appendDanMessage(welcome, false);
+}
+
+// Keep startFlow for any legacy references
+function startFlow(flow) {
+  startStuck('unsure');
 }
 
 // -- OPTION BUTTON CLICK (event delegation - no inline onclick) --
