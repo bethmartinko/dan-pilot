@@ -601,7 +601,7 @@
   <div class="chat-input-area">
     <div class="input-row-wrap">
       <div class="input-row">
-        <textarea id="user-input" rows="1" placeholder="Tell me about your situation..."></textarea>
+        <textarea id="user-input" rows="1" placeholder="Type your reply..."></textarea>
         <button class="btn-send" id="send-btn" onclick="sendMessage()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -617,7 +617,7 @@
       <button class="fb-persistent-btn" id="gen-down" onclick="rateGeneral('Not Helpful')">👎 Not helpful</button>
     </div>
     <div class="fb-general-wrap" id="fb-general-wrap" style="display:none; flex-direction:row;">
-      <textarea id="fb-general-text" rows="2" placeholder="What's on your mind? (optional)"></textarea>
+      <textarea id="fb-general-text" rows="2" placeholder="Feedback for DAN? (optional)"></textarea>
       <button class="btn-send-fb-general" onclick="submitGeneralFeedback()">Send</button>
     </div>
   </div>
@@ -756,7 +756,7 @@ function openChat(type) {
   badge.className   = 'flow-badge family';
 
   var hint = document.getElementById('input-hint');
-  hint.textContent = 'Tell DAN about your situation -- no question is too basic.';
+  hint.textContent = '';
 
   // Write one session record to Airtable — demographics + entry card
   writeSessionRecord(type);
