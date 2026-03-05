@@ -1029,9 +1029,11 @@ function scrollToBottom() {
 }
 
 function scrollToMessage(row) {
-  const c = document.getElementById('chat-messages');
-  // Scroll so the top of this message is near the top of the chat area
-  c.scrollTop = row.offsetTop - c.offsetTop - 12;
+  // Short timeout ensures buttons/content are fully rendered before scrolling
+  setTimeout(() => {
+    const c = document.getElementById('chat-messages');
+    c.scrollTop = row.offsetTop - c.offsetTop - 12;
+  }, 50);
 }
 
 // -- IN-CONVERSATION FEEDBACK --
