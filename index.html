@@ -305,7 +305,19 @@
     padding: .5rem .875rem; font-size: .8125rem; font-weight: 500;
     cursor: pointer; white-space: nowrap; transition: background .15s;
   }
-  .btn-send-fb:hover { background: #155f5f; }
+  .btn-back {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: .8125rem;
+    padding: .25rem .6rem;
+    margin-right: .5rem;
+    transition: background .15s, color .15s;
+  }
+  .btn-back:hover { background: var(--sand-dk); color: var(--navy); }
+
   .typing-indicator {
     display: flex; gap: 4px; padding: .875rem 1rem;
     background: var(--white); border: 1px solid var(--border);
@@ -631,7 +643,7 @@
     </p>
 
     <div class="privacy-box">
-      <strong data-en="Before we start:" data-es="Antes de comenzar:">Before we start:</strong> <span data-en="DAN is a navigation tool, not legal advice. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes." data-es="DAN es una herramienta de orientación, no asesoría legal. Todo lo que comparte permanece en esta conversación -- nada se guarda ni se vincula a usted. Esta es una versión piloto, y sus comentarios ayudan a mejorarla.">DAN is a navigation tool, not legal advice. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes.</span>
+      <strong data-en="Before we start:" data-es="Antes de comenzar:">Before we start:</strong> <span data-en="DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes." data-es="DAN es una herramienta informativa -- no asesoría legal. Para su situación específica, debe buscar orientación de un defensor o abogado calificado. Todo lo que comparte permanece en esta conversación -- nada se guarda ni se vincula a usted. Esta es una versión piloto, y sus comentarios ayudan a mejorarla.">DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes.</span>
     </div>
 
     <p class="stuck-prompt" data-en="Which of these sounds like your situation?" data-es="¿Cuál de estas situaciones se parece a la suya?">Which of these sounds like your situation?</p>
@@ -672,6 +684,7 @@
 <div id="chat-shell">
   <div class="chat-header">
     <div class="chat-header-left">
+      <button class="btn-back" onclick="goBack()" data-en="← Start over" data-es="← Volver">← Start over</button>
       <span class="header-wordmark">DAN</span>
       <span class="flow-badge" id="flow-badge"></span>
     </div>
@@ -895,7 +908,23 @@ function submitDemographics() {
   openChat(pendingStuckType);
 }
 
-function startStuck(type) {
+function goBack() {
+  // Reset session state
+  document.getElementById('chat-shell').style.display = 'none';
+  document.getElementById('demo-screen').style.display = 'none';
+  document.getElementById('landing').style.display = 'flex';
+  // Clear chat messages
+  document.getElementById('chat-messages').innerHTML = '';
+  // Reset buttons
+  document.getElementById('btn-copy-header').style.display = 'none';
+  document.getElementById('btn-dl-header').style.display = 'none';
+  document.getElementById('input-row-wrap').style.display = 'none';
+  // Reset path trail
+  pathTrail.length = 0;
+  sessionTopic = null;
+}
+
+
   pendingStuckType = type;
   currentFlow  = 'family';
   sessionId    = 'family-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
@@ -1208,7 +1237,7 @@ function getConversationText() {
     lines.push('');
   }
   lines.push('----------------------------------------');
-  lines.push('DAN is a navigation tool, not legal advice.');
+  lines.push('DAN is an informational tool, not legal advice. For your specific situation, seek guidance from a qualified advocate or attorney.');
   lines.push("Captains View Advocacy / SDTA");
   return lines.join('\n');
 }
