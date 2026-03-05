@@ -743,6 +743,10 @@ function startStuck(type) {
   currentFlow  = 'family';
   sessionId    = 'family-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
   sessionTopic = type;
+  // Start breadcrumb trail with the entry card label
+  const cardLabels2 = { delay:'Denial by delay', 'sdp-gap':'SDP renewal gap', generic:'Generic resource deflection', ipp:'Goal not in IPP', spending:'Spending Plan budget', preference:'Preference not a need', unsure:'Not sure / open' };
+  pathTrail.length = 0;
+  pathTrail.push(cardLabels2[type] || type);
 
   document.getElementById('landing').style.display = 'none';
   document.getElementById('demo-screen').style.display = 'flex';
@@ -783,6 +787,7 @@ async function writeSessionRecord(cardType) {
         url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}`,
         fields: {
           'Session ID':    sessionId,
+          'Flow Type':     'Family',
           'Timestamp':     new Date().toISOString(),
           'Entry Card':    cardLabels[cardType] || cardType,
           'Age Range':     demoData.age  || '',
@@ -827,6 +832,7 @@ document.addEventListener('click', function(e) {
     }
   }
   document.getElementById('user-input').value = label;
+  pathTrail.push(label); // record choice in breadcrumb
   sendMessage();
 });
 
@@ -848,6 +854,7 @@ async function sendMessage() {
 
   appendUserMessage(text);
   messages.push({ role: 'user', content: text });
+  pathTrail.push(text.length > 60 ? text.slice(0, 57) + '...' : text); // record typed reply
 
   if (!sessionTopic) {
     const t = text.toLowerCase();
@@ -1023,24 +1030,21 @@ function scrollToBottom() {
 
 // -- IN-CONVERSATION FEEDBACK --
 function getConversationPath(upToMsgId) {
-  // Captures last 6 lines (3 exchanges). If upToMsgId is null, captures entire conversation.
-  const allRows = document.querySelectorAll('.msg-row');
-  const lines = [];
-  for (const row of allRows) {
-    if (row.classList.contains('user')) {
-      const bubble = row.querySelector('.msg-bubble');
-      if (bubble) lines.push('You: ' + bubble.textContent.trim());
-    } else if (row.classList.contains('dan')) {
-      const msgId = row.dataset.msgId;
-      const bubble = row.querySelector('.msg-bubble');
-      if (bubble) lines.push('DAN: ' + bubble.textContent.trim());
-      if (upToMsgId && msgId === upToMsgId) break;
-    }
+  // Returns breadcrumb trail of user choices, e.g. "Denial by delay → Several months → Not yet appealed"
+  if (!pathTrail.length) return '';
+  // If upToMsgId given, count how many DAN messages have appeared up to that point
+  // and trim trail to match (approximate — each exchange = one choice)
+  if (upToMsgId) {
+    const allDanRows = Array.from(document.querySelectorAll('.msg-row.dan'));
+    const idx = allDanRows.findIndex(r => r.dataset.msgId === upToMsgId);
+    const trailSlice = idx >= 0 ? pathTrail.slice(0, idx + 1) : pathTrail;
+    return trailSlice.join(' → ');
   }
-  return upToMsgId ? lines.slice(-6).join('\n\n') : lines.join('\n\n');
+  return pathTrail.join(' → ');
 }
 
 const fbState = {};
+const pathTrail = []; // breadcrumb of user choices
 
 function rateDan(msgId, rating) {
   fbState[msgId] = fbState[msgId] || {};
@@ -1056,13 +1060,21 @@ function rateDan(msgId, rating) {
     followup.style.display = rating === 'Not Helpful' ? 'flex' : 'none';
   }
 
-  fbState[msgId].airtableId = null;
   const msgRow   = document.querySelector(`[data-msg-id="${msgId}"]`);
   const msgText  = msgRow ? msgRow.dataset.text : '';
   const convPath = getConversationPath(msgId);
-  sendMsgFeedback(msgId, rating, '', msgText, convPath).then(id => {
-    if (id) fbState[msgId].airtableId = id;
-  });
+
+  if (fbState[msgId].airtableId) {
+    // Record already exists — patch the rating if they changed their mind
+    patchMsgFeedback(fbState[msgId].airtableId, null, rating);
+  } else if (!fbState[msgId].writing) {
+    // First click — create the record
+    fbState[msgId].writing = true;
+    sendMsgFeedback(msgId, rating, '', msgText, convPath).then(id => {
+      if (id) fbState[msgId].airtableId = id;
+      fbState[msgId].writing = false;
+    });
+  }
 }
 
 function sendFbComment(msgId) {
@@ -1115,7 +1127,11 @@ async function sendMsgFeedback(msgId, rating, comment, msgText, convPath) {
   }
 }
 
-async function patchMsgFeedback(recordId, comment) {
+async function patchMsgFeedback(recordId, comment, rating) {
+  const fields = {};
+  if (comment !== null && comment !== undefined) fields['What were you expecting?'] = comment;
+  if (rating)  fields['Rating'] = rating;
+  if (!Object.keys(fields).length) return;
   try {
     await fetch('/.netlify/functions/proxy', {
       method: 'POST',
@@ -1125,7 +1141,7 @@ async function patchMsgFeedback(recordId, comment) {
       },
       body: JSON.stringify({
         url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_MSG_TABLE)}/${recordId}`,
-        fields: { 'What were you expecting?': comment }
+        fields
       }),
     });
   } catch (e) {
