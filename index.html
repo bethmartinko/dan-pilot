@@ -13,7 +13,7 @@
     --sand:      #F5F1EB;
     --sand-dk:   #EDE8DF;
     --ink:       #1a1a1a;
-    --muted:     #6b7280;
+    --muted:     #4b5563;
     --border:    #d9d3c8;
     --white:     #ffffff;
     --danger:    #c0392b;
@@ -25,7 +25,7 @@
     --shadow-lg: 0 8px 32px rgba(31,56,100,0.14);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  html { font-size: 17px; -webkit-font-smoothing: antialiased; }
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--sand);
@@ -221,7 +221,7 @@
   .msg-bubble {
     padding: .875rem 1rem;
     border-radius: var(--radius);
-    font-size: .9375rem;
+    font-size: 1rem;
     line-height: 1.6;
   }
   .dan  .msg-bubble { background: var(--white); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
@@ -322,7 +322,7 @@
     background: var(--white);
   }
   .feedback-bar-label {
-    font-size: .75rem;
+    font-size: .8125rem;
     color: var(--muted);
     flex-shrink: 0;
     font-family: 'DM Sans', sans-serif;
@@ -388,7 +388,7 @@
     border-radius: 20px;
     padding: 6px 14px;
     font-family: 'DM Sans', sans-serif;
-    font-size: .8125rem;
+    font-size: .875rem;
     font-weight: 500;
     color: var(--teal);
     cursor: pointer;
@@ -599,7 +599,7 @@
   </div>
   <div class="chat-messages" id="chat-messages"></div>
   <div class="chat-input-area">
-    <div class="input-row-wrap" id="input-row-wrap" style="display:none;">
+    <div class="input-row-wrap" id="input-row-wrap">
       <div class="input-row">
         <textarea id="user-input" rows="1" placeholder="Type your reply..."></textarea>
         <button class="btn-send" id="send-btn" onclick="sendMessage()">
@@ -815,7 +815,6 @@ document.addEventListener('click', function(e) {
       }
     }
     var input = document.getElementById('user-input');
-    input.closest('.input-row-wrap').style.display = 'block';
     input.focus();
     return;
   }
@@ -839,7 +838,6 @@ async function sendMessage() {
   input.value = '';
   input.style.height = 'auto';
   document.getElementById('send-btn').disabled = true;
-  document.getElementById('input-row-wrap').style.display = 'none';
 
   // Fade any remaining button groups (user has typed something instead)
   document.querySelectorAll('.option-buttons:not(.used-group)').forEach(g => {
@@ -977,9 +975,6 @@ function appendDanMessage(text, showFeedback) {
   row.dataset.text  = text;
   row.dataset.msgId = msgId;
 
-  // Show text input only if DAN's response has no buttons (brackets mean buttons)
-  const hasButtons = /\[[^\]]+\]/.test(text);
-  document.getElementById('input-row-wrap').style.display = hasButtons ? 'none' : 'block';
 }
 
 function appendSystemMessage(text) {
