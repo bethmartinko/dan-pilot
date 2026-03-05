@@ -183,6 +183,32 @@
   }
   .chat-header-left { display: flex; align-items: center; gap: .75rem; }
   .chat-header-right { display: flex; align-items: center; gap: .5rem; }
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    background: var(--sand);
+    border: 1.5px solid var(--border);
+    border-radius: 99px;
+    padding: 2px;
+    gap: 2px;
+    margin-right: .25rem;
+  }
+  .lang-btn {
+    border: none;
+    background: none;
+    border-radius: 99px;
+    padding: .2rem .6rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .lang-btn.active {
+    background: var(--navy);
+    color: white;
+  }
   .btn-save-header {
     display: none;
     align-items: center; gap: .3rem;
@@ -530,23 +556,23 @@
      ══════════════════════════════════════════════════ -->
 <div id="demo-screen" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:2rem; background:var(--sand);">
   <div class="survey-inner">
-    <h2>Before we start</h2>
-    <p class="survey-sub">A few optional questions — this helps us understand who DAN is serving and make the case for funding. You can skip any of these.</p>
+    <h2 data-en="Before we start" data-es="Antes de comenzar">Before we start</h2>
+    <p class="survey-sub" data-en="A few optional questions — this helps us understand who DAN is serving and make the case for funding. You can skip any of these." data-es="Algunas preguntas opcionales — esto nos ayuda a entender a quién sirve DAN y a justificar el financiamiento. Puede omitir cualquiera de estas.">A few optional questions — this helps us understand who DAN is serving and make the case for funding. You can skip any of these.</p>
 
     <div class="survey-field">
-      <label>Age of the person with the disability</label>
+      <label data-en="Age of the person with the disability" data-es="Edad de la persona con discapacidad">Age of the person with the disability</label>
       <div class="yn-row" style="flex-wrap:wrap; gap:.5rem;">
         <button class="yn-btn" onclick="setDemoField('age', this)">0–3</button>
         <button class="yn-btn" onclick="setDemoField('age', this)">4–22</button>
         <button class="yn-btn" onclick="setDemoField('age', this)">23+</button>
-        <button class="yn-btn" onclick="setDemoField('age', this)">Prefer not to say</button>
+        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="Prefer not to say" data-es="Prefiero no decir">Prefer not to say</button>
       </div>
     </div>
 
     <div class="survey-field" style="border:2px solid var(--border); border-radius:var(--radius); padding:1rem 1.25rem; background:var(--white);">
-      <label>Your Regional Center</label>
+      <label data-en="Your Regional Center" data-es="Su Regional Center">Your Regional Center</label>
       <select id="demo-rc" style="width:100%; padding:.5rem .75rem; border:1.5px solid var(--slate-lt); border-radius:6px; font-family:inherit; font-size:.9375rem; color:var(--ink); background:white;">
-        <option value="">— Select your Regional Center —</option>
+        <option value="" data-en="— Select your Regional Center —" data-es="— Seleccione su Regional Center —">— Select your Regional Center —</option>
         <option>Alta California Regional Center</option>
         <option>Bay Area Regional Center</option>
         <option>Central Valley Regional Center</option>
@@ -573,66 +599,72 @@
     </div>
 
     <div class="survey-field">
-      <label>Race / ethnicity</label>
+      <label data-en="Race / ethnicity" data-es="Raza / etnia">Race / ethnicity</label>
       <div class="yn-row" style="flex-wrap:wrap; gap:.5rem;">
-        <button class="yn-btn" onclick="setDemoField('race', this)">White</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)">Black / African American</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)">Hispanic / Latino</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)">Asian</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)">Native American / Alaska Native</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)">Pacific Islander</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)">Multiracial</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)">Prefer not to say</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="White" data-es="Blanco/a">White</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Black / African American" data-es="Negro/a / Afroamericano/a">Black / African American</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Hispanic / Latino" data-es="Hispano/a / Latino/a">Hispanic / Latino</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Asian" data-es="Asiático/a">Asian</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Native American / Alaska Native" data-es="Nativo/a Americano/a / Nativo/a de Alaska">Native American / Alaska Native</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Pacific Islander" data-es="Isleño/a del Pacífico">Pacific Islander</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Multiracial" data-es="Multirracial">Multiracial</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Prefer not to say" data-es="Prefiero no decir">Prefer not to say</button>
       </div>
     </div>
 
-    <button class="btn-submit-survey" onclick="submitDemographics()">Continue to DAN →</button>
+    <button class="btn-submit-survey" onclick="submitDemographics()" data-en="Continue to DAN →" data-es="Continuar a DAN →">Continue to DAN →</button>
   </div>
 </div>
 
 <div id="landing">
   <div class="landing-inner" style="max-width:720px;">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:1rem;">
+      <div class="lang-toggle" id="landing-lang-toggle">
+        <button class="lang-btn active" id="landing-btn-en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" id="landing-btn-es" onclick="setLang('es')">ES</button>
+      </div>
+    </div>
     <div class="dan-wordmark">DAN</div>
-    <div class="dan-tagline">Disability Access Navigator</div>
+    <div class="dan-tagline" data-en="Disability Access Navigator" data-es="Navegador de Acceso para Personas con Discapacidad">Disability Access Navigator</div>
     <p class="landing-intro">
-      DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time.
+      <span data-en="DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time." data-es="DAN le ayuda a navegar el sistema de Regional Centers de California -- qué pedir, cómo pedirlo, y qué hacer cuando la primera respuesta es no. Gratis, confidencial, disponible en cualquier momento.">DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time.</span>
     </p>
 
     <div class="privacy-box">
-      <strong>Before we start:</strong> DAN is a navigation tool, not legal advice. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes.
+      <strong data-en="Before we start:" data-es="Antes de comenzar:">Before we start:</strong> <span data-en="DAN is a navigation tool, not legal advice. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes." data-es="DAN es una herramienta de orientación, no asesoría legal. Todo lo que comparte permanece en esta conversación -- nada se guarda ni se vincula a usted. Esta es una versión piloto, y sus comentarios ayudan a mejorarla.">DAN is a navigation tool, not legal advice. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes.</span>
     </div>
 
-    <p class="stuck-prompt">Which of these sounds like your situation?</p>
+    <p class="stuck-prompt" data-en="Which of these sounds like your situation?" data-es="¿Cuál de estas situaciones se parece a la suya?">Which of these sounds like your situation?</p>
 
     <div class="stuck-grid">
       <div class="stuck-card featured" onclick="startStuck('delay')">
-        <div class="stuck-quote">Denial by delay</div>
-        <div class="stuck-desc">RC keeps requesting more info, moving the bar -- for months -- until you're too burnt out to appeal</div>
+        <div class="stuck-quote" data-en="Denial by delay" data-es="Negación por demora">Denial by delay</div>
+        <div class="stuck-desc" data-en="RC keeps requesting more info, moving the bar -- for months -- until you're too burnt out to appeal" data-es="El RC sigue pidiendo más información, moviendo la meta -- por meses -- hasta que usted está demasiado agotado/a para apelar">RC keeps requesting more info, moving the bar -- for months -- until you're too burnt out to appeal</div>
       </div>
       <div class="stuck-card" onclick="startStuck('sdp')">
-        <div class="stuck-quote">SDP renewal gap</div>
-        <div class="stuck-desc">RC waits for you to notice the renewal is overdue -- when RC is supposed to initiate it</div>
+        <div class="stuck-quote" data-en="SDP renewal gap" data-es="Brecha en la renovación del SDP">SDP renewal gap</div>
+        <div class="stuck-desc" data-en="RC waits for you to notice the renewal is overdue -- when RC is supposed to initiate it" data-es="El RC espera a que usted note que la renovación está vencida -- cuando el RC es quien debe iniciarla">RC waits for you to notice the renewal is overdue -- when RC is supposed to initiate it</div>
       </div>
       <div class="stuck-card" onclick="startStuck('generic')">
-        <div class="stuck-quote">"There's a generic resource for that"</div>
-        <div class="stuck-desc">RC points to a community option that doesn't actually work for your person</div>
+        <div class="stuck-quote" data-en="&quot;There's a generic resource for that&quot;" data-es="&quot;Hay un recurso comunitario para eso&quot;">"There's a generic resource for that"</div>
+        <div class="stuck-desc" data-en="RC points to a community option that doesn't actually work for your person" data-es="El RC señala una opción comunitaria que en realidad no funciona para su familiar">RC points to a community option that doesn't actually work for your person</div>
       </div>
       <div class="stuck-card" onclick="startStuck('ipp')">
-        <div class="stuck-quote">"That goal isn't in the IPP"</div>
-        <div class="stuck-desc">Service denied because the IPP language doesn't match what was requested</div>
+        <div class="stuck-quote" data-en="&quot;That goal isn't in the IPP&quot;" data-es="&quot;Esa meta no está en el IPP&quot;">"That goal isn't in the IPP"</div>
+        <div class="stuck-desc" data-en="Service denied because the IPP language doesn't match what was requested" data-es="Se niega el servicio porque el lenguaje del IPP no coincide con lo que se solicitó">Service denied because the IPP language doesn't match what was requested</div>
       </div>
       <div class="stuck-card" onclick="startStuck('spending')">
-        <div class="stuck-quote">Spending Plan -- you can't move money between budget categories</div>
-        <div class="stuck-desc">Respite budget can't be moved to community activities -- even when it makes more sense for your person</div>
+        <div class="stuck-quote" data-en="Spending Plan -- you can't move money between budget categories" data-es="Spending Plan -- no puede mover dinero entre categorías del presupuesto">Spending Plan -- you can't move money between budget categories</div>
+        <div class="stuck-desc" data-en="Respite budget can't be moved to community activities -- even when it makes more sense for your person" data-es="El presupuesto de respiro no se puede transferir a actividades comunitarias -- aunque tenga más sentido para su familiar">Respite budget can't be moved to community activities -- even when it makes more sense for your person</div>
       </div>
       <div class="stuck-card" onclick="startStuck('preference')">
-        <div class="stuck-quote">"That's a preference, not a need"</div>
-        <div class="stuck-desc">RC reframes a genuine support need as something you just want</div>
+        <div class="stuck-quote" data-en="&quot;That's a preference, not a need&quot;" data-es="&quot;Eso es una preferencia, no una necesidad&quot;">"That's a preference, not a need"</div>
+        <div class="stuck-desc" data-en="RC reframes a genuine support need as something you just want" data-es="El RC reencuadra una necesidad genuina de apoyo como algo que usted simplemente desea">RC reframes a genuine support need as something you just want</div>
       </div>
     </div>
 
     <p class="landing-note" style="margin-top:1.5rem;">
-      Not sure which fits? <a href="#" onclick="startStuck('unsure'); return false;" style="color:var(--teal);text-decoration:underline;">Tell DAN what's happening</a> and we'll figure it out together.
+      <span data-en="Not sure which fits?" data-es="¿No está seguro/a cuál le corresponde?">Not sure which fits?</span> <a href="#" onclick="startStuck('unsure'); return false;" style="color:var(--teal);text-decoration:underline;" data-en="Tell DAN what's happening" data-es="Cuéntele a DAN lo que está pasando">Tell DAN what's happening</a> <span data-en="and we'll figure it out together." data-es="y lo resolveremos juntos.">and we'll figure it out together.</span>
     </p>
   </div>
 </div>
@@ -644,8 +676,12 @@
       <span class="flow-badge" id="flow-badge"></span>
     </div>
     <div class="chat-header-right">
-      <button class="btn-save-header" id="btn-copy-header" onclick="copyConversation()">📋 Copy conversation</button>
-      <button class="btn-save-header" id="btn-dl-header" onclick="downloadConversation()">⬇ Download</button>
+      <div class="lang-toggle" id="chat-lang-toggle">
+        <button class="lang-btn active" id="chat-btn-en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" id="chat-btn-es" onclick="setLang('es')">ES</button>
+      </div>
+      <button class="btn-save-header" id="btn-copy-header" onclick="copyConversation()" style="display:none;" data-en="📋 Copy conversation" data-es="📋 Copiar conversación">📋 Copy conversation</button>
+      <button class="btn-save-header" id="btn-dl-header" onclick="downloadConversation()" style="display:none;" data-en="⬇ Download" data-es="⬇ Descargar">⬇ Download</button>
     </div>
   </div>
   <div class="chat-messages" id="chat-messages"></div>
@@ -668,13 +704,13 @@
       <button class="btn-save" onclick="downloadConversation()">⬇ Download</button>
     </div>
     <div class="feedback-bar">
-      <span class="feedback-bar-label">How is DAN doing?</span>
-      <button class="fb-persistent-btn" id="gen-up" onclick="rateGeneral('Helpful')">👍 Helpful</button>
-      <button class="fb-persistent-btn" id="gen-down" onclick="rateGeneral('Not Helpful')">👎 Not helpful</button>
+      <span class="feedback-bar-label" data-en="How is DAN doing?" data-es="¿Cómo está funcionando DAN?">How is DAN doing?</span>
+      <button class="fb-persistent-btn" id="gen-up" onclick="rateGeneral('Helpful')" data-en="👍 Helpful" data-es="👍 Útil">👍 Helpful</button>
+      <button class="fb-persistent-btn" id="gen-down" onclick="rateGeneral('Not Helpful')" data-en="👎 Not helpful" data-es="👎 No fue útil">👎 Not helpful</button>
     </div>
     <div class="fb-general-wrap" id="fb-general-wrap" style="display:flex; flex-direction:row;">
-      <textarea id="fb-general-text" rows="2" placeholder="Help us make DAN better (optional)"></textarea>
-      <button class="btn-send-fb-general" onclick="submitGeneralFeedback()">Send</button>
+      <textarea id="fb-general-text" rows="2" placeholder="Help us make DAN better (optional)" data-en-placeholder="Help us make DAN better (optional)" data-es-placeholder="Ayúdenos a mejorar a DAN (opcional)"></textarea>
+      <button class="btn-send-fb-general" onclick="submitGeneralFeedback()" data-en="Send" data-es="Enviar">Send</button>
     </div>
   </div>
 </div>
@@ -685,6 +721,55 @@
 
 <script>
 // -- CONFIG --
+// -- LANGUAGE TOGGLE --
+let currentLang = 'en';
+
+const systemPromptES = `Eres DAN (Disability Access Navigator), una herramienta de navegación para familias hispanas que participan en el sistema de Regional Centers de California.
+
+SIEMPRE responde en español. Usa un lenguaje cálido, sencillo y accesible que un familiar (no un profesional) pueda entender fácilmente. Usa "usted" para dirigirte a la persona. Mantén los términos técnicos oficiales en inglés (Regional Center, RC, IPP, SDP, Spending Plan, Lanterman Act, Fair Hearing) ya que las familias los reconocen así.
+
+Tu función es ayudar a las familias a entender qué pueden pedir, cómo pedirlo, y qué hacer cuando la primera respuesta es no. No eres un abogado ni un asesor legal — eres una guía de navegación. Siempre ofrece redactar un correo electrónico o puntos clave al final de cada tema.
+
+Principio informal primero: Antes de sugerir procesos formales, recomienda pedir directamente al Coordinador de Servicios. Los procesos formales (reuniones IPP, Fair Hearings) son para cuando el enfoque informal no funciona.
+
+Siempre cierra con una oferta: "¿Le gustaría que redactara un correo o puntos clave para su conversación con el RC?"`;
+
+function setLang(lang) {
+  currentLang = lang;
+
+  // Update all toggle buttons
+  ['landing-btn-en','landing-btn-es','chat-btn-en','chat-btn-es'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('active', id.endsWith(lang));
+  });
+
+  // Update all elements with data-en / data-es
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = el.getAttribute('data-' + lang) || el.getAttribute('data-en');
+  });
+
+  // Update placeholders
+  document.querySelectorAll('[data-en-placeholder]').forEach(el => {
+    el.placeholder = el.getAttribute('data-' + lang + '-placeholder') || el.getAttribute('data-en-placeholder');
+  });
+
+  // Update the RC dropdown placeholder option
+  const rcSelect = document.getElementById('demo-rc');
+  if (rcSelect) {
+    const placeholder = rcSelect.querySelector('option[value=""]');
+    if (placeholder) {
+      placeholder.textContent = lang === 'es'
+        ? '— Seleccione su Regional Center —'
+        : '— Select your Regional Center —';
+    }
+  }
+
+  // Store lang for Airtable
+  document.body.dataset.lang = lang;
+}
+
+
 const CONFIG = {
   AIRTABLE_BASE_ID:       "applBHiDsZwGSmFS8",
   AIRTABLE_MSG_TABLE:     "tblU3BtbYzyjF6PrI",
@@ -844,6 +929,7 @@ async function writeSessionRecord(cardType) {
         fields: {
           'Session ID':    sessionId,
           'Flow Type':     'Family',
+          'Language':      currentLang === 'es' ? 'Spanish' : 'English',
           'Timestamp':     new Date().toISOString(),
           'Entry Card':    cardLabels[cardType] || cardType,
           'Age Range':     demoData.age  || '',
@@ -925,7 +1011,7 @@ async function sendMessage() {
   const typingId = showTyping();
 
   try {
-    const systemPrompt = DAN_SYSTEM_FAMILY;
+    const systemPrompt = currentLang === 'es' ? systemPromptES : DAN_SYSTEM_FAMILY;
 
     const response = await fetch('/.netlify/functions/proxy', {
       method: 'POST',
@@ -1249,6 +1335,7 @@ async function sendMsgFeedback(msgId, rating, comment, msgText, convPath) {
         fields: {
           'Session ID':               sessionId,
           'Flow Type':                'Family',
+          'Language':               currentLang === 'es' ? 'Spanish' : 'English',
           'Timestamp':                new Date().toISOString(),
           'Message (DAN response)':   msgText,
           'Conversation Path':        convPath || '',
