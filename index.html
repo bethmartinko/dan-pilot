@@ -18,7 +18,6 @@
     --white:     #ffffff;
     --danger:    #c0392b;
     --success:   #1A7A7A;
-    --advisor-accent: #1F3864;
     --family-accent:  #1A7A7A;
     --radius:    12px;
     --radius-sm: 6px;
@@ -83,7 +82,6 @@
     text-align: left;
   }
   .flow-card:hover { border-color: var(--navy); box-shadow: var(--shadow); transform: translateY(-2px); }
-  .flow-card.advisor:hover { border-color: var(--advisor-accent); }
   .flow-card.family:hover  { border-color: var(--family-accent); }
   .flow-card-label {
     font-size: .6875rem;
@@ -92,7 +90,6 @@
     text-transform: uppercase;
     margin-bottom: .5rem;
   }
-  .flow-card.advisor .flow-card-label { color: var(--advisor-accent); }
   .flow-card.family  .flow-card-label { color: var(--family-accent); }
   .flow-card-title {
     font-family: 'DM Serif Display', serif;
@@ -199,8 +196,6 @@
     padding: .25rem .625rem;
     border-radius: 99px;
   }
-  .flow-badge.advisor { background: #e8ecf4; color: var(--advisor-accent); }
-  .flow-badge.family  { background: var(--teal-lt); color: var(--teal); }
   .chat-messages {
     flex: 1;
     overflow-y: auto;
@@ -316,24 +311,6 @@
   .btn-send:disabled { background: var(--border); cursor: default; }
   .btn-send svg { width: 16px; height: 16px; }
   .input-hint { font-size: .75rem; color: var(--muted); margin-top: .375rem; padding: 0 .25rem; }
-  .end-session-bar { padding: .625rem 1.25rem 1.25rem; }
-  .btn-end-big {
-    width: 100%;
-    display: flex; align-items: center; justify-content: center; gap: .625rem;
-    background: linear-gradient(135deg, var(--teal) 0%, #155f5f 100%);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius);
-    padding: .875rem 1.5rem;
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.125rem;
-    cursor: pointer;
-    transition: opacity .18s, transform .12s, box-shadow .18s;
-    box-shadow: 0 4px 16px rgba(26,122,122,0.28);
-    letter-spacing: .01em;
-  }
-  .btn-end-big:hover { opacity: .92; transform: translateY(-1px); box-shadow: 0 6px 22px rgba(26,122,122,0.36); }
-  .btn-end-big:active { transform: translateY(0); }
 
   /* -- INTAKE OPTION BUTTONS -- */
   .option-buttons {
@@ -379,14 +356,6 @@
     pointer-events: none;
   }
 
-  #session-survey {
-    display: none;
-    min-height: 100vh;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background: var(--sand);
-  }
   .survey-inner {
     max-width: 520px; width: 100%;
     background: var(--white);
@@ -410,13 +379,6 @@
     outline: none; resize: vertical; transition: border .15s;
   }
   .survey-field textarea:focus, .survey-field select:focus { border-color: var(--teal); }
-  .star-row { display: flex; gap: .5rem; }
-  .star-btn {
-    background: none; border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm); padding: .375rem .75rem;
-    font-size: 1.125rem; cursor: pointer; transition: all .15s; color: var(--muted);
-  }
-  .star-btn:hover, .star-btn.active { border-color: var(--teal); background: var(--teal-lt); color: var(--teal); }
   .yn-row { display: flex; gap: .75rem; }
   .yn-btn {
     flex: 1; background: none; border: 1.5px solid var(--border);
@@ -434,16 +396,6 @@
   }
   .btn-submit-survey:hover { background: #162a4e; }
   .btn-submit-survey:disabled { background: var(--border); cursor: default; }
-  #thankyou {
-    display: none;
-    min-height: 100vh;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-  }
-  .ty-inner { max-width: 440px; text-align: center; }
-  .ty-inner h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--navy); margin-bottom: 1rem; }
-  .ty-inner p { font-size: 1rem; color: var(--muted); line-height: 1.7; }
   .system-msg {
     align-self: center;
     font-size: .8125rem; color: var(--muted);
@@ -463,12 +415,77 @@
 </head>
 <body>
 
+<!-- ══════════════════════════════════════════════════
+     DEMOGRAPHICS SCREEN
+     ══════════════════════════════════════════════════ -->
+<div id="demo-screen" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:2rem; background:var(--sand);">
+  <div class="survey-inner">
+    <h2>Before we start</h2>
+    <p class="survey-sub">A few optional questions — this helps us understand who DAN is serving and make the case for funding. You can skip any of these.</p>
+
+    <div class="survey-field">
+      <label>Age of the person with the disability <span style="font-weight:400; font-size:.875rem;">(optional)</span></label>
+      <div class="yn-row" style="flex-wrap:wrap; gap:.5rem;">
+        <button class="yn-btn" onclick="setDemoField('age', this)">0–3</button>
+        <button class="yn-btn" onclick="setDemoField('age', this)">4–22</button>
+        <button class="yn-btn" onclick="setDemoField('age', this)">23+</button>
+        <button class="yn-btn" onclick="setDemoField('age', this)">Prefer not to say</button>
+      </div>
+    </div>
+
+    <div class="survey-field">
+      <label>Your Regional Center <span style="font-weight:400; font-size:.875rem;">(optional)</span></label>
+      <select id="demo-rc" style="width:100%; padding:.5rem .75rem; border:1.5px solid var(--slate-lt); border-radius:6px; font-family:inherit; font-size:.9375rem; color:var(--ink); background:white;">
+        <option value="">— Select your Regional Center —</option>
+        <option>Alta California Regional Center</option>
+        <option>Bay Area Regional Center</option>
+        <option>Central Valley Regional Center</option>
+        <option>Coastal Regional Center</option>
+        <option>Desert/Mountain Children's Center</option>
+        <option>Eastern Los Angeles Regional Center</option>
+        <option>Far Northern Regional Center</option>
+        <option>Frank D. Lanterman Regional Center</option>
+        <option>Golden Gate Regional Center</option>
+        <option>Harbor Regional Center</option>
+        <option>Inland Regional Center</option>
+        <option>Kern Regional Center</option>
+        <option>North Bay Regional Center</option>
+        <option>North Los Angeles County Regional Center</option>
+        <option>Redwood Coast Regional Center</option>
+        <option>Regional Center of the East Bay</option>
+        <option>Regional Center of Orange County (RCOC)</option>
+        <option>San Andreas Regional Center</option>
+        <option>San Diego Regional Center</option>
+        <option>San Gabriel/Pomona Regional Center</option>
+        <option>Tri-Counties Regional Center</option>
+        <option>Prefer not to say</option>
+      </select>
+    </div>
+
+    <div class="survey-field">
+      <label>Race / ethnicity <span style="font-weight:400; font-size:.875rem;">(optional)</span></label>
+      <div class="yn-row" style="flex-wrap:wrap; gap:.5rem;">
+        <button class="yn-btn" onclick="setDemoField('race', this)">White</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)">Black / African American</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)">Hispanic / Latino</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)">Asian</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)">Native American / Alaska Native</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)">Pacific Islander</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)">Multiracial</button>
+        <button class="yn-btn" onclick="setDemoField('race', this)">Prefer not to say</button>
+      </div>
+    </div>
+
+    <button class="btn-submit-survey" onclick="submitDemographics()">Continue to DAN →</button>
+  </div>
+</div>
+
 <div id="landing">
   <div class="landing-inner" style="max-width:720px;">
     <div class="dan-wordmark">DAN</div>
     <div class="dan-tagline">Disability Access Navigator</div>
     <p class="landing-intro">
-      DAN helps families navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time.
+      DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time.
     </p>
 
     <div class="privacy-box">
@@ -478,29 +495,29 @@
     <p class="stuck-prompt">Which of these sounds like your situation?</p>
 
     <div class="stuck-grid">
-      <div class="stuck-card" onclick="startStuck('preference')">
-        <div class="stuck-quote">"That's a preference, not a need"</div>
-        <div class="stuck-desc">RC reframes a genuine support need as something your family just wants</div>
-      </div>
-      <div class="stuck-card" onclick="startStuck('ipp')">
-        <div class="stuck-quote">"That goal isn't in the IPP"</div>
-        <div class="stuck-desc">Service denied because the IPP language doesn't match what was requested</div>
-      </div>
-      <div class="stuck-card" onclick="startStuck('crisis')">
-        <div class="stuck-quote">"We can't fund that without a crisis"</div>
-        <div class="stuck-desc">Prevention denied because nothing bad has happened yet</div>
-      </div>
       <div class="stuck-card featured" onclick="startStuck('delay')">
         <div class="stuck-quote">Denial by delay</div>
-        <div class="stuck-desc">RC keeps requesting more info, moving the bar -- for months -- until the family is too burnt out to appeal</div>
+        <div class="stuck-desc">RC keeps requesting more info, moving the bar -- for months -- until you're too burnt out to appeal</div>
+      </div>
+      <div class="stuck-card" onclick="startStuck('sdp')">
+        <div class="stuck-quote">SDP renewal gap</div>
+        <div class="stuck-desc">RC waits for you to notice the renewal is overdue -- when RC is supposed to initiate it</div>
       </div>
       <div class="stuck-card" onclick="startStuck('generic')">
         <div class="stuck-quote">"There's a generic resource for that"</div>
         <div class="stuck-desc">RC points to a community option that doesn't actually work for your person</div>
       </div>
-      <div class="stuck-card" onclick="startStuck('sdp')">
-        <div class="stuck-quote">SDP renewal gap</div>
-        <div class="stuck-desc">RC waits for the family to notice the renewal is overdue -- when RC is supposed to initiate it</div>
+      <div class="stuck-card" onclick="startStuck('ipp')">
+        <div class="stuck-quote">"That goal isn't in the IPP"</div>
+        <div class="stuck-desc">Service denied because the IPP language doesn't match what was requested</div>
+      </div>
+      <div class="stuck-card" onclick="startStuck('spending')">
+        <div class="stuck-quote">Spending Plan -- you can't move money between budget categories</div>
+        <div class="stuck-desc">Respite budget can't be moved to community activities -- even when it makes more sense for your person</div>
+      </div>
+      <div class="stuck-card" onclick="startStuck('preference')">
+        <div class="stuck-quote">"That's a preference, not a need"</div>
+        <div class="stuck-desc">RC reframes a genuine support need as something you just want</div>
       </div>
     </div>
 
@@ -531,58 +548,21 @@
       </div>
       <p class="input-hint" id="input-hint"></p>
     </div>
-    <div class="end-session-bar">
-      <button class="btn-end-big" onclick="endSession()">
-        Share your feedback &nbsp;<span class="btn-end-arrow">&rarr;</span>
-      </button>
+    <div class="feedback-bar">
+      <span class="feedback-bar-label">How is DAN doing?</span>
+      <button class="fb-persistent-btn" id="gen-up" onclick="rateGeneral('Helpful')">👍 Helpful</button>
+      <button class="fb-persistent-btn" id="gen-down" onclick="rateGeneral('Not Helpful')">👎 Not helpful</button>
+    </div>
+    <div class="fb-general-wrap" id="fb-general-wrap" style="display:none; flex-direction:row;">
+      <textarea id="fb-general-text" rows="2" placeholder="What's on your mind? (optional)"></textarea>
+      <button class="btn-send-fb-general" onclick="submitGeneralFeedback()">Send</button>
     </div>
   </div>
 </div>
 
-<div id="session-survey" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:2rem; background:var(--sand);">
-  <div class="survey-inner">
-    <h2>Before you go</h2>
-    <p class="survey-sub" id="survey-sub"></p>
-    <div class="survey-field">
-      <label>Overall, how useful was DAN in this session?</label>
-      <div class="star-row" id="star-row">
-        <button class="star-btn" data-v="1" onclick="setStar(1)">1</button>
-        <button class="star-btn" data-v="2" onclick="setStar(2)">2</button>
-        <button class="star-btn" data-v="3" onclick="setStar(3)">3</button>
-        <button class="star-btn" data-v="4" onclick="setStar(4)">4</button>
-        <button class="star-btn" data-v="5" onclick="setStar(5)">5</button>
-      </div>
-    </div>
-    <div class="survey-field">
-      <label id="useful-label"></label>
-      <textarea id="survey-useful" rows="3" placeholder="..."></textarea>
-    </div>
-    <div class="survey-field">
-      <label id="missing-label"></label>
-      <textarea id="survey-missing" rows="3" placeholder="..."></textarea>
-    </div>
-    <div class="survey-field">
-      <label>Would you use DAN again -- or recommend it to someone?</label>
-      <div class="yn-row">
-        <button class="yn-btn" onclick="setYN('Yes')">Yes</button>
-        <button class="yn-btn" onclick="setYN('Maybe')">Maybe</button>
-        <button class="yn-btn" onclick="setYN('No')">No</button>
-      </div>
-    </div>
-    <div class="survey-field">
-      <label>Anything else you want us to know?</label>
-      <textarea id="survey-other" rows="2" placeholder="Optional"></textarea>
-    </div>
-    <button class="btn-submit-survey" onclick="submitSurvey()">Submit feedback</button>
-  </div>
-</div>
 
-<div id="thankyou" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:2rem;">
-  <div class="ty-inner">
-    <h2>Thank you.</h2>
-    <p id="ty-text"></p>
-  </div>
-</div>
+
+
 
 <script>
 // -- CONFIG --
@@ -594,7 +574,7 @@ const CONFIG = {
 
 // -- SYSTEM PROMPT --
 const DAN_SYSTEM_PROMPT = [
-  'You are DAN -- the Disability Access Navigator. You help families navigate California Regional Center (RC) services for adults with developmental disabilities.',
+  'You are DAN -- the Disability Access Navigator. You help people navigate California Regional Center (RC) services for adults with developmental disabilities.',
   '',
   '=== OUTPUT FORMAT -- THIS IS THE MOST IMPORTANT RULE ===',
   'When you present choices or ask a question with options, you MUST use this EXACT format:',
@@ -604,13 +584,13 @@ const DAN_SYSTEM_PROMPT = [
   'The bracket format is what creates clickable buttons in the interface. Any other format breaks the UI.',
   '',
   '=== STUCK POINT ENTRY -- WHEN A FAMILY ARRIVES VIA A STUCK POINT CARD ===',
-  'The family has already identified their stuck point. Skip the intake questions entirely.',
+  'The person has already identified their stuck point. Skip the intake questions entirely.',
   'Start with brief validation of the pattern they named, then ask ONE clarifying question to understand where they are.',
   'For denial by delay specifically: ask how long first, then ask about deadlines (SDP plan year, fair hearing window, IPP anniversary), then ask about health, safety, or functional impact on the person. All three shape the pace.',
   'Your job is to meet them exactly where they are -- not where the process says they should be.',
   '',
   '=== DENIAL BY DELAY -- KNOW THIS COLD ===',
-  'Pattern: RC does not formally deny the request. Instead they keep asking for more information, scheduling more assessments, saying they need to consult internally -- for weeks or months. The family eventually gives up. No Notice of Action (NOA) is ever issued.',
+  'Pattern: RC does not formally deny the request. Instead they keep asking for more information, scheduling more assessments, saying they need to consult internally -- for weeks or months. People eventually give up. No Notice of Action (NOA) is ever issued.',
   '',
   'BEFORE ANYTHING ELSE -- ask these three things (one at a time):',
   '1. How long has this been going on?',
@@ -618,13 +598,13 @@ const DAN_SYSTEM_PROMPT = [
   '3. What is the impact on the person right now -- is there a health, safety, or functional impact from not having this support?',
   'These three answers together determine the pace. No deadline, early stage, no impact = start soft. Deadline approaching OR significant impact = move faster through the arc.',
   '',
-  'TONE: Lead with validation, not legal options. The family is exhausted and probably doubting themselves. Start there. This is a documented pattern -- they are not imagining it, they are not being difficult. Only introduce escalation steps after you understand where they are.',
+  'TONE: Lead with validation, not legal options. The person is exhausted and probably doubting themselves. Start there. This is a documented pattern -- they are not imagining it, they are not being difficult. Only introduce escalation steps after you understand where they are.',
   '',
   'GRADUAL ESCALATION ARC -- follow this order, do not jump ahead:',
   'Step 1 -- Informal ask (if not done): Suggest a friendly direct conversation with the SC first. Sometimes delay is disorganization, not strategy. A simple "can we set a date to have a decision by?" can unstick things without creating conflict.',
   'Step 2 -- Put it in writing: If informal ask did not work or has already been tried, the next step is a short, friendly email to the SC requesting a written timeline. This is not adversarial -- it is just creating a record. Offer to draft this.',
   'Step 3 -- Written escalation: If no response after the first email, a follow-up that names the delay more directly and references their right to a timely decision. Still not a threat -- just firmer.',
-  'Step 4 -- OCRA: Free advocate, 1-800-390-7032. Bring them in when the written path has stalled. They can intervene without the family having to file anything.',
+  'Step 4 -- OCRA: Free advocate, 1-800-390-7032. Bring them in when the written path has stalled. They can intervene without you having to file anything.',
   'Step 5 -- Fair hearing: Only if earlier steps have not moved things, or if a deadline makes earlier steps too slow. Families can file even without an NOA -- unreasonable delay is itself grounds. OCRA can help file.',
   '',
   'DEADLINE SHAPES PACE: If SDP plan year is ending, or a fair hearing window is closing, move faster through the arc. Name the urgency clearly but calmly.',
@@ -635,8 +615,8 @@ const DAN_SYSTEM_PROMPT = [
   '- Lanterman Act: RC must provide services based on need. Services are an entitlement (WIC sec. 4500).',
   '- IPP: the legal document listing all RC services. Families can request IPP review anytime.',
   '- Writing matters: verbal requests create no legal obligation. Always suggest putting requests in writing.',
-  '- SDP: gives families a personal budget and control over services. First step is Orientation Training.',
-  '- Fair Hearing: families have 60 days from an NOA to appeal (2025 law). No NOA needed -- delay can be treated as denial.',
+  '- SDP: gives you a personal budget and control over services. First step is Orientation Training.',
+  '- Fair Hearing: you have 60 days from an NOA to appeal (2025 law). No NOA needed -- delay can be treated as denial.',
   '- OCRA (free advocate): 1-800-390-7032. DDS SDP Ombudsperson: SDP.Ombudsperson@dds.ca.gov',
   '- ILS: skill-building (cooking, budgeting, community navigation). SLS: ongoing support for people in their own home.',
   '- Check for existing ILS/SLS before suggesting a new IPP meeting.',
@@ -646,63 +626,114 @@ const DAN_SYSTEM_PROMPT = [
   '- ONE question at a time. Never stack questions.',
   '- Plain language. Explain any term you use.',
   '- Never predict outcomes or promise results.',
-  '- Always offer to draft an email or talking points when a next step is clear.',
-  '- You serve adults 18+ with developmental disabilities and their families. Not children in school-based services.'
+  '- Always offer to draft an email or talking points when a next step is clear.'
 ].join("\n");
 
 const DAN_SYSTEM_FAMILY = DAN_SYSTEM_PROMPT + `
 
 ADDITIONAL CONTEXT FOR THIS SESSION:
-You are speaking with a family member or supporter navigating the Regional Center system. This is a pilot -- at the end, they'll be asked a few questions about whether DAN was helpful. Your goal is to be genuinely useful to them right now.`;
+You are speaking with someone navigating the Regional Center system -- either the person with a disability themselves, or someone in their circle of support. This is a pilot -- at the end, they'll be asked a few questions about whether DAN was helpful. Your goal is to be genuinely useful to them right now.`;
 
 // -- STATE --
 let currentFlow  = null;
 let sessionId    = null;
 let messages     = [];
-let surveyData   = { rating: null, yn: null };
 let sessionTopic = null;
 let msgCounter   = 0;
 
 // -- STUCK POINT ENTRY --
 const STUCK_WELCOMES = {
-  delay: `What you're describing is real, and you're not imagining it. Families wait and wait, and nothing ever officially gets denied -- so there's nothing to appeal. It's one of the most common and exhausting patterns in the RC system.\n\nBefore we figure out next steps, I want to understand where you are.\n\nHow long has this been going on?\n\n[A few weeks] [1-2 months] [Several months] [More than 6 months]`,
+  delay: `What you're describing is real, and you're not imagining it. People wait and wait, and nothing ever officially gets denied -- so there's nothing to appeal. It's one of the most common and exhausting patterns in the RC system.\n\nBefore we figure out next steps, I want to understand where you are.\n\nHow long has this been going on?\n\n[A few weeks] [1-2 months] [Several months] [More than 6 months]`,
 
-  preference: `"That's a preference, not a need" is one of the most common deflections families hear -- and it's often not accurate. The Lanterman Act says RC must fund services based on functional need, not just what the RC thinks is important.\n\nLet's figure out what's actually going on here.\n\nWhat did you ask for, and what reason did they give for calling it a preference?`,
+  preference: `"That's a preference, not a need" is one of the most common deflections people hear -- and it's often not accurate. The Lanterman Act says RC must fund services based on functional need, not just what the RC thinks is important.\n\nLet's figure out what's actually going on here.\n\nWhat did you ask for, and what reason did they give for calling it a preference?`,
 
   ipp: `If the RC is saying "that goal isn't in the IPP," they may be right that the IPP needs updating -- but that's fixable, and it's not a reason to deny the service outright.\n\nThe IPP is a legal document and you have the right to request a planning meeting to update it at any time.\n\nWhat service were you asking for, and is there an IPP goal that seems related, even if the wording doesn't match exactly?`,
 
-  crisis: `"We can't fund that without a crisis" is a real pattern, and it conflicts directly with what the Lanterman Act says -- RC is supposed to fund services that prevent a crisis, not just respond after one.\n\nLet's look at what you're up against.\n\nWhat support were you asking for, and what did the RC say specifically?`,
+  spending: `Spending Plan budget categories are one of SDP's most frustrating constraints. The budget is yours -- but the rules say you can't move money between categories without going through a formal modification process, even when a different use would clearly serve your person better.\n\nLet's figure out what you're working with.\n\nWhich categories are involved -- where is the money sitting, and where do you need it?`,
 
   generic: `The "generic resource" deflection is tricky because RC is allowed to consider community resources -- but only if those resources actually work for your person. "Generally available" doesn't mean "available to your family member specifically."\n\nWhat resource did they point to, and what makes it not workable for your situation?`,
 
-  sdp: `SDP renewals are supposed to be initiated by the RC -- not the family. If your renewal is overdue and they haven't started it, that's on them, not you.\n\nLet's figure out where things stand.\n\nDo you know when your current SDP agreement was supposed to renew?`,
+  sdp: `SDP renewals are supposed to be initiated by the RC -- not you. If your renewal is overdue and they haven't started it, that's on them, not you.\n\nLet's figure out where things stand.\n\nDo you know when your current SDP agreement was supposed to renew?`,
 
   unsure: `No problem -- let's figure it out together.\n\nTell me what's been happening with your Regional Center, and I'll help you identify what you're dealing with and what your options are.`
 };
 
+// -- DEMOGRAPHICS STATE --
+let demoData = { age: null, rc: null, race: null };
+let pendingStuckType = null;
+
+function setDemoField(field, btn) {
+  demoData[field] = btn.textContent.trim();
+  var group = btn.closest('.yn-row');
+  group.querySelectorAll('.yn-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function submitDemographics() {
+  demoData.rc = document.getElementById('demo-rc').value;
+  document.getElementById('demo-screen').style.display = 'none';
+  openChat(pendingStuckType);
+}
+
 function startStuck(type) {
-  currentFlow = 'family';
-  sessionId   = 'family-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
+  pendingStuckType = type;
+  currentFlow  = 'family';
+  sessionId    = 'family-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
   sessionTopic = type;
 
-  document.getElementById('landing').style.display    = 'none';
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('demo-screen').style.display = 'flex';
+}
+
+function openChat(type) {
   document.getElementById('chat-shell').style.display = 'flex';
 
   var badge = document.getElementById('flow-badge');
-  badge.textContent = 'Family';
+  badge.textContent = 'Navigator';
   badge.className   = 'flow-badge family';
 
   var hint = document.getElementById('input-hint');
   hint.textContent = 'Tell DAN about your situation -- no question is too basic.';
 
+  // Write one session record to Airtable — demographics + entry card
+  writeSessionRecord(type);
+
   var welcome = STUCK_WELCOMES[type] || STUCK_WELCOMES['unsure'];
   appendDanMessage(welcome, false);
 }
 
-// Keep startFlow for any legacy references
-function startFlow(flow) {
-  startStuck('unsure');
+async function writeSessionRecord(cardType) {
+  const cardLabels = {
+    'delay':      'Denial by delay',
+    'sdp-gap':    'SDP renewal gap',
+    'generic':    'Generic resource deflection',
+    'ipp':        'Goal not in IPP',
+    'spending':   'Spending Plan budget categories',
+    'preference': 'Preference not a need',
+    'unsure':     'Not sure / open',
+  };
+  try {
+    await fetch('/.netlify/functions/proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-target': 'airtable-post' },
+      body: JSON.stringify({
+        url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}`,
+        fields: {
+          'Session ID':    sessionId,
+          'Timestamp':     new Date().toISOString(),
+          'Entry Card':    cardLabels[cardType] || cardType,
+          'Age Range':     demoData.age  || '',
+          'Regional Center': demoData.rc || '',
+          'Race / Ethnicity': demoData.race || '',
+        }
+      }),
+    });
+  } catch (e) {
+    console.error('Airtable session record error', e);
+  }
 }
+
+
 
 // -- OPTION BUTTON CLICK (event delegation - no inline onclick) --
 document.addEventListener('click', function(e) {
@@ -752,7 +783,7 @@ async function sendMessage() {
   const typingId = showTyping();
 
   try {
-    const systemPrompt = currentFlow === 'advisor' ? DAN_SYSTEM_ADVISOR : DAN_SYSTEM_FAMILY;
+    const systemPrompt = DAN_SYSTEM_FAMILY;
 
     const response = await fetch('/.netlify/functions/proxy', {
       method: 'POST',
@@ -826,7 +857,7 @@ function escHtml(str) {
 // -- DOM HELPERS --
 function appendUserMessage(text) {
   const container = document.getElementById('chat-messages');
-  const initials   = currentFlow === 'advisor' ? 'ADV' : 'YOU';
+  const initials   = 'YOU';
   const row = document.createElement('div');
   row.className = 'msg-row user';
   row.innerHTML = `
@@ -915,6 +946,24 @@ function scrollToBottom() {
 }
 
 // -- IN-CONVERSATION FEEDBACK --
+function getConversationPath(upToMsgId) {
+  // Captures last 6 lines (3 exchanges). If upToMsgId is null, captures entire conversation.
+  const allRows = document.querySelectorAll('.msg-row');
+  const lines = [];
+  for (const row of allRows) {
+    if (row.classList.contains('user')) {
+      const bubble = row.querySelector('.msg-bubble');
+      if (bubble) lines.push('You: ' + bubble.textContent.trim());
+    } else if (row.classList.contains('dan')) {
+      const msgId = row.dataset.msgId;
+      const bubble = row.querySelector('.msg-bubble');
+      if (bubble) lines.push('DAN: ' + bubble.textContent.trim());
+      if (upToMsgId && msgId === upToMsgId) break;
+    }
+  }
+  return upToMsgId ? lines.slice(-6).join('\n\n') : lines.join('\n\n');
+}
+
 const fbState = {};
 
 function rateDan(msgId, rating) {
@@ -932,9 +981,10 @@ function rateDan(msgId, rating) {
   }
 
   fbState[msgId].airtableId = null;
-  const msgRow  = document.querySelector(`[data-msg-id="${msgId}"]`);
-  const msgText = msgRow ? msgRow.dataset.text : '';
-  sendMsgFeedback(msgId, rating, '', msgText).then(id => {
+  const msgRow   = document.querySelector(`[data-msg-id="${msgId}"]`);
+  const msgText  = msgRow ? msgRow.dataset.text : '';
+  const convPath = getConversationPath(msgId);
+  sendMsgFeedback(msgId, rating, '', msgText, convPath).then(id => {
     if (id) fbState[msgId].airtableId = id;
   });
 }
@@ -947,9 +997,10 @@ function sendFbComment(msgId) {
   if (recordId) {
     patchMsgFeedback(recordId, comment);
   } else {
-    const msgRow  = document.querySelector(`[data-msg-id="${msgId}"]`);
-    const msgText = msgRow ? msgRow.dataset.text : '';
-    sendMsgFeedback(msgId, rating, comment, msgText);
+    const msgRow   = document.querySelector(`[data-msg-id="${msgId}"]`);
+    const msgText  = msgRow ? msgRow.dataset.text : '';
+    const convPath = getConversationPath(msgId);
+    sendMsgFeedback(msgId, rating, comment, msgText, convPath);
   }
 
   const followup = document.getElementById(`fb-follow-${msgId}`);
@@ -959,7 +1010,7 @@ function sendFbComment(msgId) {
 }
 
 // -- AIRTABLE WRITES --
-async function sendMsgFeedback(msgId, rating, comment, msgText) {
+async function sendMsgFeedback(msgId, rating, comment, msgText, convPath) {
   try {
     const res = await fetch('/.netlify/functions/proxy', {
       method: 'POST',
@@ -971,9 +1022,10 @@ async function sendMsgFeedback(msgId, rating, comment, msgText) {
         url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_MSG_TABLE)}`,
         fields: {
           'Session ID':               sessionId,
-          'Flow Type':                currentFlow === 'advisor' ? 'Advisor' : 'Family',
+          'Flow Type':                'Family',
           'Timestamp':                new Date().toISOString(),
           'Message (DAN response)':   msgText,
+          'Conversation Path':        convPath || '',
           'Rating':                   rating,
           'What were you expecting?': comment,
         }
@@ -1005,87 +1057,38 @@ async function patchMsgFeedback(recordId, comment) {
   }
 }
 
-async function sendSessionFeedback(fields) {
-  try {
-    await fetch('/.netlify/functions/proxy', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-target': 'airtable-post',
-      },
-      body: JSON.stringify({
-        url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}`,
-        fields,
-      }),
-    });
-  } catch (e) {
-    console.error('Airtable session feedback error', e);
-  }
+// -- PERSISTENT FEEDBACK BAR --
+let generalFbRating = null;
+
+function rateGeneral(rating) {
+  generalFbRating = rating;
+  document.getElementById('gen-up').className   = 'fb-persistent-btn' + (rating === 'Helpful'     ? ' active-helpful'     : '');
+  document.getElementById('gen-down').className = 'fb-persistent-btn' + (rating === 'Not Helpful'  ? ' active-nothelpful'  : '');
+  // show comment box
+  const wrap = document.getElementById('fb-general-wrap');
+  wrap.style.display = 'flex';
+  document.getElementById('fb-general-text').focus();
 }
 
-// -- END SESSION --
-function endSession() {
-  document.getElementById('chat-shell').style.display = 'none';
+function submitGeneralFeedback() {
+  const comment  = document.getElementById('fb-general-text').value.trim();
+  const convPath = getConversationPath(null); // full conversation so far
 
-  if (currentFlow === 'advisor') {
-    document.getElementById('survey-sub').textContent    = "Your practitioner perspective helps us improve DAN's accuracy and identify gaps.";
-    document.getElementById('useful-label').textContent  = 'What did DAN get right -- or what was most useful?';
-    document.getElementById('missing-label').textContent = 'What was missing, inaccurate, or unclear?';
-  } else {
-    document.getElementById('survey-sub').textContent    = "Your feedback helps us make DAN more useful for families like yours.";
-    document.getElementById('useful-label').textContent  = 'What was most helpful about this conversation?';
-    document.getElementById('missing-label').textContent = "Was there anything you expected to see that wasn't there?";
-  }
+  sendMsgFeedback('general-' + Date.now(), generalFbRating || 'General', comment, '[General session feedback]', convPath);
 
-  const survey = document.getElementById('session-survey');
-  survey.style.display        = 'flex';
-  survey.style.minHeight      = '100vh';
-  survey.style.alignItems     = 'center';
-  survey.style.justifyContent = 'center';
-}
+  // reset bar
+  generalFbRating = null;
+  document.getElementById('gen-up').className   = 'fb-persistent-btn';
+  document.getElementById('gen-down').className = 'fb-persistent-btn';
+  document.getElementById('fb-general-text').value = '';
+  const wrap = document.getElementById('fb-general-wrap');
+  wrap.style.display = 'none';
 
-function setStar(v) {
-  surveyData.rating = v;
-  document.querySelectorAll('.star-btn').forEach(b => {
-    b.classList.toggle('active', parseInt(b.dataset.v) <= v);
-  });
-}
-
-function setYN(v) {
-  surveyData.yn = v;
-  document.querySelectorAll('.yn-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent === v);
-  });
-}
-
-async function submitSurvey() {
-  const btn = document.querySelector('.btn-submit-survey');
-  btn.disabled    = true;
-  btn.textContent = 'Submitting...';
-
-  await sendSessionFeedback({
-    'Session ID':                  sessionId,
-    'Flow Type':                   currentFlow === 'advisor' ? 'Advisor' : 'Family',
-    'Timestamp':                   new Date().toISOString(),
-    'Topic':                       sessionTopic || 'Unknown',
-    'Overall Rating':              surveyData.rating ? String(surveyData.rating) : '',
-    'Most useful part':            document.getElementById('survey-useful').value,
-    'What was missing or unclear': document.getElementById('survey-missing').value,
-    'Would you use this again':    surveyData.yn || '',
-    'Other comments':              document.getElementById('survey-other').value,
-  });
-
-  document.getElementById('session-survey').style.display = 'none';
-  const ty = document.getElementById('thankyou');
-  ty.style.display        = 'flex';
-  ty.style.minHeight      = '100vh';
-  ty.style.alignItems     = 'center';
-  ty.style.justifyContent = 'center';
-  ty.style.background     = 'var(--sand)';
-
-  document.getElementById('ty-text').textContent = currentFlow === 'advisor'
-    ? "Your practitioner review goes directly into the next version of DAN. We'll be in touch as the pilot develops."
-    : 'Your feedback helps make DAN more useful for every family that comes after you. Thank you for being part of this.';
+  // brief confirmation in bar
+  const label = document.querySelector('.feedback-bar-label');
+  const orig  = label.textContent;
+  label.textContent = '✓ Thanks for the feedback';
+  setTimeout(() => { label.textContent = orig; }, 2500);
 }
 
 // -- TEXTAREA AUTO-RESIZE + ENTER TO SEND --
