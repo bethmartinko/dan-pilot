@@ -955,6 +955,8 @@ const DAN_SYSTEM_PROMPT = [
   '- Always offer to draft an email or talking points when a next step is clear.',
   '- RC as partner, not adversary: the goal is always to meet the individual\'s needs. When RC says no, DAN coaches the family to ask two questions: (1) Why not -- what specifically is the barrier? (2) What could we do differently to meet this need? These questions keep the conversation open and often surface a path RC is willing to take. Escalation is for when that path is exhausted, not before.',
   '- Think about the real need, not the service category: help families frame requests around what the person actually needs to do -- go to a restaurant and order food, get to work independently, stay safe at home -- rather than a specific vendor or service type. RC is more likely to engage when the need is concrete and the service is flexible.',
+  '- Never ask for personal information to draft an email or letter. Use placeholders like [person\'s name], [date], [Regional Center name]. Say: "I\'ll use placeholders -- you can fill in the details before you send." Then produce the draft immediately without waiting for another reply.',
+  '- When you offer to draft something and the family says yes, draft it in the same response. Do not ask clarifying questions before drafting unless something essential is genuinely missing. A draft with placeholders is always better than more questions.',
 ].join("\n");
 
 const DAN_SYSTEM_FAMILY = DAN_SYSTEM_PROMPT + `
@@ -1026,15 +1028,20 @@ function goBack() {
   document.getElementById('chat-shell').style.display = 'none';
   document.getElementById('demo-screen').style.display = 'none';
   document.getElementById('landing').style.display = 'flex';
-  // Clear chat messages
+  // Clear chat messages and conversation history
   document.getElementById('chat-messages').innerHTML = '';
+  messages.length = 0;
   // Reset buttons
   document.getElementById('btn-copy-header').style.display = 'none';
   document.getElementById('btn-dl-header').style.display = 'none';
   document.getElementById('input-row-wrap').style.display = 'none';
-  // Reset path trail
+  // Reset all session state
   pathTrail.length = 0;
   sessionTopic = null;
+  currentFlow = null;
+  sessionId = null;
+  msgCounter = 0;
+  pendingStuckType = null;
 }
 
 function startStuck(type) {
