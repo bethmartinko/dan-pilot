@@ -845,6 +845,7 @@ async function sendMessage() {
   input.value = '';
   input.style.height = 'auto';
   document.getElementById('send-btn').disabled = true;
+  document.getElementById('input-row-wrap').style.display = 'none'; // hide while DAN thinks
 
   // Fade any remaining button groups (user has typed something instead)
   document.querySelectorAll('.option-buttons:not(.used-group)').forEach(g => {
