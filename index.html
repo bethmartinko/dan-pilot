@@ -666,8 +666,8 @@
         <div class="stuck-desc" data-en="Service denied because the IPP language doesn't match what was requested" data-es="Se niega el servicio porque el lenguaje del IPP no coincide con lo que se solicitó">Service denied because the IPP language doesn't match what was requested</div>
       </div>
       <div class="stuck-card" onclick="startStuck('spending')">
-        <div class="stuck-quote" data-en="Spending Plan -- you can't move money between budget categories" data-es="Spending Plan -- no puede mover dinero entre categorías del presupuesto">Spending Plan -- you can't move money between budget categories</div>
-        <div class="stuck-desc" data-en="Respite budget can't be moved to community activities -- even when it makes more sense for your person" data-es="El presupuesto de respiro no se puede transferir a actividades comunitarias -- aunque tenga más sentido para su familiar">Respite budget can't be moved to community activities -- even when it makes more sense for your person</div>
+        <div class="stuck-quote" data-en="SDP Spending Plan" data-es="Plan de Gastos del SDP">SDP Spending Plan</div>
+        <div class="stuck-desc" data-en="RC won't allow flexibility in how the budget is spent, or a specific service isn't being approved" data-es="El RC no permite flexibilidad en cómo se gasta el presupuesto, o un servicio específico no está siendo aprobado">RC won't allow flexibility in how the budget is spent, or a specific service isn't being approved</div>
       </div>
       <div class="stuck-card" onclick="startStuck('preference')">
         <div class="stuck-quote" data-en="&quot;That's a preference, not a need&quot;" data-es="&quot;Eso es una preferencia, no una necesidad&quot;">"That's a preference, not a need"</div>
@@ -852,6 +852,25 @@ const DAN_SYSTEM_PROMPT = [
   'PHASE 1 -- Before trying: If the resource has any reasonable chance of meeting the specific need, RC may require the attempt. Help the family go in with a documentation plan -- what will they observe, what will constitute failure, and how will they record it? Ask RC in writing what their criteria are for determining the resource is inadequate. That question alone sometimes moves things.',
   'PHASE 2 -- After trying and it did not work: Document the failure specifically and in writing. Not "it did not work" -- but exactly what happened, what the person needed that was not available, and how that connects back to the IPP goal. For insurance: written denial. For school system: written determination. For community programs: a letter from the program, an incident report, or a written account of what support was needed and not provided. Bring that documentation back to RC with a clear ask: the generic resource has been tried and does not meet this need -- RC\'s obligation as payer of last resort is now restored.',
   '',
+  '=== SDP SPENDING PLAN -- THREE DISTINCT PROBLEMS ===',
+  'Families arrive at this card with one of three different problems. The opening branches to identify which one before going further.',
+  '',
+  'PROBLEM 1 -- RC REQUIRES SPENDING TO MATCH PLAN EXACTLY:',
+  'Some Regional Centers interpret DDS guidance as requiring that spending match the approved Spending Plan exactly -- service by service, dollar by dollar. Others allow more flexibility. There is no current definitive ruling that overrides RC interpretation on this. Do not tell the family their RC is wrong -- say: some Regional Centers interpret the law and DDS guidance this way; others allow more flexibility; until there is a definitive ruling, the practical path is to work within their RC\'s interpretation.',
+  'WORKAROUND: Help the family find a genuine connection between the original budget need and the actual activity. Example: respite was in the plan; the person ends up attending a swimming class next to the parent\'s doctor office -- this provides community exposure for the person and effectively serves as respite for the parent. The connection must be real, not fabricated. The goal is to document how the actual use serves the same underlying need that was in the plan.',
+  'Also: back up to the need. Sometimes rephrasing the goal more broadly in the spending plan -- around what the person needs to accomplish rather than a specific vendor or activity -- creates legitimate flexibility within the same service code.',
+  '',
+  'PROBLEM 2 -- MOVING MONEY BETWEEN SERVICE CATEGORIES:',
+  'Spending Plan funds cannot be moved between service codes without a formal modification. This requires submitting a revised Spending Plan to RC, going through the same approval process as the original. Timeline varies by RC -- typically 2-4 weeks if uncontested.',
+  'Help the family assess: is the modification worth pursuing, or is there a way to meet the need within existing categories? Sometimes the same activity qualifies under a different service code that already has budget. Ask: what is the person trying to do, and what service codes are currently in the plan?',
+  'If modification is the right path: offer to help draft the request to RC with a clear explanation of why the reallocation serves the person\'s IPP goals.',
+  '',
+  'PROBLEM 3 -- A SPECIFIC SERVICE IS NOT BEING APPROVED:',
+  'This has three possible causes -- route accordingly:',
+  '- HCBS compliance issue: the service may not meet Home and Community Based Services federal requirements. Explain what HCBS means (services must be provided in integrated, community settings -- not segregated or institutional). If RC is citing HCBS, ask them to explain specifically what the compliance concern is and what modifications would make it approvable.',
+  '- Goal not in IPP: route to the IPP card with this handoff: "It sounds like the real issue may be that the goal supporting this service isn\'t in your IPP yet. Let me help you with that."',
+  '- Too expensive: RC has an obligation to conduct an actual cost analysis -- they cannot simply say a service is too expensive without comparing it to alternatives and documenting why the cost is not justified given the person\'s needs. Ask RC in writing: what is your cost analysis, and what alternatives did you consider? That question alone often moves things.',
+  '',
   '=== GOAL NOT IN IPP -- DIAGNOSTIC SEQUENCE ===',
   'When RC says a goal is not in the IPP, they are telling the family exactly where the chain is broken. DAN\'s job is to back up as far as necessary to find solid ground, then rebuild forward. Do not start with the goal -- start with the need.',
   '',
@@ -936,13 +955,15 @@ let sessionTopic = null;
 let msgCounter   = 0;
 
 // -- STUCK POINT ENTRY --
+// -- STUCK POINT ENTRY --
 const STUCK_WELCOMES = {
   delay: `I hear you -- waiting without an answer is really hard, especially when so much depends on it. Let me ask one thing first so I can point you in the right direction.\n\nWhat specifically are you waiting for?\n\n[A general response from RC] [Something about my SDP renewal -- spending plan or FMS authorization] [Something else]`,
 
   preference: `Hearing that is really frustrating -- especially when you know your person needs this support.\n\nLet me ask a few things one at a time so I can help you figure out what's going on.\n\nFirst -- what did you ask RC for?`,
 
   ipp: `When RC says that, they're actually telling you something useful -- they've shown you exactly where the chain is broken. And broken chains are fixable.\n\nLet's back up to the need and rebuild from there.\n\nWhat does your person actually need to be able to do, be part of, or stay safe doing? Tell me in plain terms -- not the service name, just what they need.`,
-  spending: `Spending Plan budget categories are one of SDP's most frustrating constraints. The budget is yours -- but the rules say you can't move money between categories without going through a formal modification process, even when a different use would clearly serve your person better.\n\nLet's figure out what you're working with.\n\nWhich categories are involved -- where is the money sitting, and where do you need it?`,
+
+  spending: `SDP gives you control over your budget -- but families run into a few different walls with the Spending Plan itself. Let me make sure I understand which one you're dealing with.\n\nWhat's the problem you're hitting?\n\n[RC says I have to spend exactly what's on the plan -- no flexibility] [I need to move money between service categories] [A specific service on my plan isn't being approved] [Something else]`,
 
   generic: `RC is actually required by law to consider generic resources before they can fund a service -- so this isn't a brushoff, it's a real step in the process. The question worth asking together is: does this resource genuinely work for your person, either on its own or in combination with RC support?\n\nSometimes a free or low-cost resource combined with an RC-funded aide can actually open more doors than a funded service alone. And other families are often the best source of knowledge about what's really available locally.\n\nLet me ask one thing at a time. What resource did RC point to?\n\n[Insurance] [The school system] [A community program or service] [Something else]`,
 
@@ -952,18 +973,19 @@ const STUCK_WELCOMES = {
 };
 
 const STUCK_WELCOMES_ES = {
-  delay: `Entiendo -- esperar sin recibir una respuesta es muy difícil, especialmente cuando tanto depende de ello. Déjeme hacerle un par de preguntas para orientarle mejor.\n\n¿Qué específicamente está esperando?\n\n[Una respuesta general del RC] [Un plan de gastos de SDP aprobado] [Que el RC envíe la autorización a mi FMS] [Algo más]`,
+  delay: `Entiendo -- esperar sin recibir una respuesta es muy difícil, especialmente cuando tanto depende de ello. Déjeme hacerle un par de preguntas para orientarle mejor.\n\n¿Qué específicamente está esperando?\n\n[Una respuesta general del RC] [Algo sobre mi renovación de SDP -- plan de gastos o autorización de FMS] [Otra cosa]`,
 
   preference: `Eso es muy frustrante -- especialmente cuando usted sabe que su familiar necesita este apoyo.\n\nDéjeme hacerle algunas preguntas de una en una para entender mejor la situación.\n\nPrimero -- ¿qué le pidió usted al RC?`,
 
   ipp: `Cuando el RC dice eso, en realidad le está dando información útil -- le está mostrando exactamente dónde está rota la cadena. Y las cadenas rotas se pueden reparar.\n\nVamos a retroceder hasta la necesidad y reconstruir desde ahí.\n\n¿Qué necesita realmente su familiar poder hacer, participar, o hacer de forma segura? Cuénteme en palabras simples -- no el nombre del servicio, sino la necesidad en sí.`,
-  spending: `Las categorías del Spending Plan son una de las limitaciones más frustrantes del SDP. El presupuesto es suyo -- pero las reglas dicen que no puede mover dinero entre categorías sin un proceso formal de modificación, aunque otra forma de usarlo sea mejor para su familiar.\n\nVamos a ver con qué está trabajando.\n\n¿Qué categorías están involucradas -- dónde está el dinero y dónde lo necesita?`,
+
+  spending: `El SDP le da control sobre su presupuesto -- pero las familias se encuentran con varios obstáculos diferentes con el Plan de Gastos. Déjeme asegurarme de entender cuál es el suyo.\n\n¿Cuál es el problema que está enfrentando?\n\n[El RC dice que tengo que gastar exactamente lo que está en el plan -- sin flexibilidad] [Necesito mover dinero entre categorías de servicio] [Un servicio específico en mi plan no está siendo aprobado] [Otra cosa]`,
 
   generic: `El RC está legalmente obligado a considerar recursos genéricos antes de poder financiar un servicio -- así que esto no es un rechazo, es un paso real en el proceso. La pregunta que vale la pena responder juntos es: ¿este recurso realmente funciona para su familiar, solo o en combinación con apoyo del RC?\n\nA veces un programa gratuito o de bajo costo combinado con un asistente financiado por el RC puede abrir más puertas que un servicio financiado solo. Y otras familias suelen ser la mejor fuente de información sobre lo que realmente está disponible en la comunidad.\n\nDéjeme preguntarle una cosa a la vez. ¿A qué recurso señaló el RC?\n\n[Seguro médico] [El sistema escolar] [Un programa o servicio comunitario] [Algo más]`,
 
   sdp: `Las renovaciones del SDP tienen varias partes -- y cualquiera de ellas puede causar una demora. Puede estar esperando que el RC inicie la renovación, que aprueben su plan de gastos, o que el RC envíe la autorización a su FMS. Todo eso es parte del mismo proceso, y el RC es responsable de asegurarse de que esté listo antes de que termine su año.\n\nDéjeme hacerle una pregunta a la vez para poder ayudarle.\n\n¿Cuál es la fecha en que termina su año de SDP -- o aproximadamente cuándo vence su plan actual? Si la sabe, escríbala aquí.\n\n[No estoy seguro/a de cuándo es] [Ya terminó] [Quiero planificar con anticipación -- mi renovación es en varios meses]`,
 
-  unsure: `No hay problema -- lo resolveremos juntos.\n\nCuénteme qué ha estado pasando con su Regional Center y le ayudaré a identificar qué situación está enfrentando y cuáles son sus opciones.`
+  unsure: `No hay problema -- vamos a resolverlo juntos.\n\nCuénteme qué ha pasado con su Regional Center, y le ayudaré a identificar qué está enfrentando y cuáles son sus opciones.`
 };
 
 // -- DEMOGRAPHICS STATE --
@@ -1005,7 +1027,7 @@ function startStuck(type) {
   sessionId    = 'family-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
   sessionTopic = type;
   // Start breadcrumb trail with the entry card label
-  const cardLabels2 = { delay:"We're waiting for an answer", 'sdp-gap':'SDP renewal gap', generic:'Generic resource deflection', ipp:'Goal not in IPP', spending:'Spending Plan budget', preference:'Preference not a need', unsure:'Not sure / open' };
+  const cardLabels2 = { delay:"We're waiting for an answer", 'sdp-gap':'SDP renewal gap', generic:'Generic resource deflection', ipp:'Goal not in IPP', spending:'SDP Spending Plan', preference:'Preference not a need', unsure:'Not sure / open' };
   pathTrail.length = 0;
   pathTrail.push(cardLabels2[type] || type);
 
@@ -1037,7 +1059,7 @@ async function writeSessionRecord(cardType) {
     'sdp-gap':    'SDP renewal gap',
     'generic':    'Generic resource deflection',
     'ipp':        'Goal not in IPP',
-    'spending':   'Spending Plan budget categories',
+    'spending':   'SDP Spending Plan',
     'preference': 'Preference not a need',
     'unsure':     'Not sure / open',
   };
