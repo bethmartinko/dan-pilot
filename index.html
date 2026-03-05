@@ -654,8 +654,8 @@
         <div class="stuck-desc" data-en="RC said they'd look into it -- and then went quiet. Or your SDP year end is coming and nothing is moving." data-es="El RC dijo que lo revisaría -- y luego no respondió. O su año de SDP está por terminar y nada avanza.">RC said they'd look into it -- and then went quiet. Or your SDP year end is coming and nothing is moving.</div>
       </div>
       <div class="stuck-card" onclick="startStuck('sdp')">
-        <div class="stuck-quote" data-en="SDP renewal gap" data-es="Brecha en la renovación del SDP">SDP renewal gap</div>
-        <div class="stuck-desc" data-en="RC waits for you to notice the renewal is overdue -- when RC is supposed to initiate it" data-es="El RC espera a que usted note que la renovación está vencida -- cuando el RC es quien debe iniciarla">RC waits for you to notice the renewal is overdue -- when RC is supposed to initiate it</div>
+        <div class="stuck-quote" data-en="My SDP year is ending and things aren't in place" data-es="Mi año de SDP está por terminar y las cosas no están listas">My SDP year is ending and things aren't in place</div>
+        <div class="stuck-desc" data-en="Spending plan not approved, FMS authorization not sent, or RC hasn't started the renewal -- and your year end is coming" data-es="El plan de gastos no está aprobado, la autorización al FMS no se ha enviado, o el RC no ha iniciado la renovación -- y su año está por terminar">Spending plan not approved, FMS authorization not sent, or RC hasn't started the renewal -- and your year end is coming</div>
       </div>
       <div class="stuck-card" onclick="startStuck('generic')">
         <div class="stuck-quote" data-en="&quot;There's a generic resource for that&quot;" data-es="&quot;Hay un recurso comunitario para eso&quot;">"There's a generic resource for that"</div>
@@ -828,6 +828,23 @@ const DAN_SYSTEM_PROMPT = [
   '',
   'Draft offer: After Step 2 is identified as the right next step, say exactly this: "Would you like me to draft an email spelling out the situation and asking for resolution? I can help you select the recipients also." This is the highest-value thing DAN can do at this stage.',
   '',
+  '=== PREFERENCE NOT A NEED -- DIAGNOSTIC SEQUENCE ===',
+  'When a family arrives at this card, RC has told them something they asked for is a preference, not a need. Do not lead with the legal reframe -- lead with listening.',
+  '',
+  'Ask these questions ONE AT A TIME in this order:',
+  '1. What did you ask RC for? (understand the request)',
+  '2. What did RC say about why it is a preference? (understand their position)',
+  '3. Is there an IPP goal that connects to this ask? (find the chain)',
+  '   - If yes: How is that goal worded? Does it actually describe the real-world outcome your person needs -- or is the language too vague to support this ask?',
+  '   - If goal language is strong: help the family talk with their SC about how to work together to meet that goal -- reference the goal directly in any communication.',
+  '   - If goal language is weak or outdated: the next step is working with the SC to update the goal so it better reflects the real need. A stronger goal supports the service ask.',
+  '   - If family does not know their IPP goals: educate them -- the IPP drives everything. If it is not in the IPP it will not be funded. Ask your SC to send you a copy of your IPP so you can review it. You can always come back here and we can look at it together.',
+  '   - If there is no relevant IPP goal at all: this is not a preference dispute -- it is an IPP gap. Route to the IPP card flow with this handoff: "What you are describing is actually a different situation. The ask is not being called a preference because RC disagrees with the need -- it is that the goal is not in the IPP yet. That is fixable, and I can help you with that."',
+  '',
+  'HEALTH/SAFETY/EMPLOYMENT REFRAME: After understanding the ask and RC position, ask -- is there a health, safety, or employment impact if this support is not in place? If yes, this reframes the request from a preference to a functional need. Cooking safety, fall risk, job retention, community access -- these are needs, not preferences. Help the family name that impact clearly.',
+  '',
+  'COLLABORATIVE FRAME: The goal is always to work with the SC to meet the need, not to fight RC. When the IPP goal needs updating, position this as: how can we work together to make sure the IPP reflects what your person actually needs today?',
+  '',
   '=== WHAT YOU KNOW (general) ===',
   '- THE GOLDEN RULE: Needs lead to goals. Goals lead to services. Services lead to placement. This is the organizing logic of the entire RC system. When helping a family, always work backward from the real need -- what does this person need to live a safe, engaged, meaningful life? That need should connect to an IPP goal. That goal should connect to a funded service. If the chain is broken anywhere, that is where DAN helps.',
   '- Lanterman Act: RC must provide services based on need. Services are an entitlement (WIC sec. 4500).',
@@ -839,6 +856,19 @@ const DAN_SYSTEM_PROMPT = [
   '- ILS: skill-building (cooking, budgeting, community navigation). SLS: ongoing support for people in their own home.',
   '- Check for existing ILS/SLS before suggesting a new IPP meeting.',
   '- Shadow policies: RCs sometimes apply internal interpretations that go beyond what DDS has formally required. When RC cites a rule, it is fair to ask them to point to the specific directive or statute. If they cannot, that is worth noting. For RC-specific patterns, refer families to a local advocate or IF who knows how that particular RC operates.',
+  '',
+  '=== SDP RENEWAL -- KNOW THIS COLD ===',
+  'SDP renewals have three possible states: (1) proactive -- family is planning ahead with months of runway, (2) urgent -- renewal is approaching and something is not moving, (3) crisis -- year end is days away or has passed.',
+  '',
+  'PROACTIVE RENEWAL TIMELINE (advisory guidance -- share when family has several months of runway):',
+  '5 months before renewal: Review and update the Person-Centered Plan (PCP). Review IPP goals -- do they still reflect what the person needs today? If goals need updating, schedule an IPP meeting within 30 days. Do not let this drift -- the spending plan is built on the IPP, so outdated goals create problems downstream.',
+  '3 months before renewal: Submit a draft spending plan to RC for review. Work interactively with RC from this point -- ask for weekly written updates on the status. Each round of RC feedback can take weeks; build in at least two rounds.',
+  '45 days before renewal: Target having the spending plan fully approved by this date. After RC approves, the authorization still has to move through RC accounting before the FMS receives it. RC accounting needs time to generate the authorization, and the FMS needs time to update their systems before the year starts.',
+  'Check in with your FMS independently around this time -- do not assume RC sending the authorization means the FMS has it loaded.',
+  '',
+  'URGENT / CRISIS: Use the three-tier response (standard arc / elevated / HIGH criticality) based on days remaining and whether RC has taken an active position. See the waiting for an answer section.',
+  '',
+  'SPENDING PLAN TRIAGE: If one or two items are holding up approval and are not critical to start the year, offer the triage workaround -- remove them to get the year started, open a parallel path to resolve them, add back via spending plan revision. Frame it clearly: you are not giving up those items, you are protecting everything else while we keep working.',
   '',
   '=== YOUR VOICE ===',
   '- Start with brief validation of what they said.',
@@ -864,9 +894,9 @@ let msgCounter   = 0;
 
 // -- STUCK POINT ENTRY --
 const STUCK_WELCOMES = {
-  delay: `I hear you -- waiting without an answer is really hard, especially when so much depends on it. Let me ask a couple of things so I can point you in the right direction.\n\nWhat specifically are you waiting for?\n\n[A general response from RC] [An approved SDP spending plan] [RC to send the authorization to my FMS] [Something else]`,
+  delay: `I hear you -- waiting without an answer is really hard, especially when so much depends on it. Let me ask one thing first so I can point you in the right direction.\n\nWhat specifically are you waiting for?\n\n[A general response from RC] [Something about my SDP renewal -- spending plan or FMS authorization] [Something else]`,
 
-  preference: `"That's a preference, not a need" is one of the most common deflections people hear -- and it's often not accurate. The Lanterman Act says RC must fund services based on functional need, not just what the RC thinks is important.\n\nLet's figure out what's actually going on here.\n\nWhat did you ask for, and what reason did they give for calling it a preference?`,
+  preference: `Hearing that is really frustrating -- especially when you know your person needs this support.\n\nLet me ask a few things one at a time so I can help you figure out what's going on.\n\nFirst -- what did you ask RC for?`,
 
   ipp: `If the RC is saying "that goal isn't in the IPP," they may be right that the IPP needs updating -- but that's fixable, and it's not a reason to deny the service outright.\n\nThe IPP is a legal document and you have the right to request a planning meeting to update it at any time.\n\nWhat service were you asking for, and is there an IPP goal that seems related, even if the wording doesn't match exactly?`,
 
@@ -874,7 +904,7 @@ const STUCK_WELCOMES = {
 
   generic: `The "generic resource" deflection is tricky because RC is allowed to consider community resources -- but only if those resources actually work for your person. "Generally available" doesn't mean "available to your family member specifically."\n\nWhat resource did they point to, and what makes it not workable for your situation?`,
 
-  sdp: `SDP renewals are supposed to be initiated by the RC -- not you. If your renewal is overdue and they haven't started it, that's on them, not you.\n\nLet's figure out where things stand.\n\nDo you know when your current SDP agreement was supposed to renew?`,
+  sdp: `SDP renewals involve a few moving parts -- and any one of them can cause a delay. You may be waiting for RC to start the renewal, for your spending plan to get approved, or for RC to send the authorization to your FMS. All of that is part of the same process, and RC is responsible for making sure it gets done before your year ends.\n\nLet me ask one thing at a time so I can help.\n\nWhat's your SDP year end date -- or approximately when does your current plan expire?\n\n[I know the exact date] [It's coming up soon -- within a few months] [I'm not sure when it is] [I want to plan ahead -- my renewal is several months away]`,
 
   unsure: `No problem -- let's figure it out together.\n\nTell me what's been happening with your Regional Center, and I'll help you identify what you're dealing with and what your options are.`
 };
@@ -882,7 +912,7 @@ const STUCK_WELCOMES = {
 const STUCK_WELCOMES_ES = {
   delay: `Entiendo -- esperar sin recibir una respuesta es muy difícil, especialmente cuando tanto depende de ello. Déjeme hacerle un par de preguntas para orientarle mejor.\n\n¿Qué específicamente está esperando?\n\n[Una respuesta general del RC] [Un plan de gastos de SDP aprobado] [Que el RC envíe la autorización a mi FMS] [Algo más]`,
 
-  preference: `"Eso es una preferencia, no una necesidad" es una de las respuestas más comunes -- y muchas veces no es correcta. La Ley Lanterman dice que el RC debe financiar servicios según la necesidad funcional, no solo lo que el RC considera importante.\n\nVamos a ver qué está pasando realmente.\n\n¿Qué solicitó usted, y qué razón le dieron para llamarlo una preferencia?`,
+  preference: `Eso es muy frustrante -- especialmente cuando usted sabe que su familiar necesita este apoyo.\n\nDéjeme hacerle algunas preguntas de una en una para entender mejor la situación.\n\nPrimero -- ¿qué le pidió usted al RC?`,
 
   ipp: `Si el RC dice "esa meta no está en el IPP", puede que tengan razón en que el IPP necesita actualizarse -- pero eso tiene solución, y no es razón para negar el servicio de inmediato.\n\nEl IPP es un documento legal y usted tiene derecho a pedir una reunión de planificación para actualizarlo en cualquier momento.\n\n¿Qué servicio estaba solicitando, y hay alguna meta en el IPP que parezca relacionada, aunque las palabras no sean exactas?`,
 
@@ -890,7 +920,7 @@ const STUCK_WELCOMES_ES = {
 
   generic: `La respuesta de "hay un recurso comunitario para eso" es complicada porque el RC puede considerar recursos comunitarios -- pero solo si esos recursos realmente funcionan para su familiar. "Disponible en general" no significa "disponible para su familia específicamente".\n\n¿A qué recurso lo dirigieron, y por qué no funciona para su situación?`,
 
-  sdp: `Las renovaciones del SDP las debe iniciar el RC -- no usted. Si su renovación está vencida y no la han iniciado, eso es responsabilidad del RC, no suya.\n\nVamos a ver cómo están las cosas.\n\n¿Sabe cuándo se suponía que se renovaba su acuerdo SDP actual?`,
+  sdp: `Las renovaciones del SDP tienen varias partes -- y cualquiera de ellas puede causar una demora. Puede estar esperando que el RC inicie la renovación, que aprueben su plan de gastos, o que el RC envíe la autorización a su FMS. Todo eso es parte del mismo proceso, y el RC es responsable de asegurarse de que esté listo antes de que termine su año.\n\nDéjeme hacerle una pregunta a la vez para poder ayudarle.\n\n¿Cuál es la fecha en que termina su año de SDP -- o aproximadamente cuándo vence su plan actual?\n\n[Sé la fecha exacta] [Se acerca pronto -- dentro de unos meses] [No estoy seguro/a de cuándo es] [Quiero planificar con anticipación -- mi renovación es en varios meses]`,
 
   unsure: `No hay problema -- lo resolveremos juntos.\n\nCuénteme qué ha estado pasando con su Regional Center y le ayudaré a identificar qué situación está enfrentando y cuáles son sus opciones.`
 };
@@ -1002,6 +1032,20 @@ document.addEventListener('click', function(e) {
   var label = btn.getAttribute('data-label');
   var groupId = btn.getAttribute('data-group');
   if (!label) return;
+
+  // SDP routing -- if family picks SDP option from delay card, switch to SDP welcome
+  if (sessionTopic === null && label.toLowerCase().indexOf('something about my sdp renewal') === 0) {
+    // Mark button group as used
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    sessionTopic = 'SDP';
+    var sdpWelcome = currentLang === 'es' ? STUCK_WELCOMES_ES['sdp'] : STUCK_WELCOMES['sdp'];
+    appendDanMessage(sdpWelcome, false);
+    return;
+  }
 
   // "Tell me more" reveals the text box instead of sending
   if (label.toLowerCase().indexOf('tell me more') === 0) {
