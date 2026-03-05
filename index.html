@@ -978,7 +978,7 @@ function appendDanMessage(text, showFeedback) {
       ${fbHtml}
     </div>`;
   container.appendChild(row);
-  scrollToBottom();
+  scrollToMessage(row);
 
   row.dataset.text  = text;
   row.dataset.msgId = msgId;
@@ -1026,6 +1026,12 @@ function removeTyping(id) {
 function scrollToBottom() {
   const c = document.getElementById('chat-messages');
   c.scrollTop = c.scrollHeight;
+}
+
+function scrollToMessage(row) {
+  const c = document.getElementById('chat-messages');
+  // Scroll so the top of this message is near the top of the chat area
+  c.scrollTop = row.offsetTop - c.offsetTop - 12;
 }
 
 // -- IN-CONVERSATION FEEDBACK --
