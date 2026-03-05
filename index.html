@@ -599,7 +599,7 @@
   </div>
   <div class="chat-messages" id="chat-messages"></div>
   <div class="chat-input-area">
-    <div class="input-row-wrap">
+    <div class="input-row-wrap" id="input-row-wrap" style="display:none;">
       <div class="input-row">
         <textarea id="user-input" rows="1" placeholder="Type your reply..."></textarea>
         <button class="btn-send" id="send-btn" onclick="sendMessage()">
@@ -805,6 +805,21 @@ document.addEventListener('click', function(e) {
   var label = btn.getAttribute('data-label');
   var groupId = btn.getAttribute('data-group');
   if (!label) return;
+
+  // "Tell me more" reveals the text box instead of sending
+  if (label.toLowerCase().indexOf('tell me more') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) {
+        group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+      }
+    }
+    var input = document.getElementById('user-input');
+    input.closest('.input-row-wrap').style.display = 'block';
+    input.focus();
+    return;
+  }
+
   if (groupId) {
     var group = document.getElementById(groupId);
     if (group) {
@@ -824,6 +839,7 @@ async function sendMessage() {
   input.value = '';
   input.style.height = 'auto';
   document.getElementById('send-btn').disabled = true;
+  document.getElementById('input-row-wrap').style.display = 'none';
 
   // Fade any remaining button groups (user has typed something instead)
   document.querySelectorAll('.option-buttons:not(.used-group)').forEach(g => {
@@ -961,12 +977,9 @@ function appendDanMessage(text, showFeedback) {
   row.dataset.text  = text;
   row.dataset.msgId = msgId;
 
-  if (msgCounter === 3) {
-    const nudge = document.createElement('div');
-    nudge.className = 'system-msg';
-    nudge.innerHTML = `When you're ready, use the <strong>Share your feedback</strong> button below to share your overall thoughts.`;
-    container.appendChild(nudge);
-  }
+  // Show text input only if DAN's response has no buttons (brackets mean buttons)
+  const hasButtons = /\[[^\]]+\]/.test(text);
+  document.getElementById('input-row-wrap').style.display = hasButtons ? 'none' : 'block';
 }
 
 function appendSystemMessage(text) {
