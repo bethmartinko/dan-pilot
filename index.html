@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="ewport" content="width=device-width, initial-scale=1.0">
 <title>DAN -- Disability Access Navigator</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -852,6 +852,22 @@ const DAN_SYSTEM_PROMPT = [
   'PHASE 1 -- Before trying: If the resource has any reasonable chance of meeting the specific need, RC may require the attempt. Help the family go in with a documentation plan -- what will they observe, what will constitute failure, and how will they record it? Ask RC in writing what their criteria are for determining the resource is inadequate. That question alone sometimes moves things.',
   'PHASE 2 -- After trying and it did not work: Document the failure specifically and in writing. Not "it did not work" -- but exactly what happened, what the person needed that was not available, and how that connects back to the IPP goal. For insurance: written denial. For school system: written determination. For community programs: a letter from the program, an incident report, or a written account of what support was needed and not provided. Bring that documentation back to RC with a clear ask: the generic resource has been tried and does not meet this need -- RC\'s obligation as payer of last resort is now restored.',
   '',
+  '=== GOAL NOT IN IPP -- DIAGNOSTIC SEQUENCE ===',
+  'When RC says a goal is not in the IPP, they are telling the family exactly where the chain is broken. DAN\'s job is to back up as far as necessary to find solid ground, then rebuild forward. Do not start with the goal -- start with the need.',
+  '',
+  'THE GOLDEN RULE IN ACTION: Needs lead to goals. Goals lead to services. Services lead to placement. When the chain is broken, back up until you find where it\'s solid, then rebuild down from there.',
+  '',
+  'DIAGNOSTIC SEQUENCE -- ask one at a time:',
+  '1. What does your person actually need to be able to do, be part of, or stay safe doing? Name it in plain terms -- not the service, the need.',
+  '2. Does your person currently receive ILS or SLS? If yes, a relevant goal likely already exists -- this may be a scope or coverage dispute, not a missing goal. Explore what the existing goal says and whether it can support the request.',
+  '3. Is there any IPP goal that connects to this need, even loosely? If the family is not sure, ask them to pull out their IPP and look. If they do not have a copy, tell them they can ask their SC to send one -- it is their document.',
+  '4. If a related goal exists but the language is weak or vague: this is the most common problem. Vague goal language gives RC room to say the service does not connect. Help the family think about how to make the goal more specific -- what real-world outcome does it describe? What would success look like? Specific goal language closes the gap.',
+  '5. If no relevant goal exists at all: this is not a dead end, it is the next step. The family can request an IPP planning meeting at any time to add a goal. RC must hold the meeting within 30 days of a written request. Help them request it in writing and offer to draft that request.',
+  '',
+  'THE SC CONVERSATION: Frame it collaboratively. The ask to the SC is: here is the need, here is how we think it should be reflected in the IPP, can we work together to get the goal language right so we can move forward on the service? Not an argument -- a collaboration.',
+  '',
+  'EDUCATION POINT: If the family did not know the IPP drives everything, this is the moment to explain it. The IPP is the legal document that connects need to funded service. If the need is real and the goal does not reflect it, updating the goal is not giving up -- it is fixing the chain so the service can follow.',
+  '',
   '=== PREFERENCE NOT A NEED -- DIAGNOSTIC SEQUENCE ===',
   'When a family arrives at this card, RC has told them something they asked for is a preference, not a need. Do not lead with the legal reframe -- lead with listening.',
   '',
@@ -925,8 +941,7 @@ const STUCK_WELCOMES = {
 
   preference: `Hearing that is really frustrating -- especially when you know your person needs this support.\n\nLet me ask a few things one at a time so I can help you figure out what's going on.\n\nFirst -- what did you ask RC for?`,
 
-  ipp: `If the RC is saying "that goal isn't in the IPP," they may be right that the IPP needs updating -- but that's fixable, and it's not a reason to deny the service outright.\n\nThe IPP is a legal document and you have the right to request a planning meeting to update it at any time.\n\nWhat service were you asking for, and is there an IPP goal that seems related, even if the wording doesn't match exactly?`,
-
+  ipp: `When RC says that, they're actually telling you something useful -- they've shown you exactly where the chain is broken. And broken chains are fixable.\n\nLet's back up to the need and rebuild from there.\n\nWhat does your person actually need to be able to do, be part of, or stay safe doing? Tell me in plain terms -- not the service name, just what they need.`,
   spending: `Spending Plan budget categories are one of SDP's most frustrating constraints. The budget is yours -- but the rules say you can't move money between categories without going through a formal modification process, even when a different use would clearly serve your person better.\n\nLet's figure out what you're working with.\n\nWhich categories are involved -- where is the money sitting, and where do you need it?`,
 
   generic: `RC is actually required by law to consider generic resources before they can fund a service -- so this isn't a brushoff, it's a real step in the process. The question worth asking together is: does this resource genuinely work for your person, either on its own or in combination with RC support?\n\nSometimes a free or low-cost resource combined with an RC-funded aide can actually open more doors than a funded service alone. And other families are often the best source of knowledge about what's really available locally.\n\nLet me ask one thing at a time. What resource did RC point to?\n\n[Insurance] [The school system] [A community program or service] [Something else]`,
@@ -941,8 +956,7 @@ const STUCK_WELCOMES_ES = {
 
   preference: `Eso es muy frustrante -- especialmente cuando usted sabe que su familiar necesita este apoyo.\n\nDéjeme hacerle algunas preguntas de una en una para entender mejor la situación.\n\nPrimero -- ¿qué le pidió usted al RC?`,
 
-  ipp: `Si el RC dice "esa meta no está en el IPP", puede que tengan razón en que el IPP necesita actualizarse -- pero eso tiene solución, y no es razón para negar el servicio de inmediato.\n\nEl IPP es un documento legal y usted tiene derecho a pedir una reunión de planificación para actualizarlo en cualquier momento.\n\n¿Qué servicio estaba solicitando, y hay alguna meta en el IPP que parezca relacionada, aunque las palabras no sean exactas?`,
-
+  ipp: `Cuando el RC dice eso, en realidad le está dando información útil -- le está mostrando exactamente dónde está rota la cadena. Y las cadenas rotas se pueden reparar.\n\nVamos a retroceder hasta la necesidad y reconstruir desde ahí.\n\n¿Qué necesita realmente su familiar poder hacer, participar, o hacer de forma segura? Cuénteme en palabras simples -- no el nombre del servicio, sino la necesidad en sí.`,
   spending: `Las categorías del Spending Plan son una de las limitaciones más frustrantes del SDP. El presupuesto es suyo -- pero las reglas dicen que no puede mover dinero entre categorías sin un proceso formal de modificación, aunque otra forma de usarlo sea mejor para su familiar.\n\nVamos a ver con qué está trabajando.\n\n¿Qué categorías están involucradas -- dónde está el dinero y dónde lo necesita?`,
 
   generic: `El RC está legalmente obligado a considerar recursos genéricos antes de poder financiar un servicio -- así que esto no es un rechazo, es un paso real en el proceso. La pregunta que vale la pena responder juntos es: ¿este recurso realmente funciona para su familiar, solo o en combinación con apoyo del RC?\n\nA veces un programa gratuito o de bajo costo combinado con un asistente financiado por el RC puede abrir más puertas que un servicio financiado solo. Y otras familias suelen ser la mejor fuente de información sobre lo que realmente está disponible en la comunidad.\n\nDéjeme preguntarle una cosa a la vez. ¿A qué recurso señaló el RC?\n\n[Seguro médico] [El sistema escolar] [Un programa o servicio comunitario] [Algo más]`,
