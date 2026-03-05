@@ -924,8 +924,7 @@ function goBack() {
   sessionTopic = null;
 }
 
-
-  pendingStuckType = type;
+function startStuck(type) {
   currentFlow  = 'family';
   sessionId    = 'family-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
   sessionTopic = type;
