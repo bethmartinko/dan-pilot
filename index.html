@@ -599,7 +599,7 @@
   </div>
   <div class="chat-messages" id="chat-messages"></div>
   <div class="chat-input-area">
-    <div class="input-row-wrap" id="input-row-wrap">
+    <div class="input-row-wrap" id="input-row-wrap" style="display:none;">
       <div class="input-row">
         <textarea id="user-input" rows="1" placeholder="Type your reply..."></textarea>
         <button class="btn-send" id="send-btn" onclick="sendMessage()">
@@ -616,7 +616,7 @@
       <button class="fb-persistent-btn" id="gen-up" onclick="rateGeneral('Helpful')">👍 Helpful</button>
       <button class="fb-persistent-btn" id="gen-down" onclick="rateGeneral('Not Helpful')">👎 Not helpful</button>
     </div>
-    <div class="fb-general-wrap" id="fb-general-wrap" style="display:none; flex-direction:row;">
+    <div class="fb-general-wrap" id="fb-general-wrap" style="display:flex; flex-direction:row;">
       <textarea id="fb-general-text" rows="2" placeholder="Feedback for DAN? (optional)"></textarea>
       <button class="btn-send-fb-general" onclick="submitGeneralFeedback()">Send</button>
     </div>
@@ -815,6 +815,7 @@ document.addEventListener('click', function(e) {
       }
     }
     var input = document.getElementById('user-input');
+    document.getElementById('input-row-wrap').style.display = 'flex';
     input.focus();
     return;
   }
@@ -974,6 +975,10 @@ function appendDanMessage(text, showFeedback) {
 
   row.dataset.text  = text;
   row.dataset.msgId = msgId;
+
+  // Hide text box when DAN gives buttons; show when open-ended
+  const hasButtons = /\[[^\]]+\]/.test(text);
+  document.getElementById('input-row-wrap').style.display = hasButtons ? 'none' : 'flex';
 
 }
 
@@ -1135,9 +1140,6 @@ function rateGeneral(rating) {
   generalFbRating = rating;
   document.getElementById('gen-up').className   = 'fb-persistent-btn' + (rating === 'Helpful'     ? ' active-helpful'     : '');
   document.getElementById('gen-down').className = 'fb-persistent-btn' + (rating === 'Not Helpful'  ? ' active-nothelpful'  : '');
-  // show comment box
-  const wrap = document.getElementById('fb-general-wrap');
-  wrap.style.display = 'flex';
   document.getElementById('fb-general-text').focus();
 }
 
@@ -1152,9 +1154,6 @@ function submitGeneralFeedback() {
   document.getElementById('gen-up').className   = 'fb-persistent-btn';
   document.getElementById('gen-down').className = 'fb-persistent-btn';
   document.getElementById('fb-general-text').value = '';
-  const wrap = document.getElementById('fb-general-wrap');
-  wrap.style.display = 'none';
-
   // brief confirmation in bar
   const label = document.querySelector('.feedback-bar-label');
   const orig  = label.textContent;
