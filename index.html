@@ -1065,7 +1065,7 @@ function getConversationText() {
   const lines = [];
   lines.push('DAN — Disability Access Navigator');
   lines.push('Conversation saved: ' + new Date().toLocaleString());
-  lines.push('─'.repeat(40));
+  lines.push('----------------------------------------');
   lines.push('');
   for (const row of rows) {
     const bubble = row.querySelector('.msg-bubble');
@@ -1082,9 +1082,9 @@ function getConversationText() {
     }
     lines.push('');
   }
-  lines.push('─'.repeat(40));
+  lines.push('----------------------------------------');
   lines.push('DAN is a navigation tool, not legal advice.');
-  lines.push('Captain's View Advocacy / SDTA');
+  lines.push("Captain's View Advocacy / SDTA");
   return lines.join('\n');
 }
 
