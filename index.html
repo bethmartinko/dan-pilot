@@ -638,8 +638,8 @@
 
     <div class="stuck-grid">
       <div class="stuck-card featured" onclick="startStuck('delay')">
-        <div class="stuck-quote" data-en="Denial by delay" data-es="Negación por demora">Denial by delay</div>
-        <div class="stuck-desc" data-en="RC keeps requesting more info, moving the bar -- for months -- until you're too burnt out to appeal" data-es="El RC sigue pidiendo más información, moviendo la meta -- por meses -- hasta que usted está demasiado agotado/a para apelar">RC keeps requesting more info, moving the bar -- for months -- until you're too burnt out to appeal</div>
+        <div class="stuck-quote" data-en="We're waiting for an answer" data-es="Estamos esperando una respuesta">We're waiting for an answer</div>
+        <div class="stuck-desc" data-en="RC said they'd look into it -- and then went quiet. Or your SDP year end is coming and nothing is moving." data-es="El RC dijo que lo revisaría -- y luego no respondió. O su año de SDP está por terminar y nada avanza.">RC said they'd look into it -- and then went quiet. Or your SDP year end is coming and nothing is moving.</div>
       </div>
       <div class="stuck-card" onclick="startStuck('sdp')">
         <div class="stuck-quote" data-en="SDP renewal gap" data-es="Brecha en la renovación del SDP">SDP renewal gap</div>
@@ -790,7 +790,7 @@ const DAN_SYSTEM_PROMPT = [
   '=== STUCK POINT ENTRY -- WHEN A FAMILY ARRIVES VIA A STUCK POINT CARD ===',
   'The person has already identified their stuck point. Skip the intake questions entirely.',
   'Start with brief validation of the pattern they named, then ask ONE clarifying question to understand where they are.',
-  'For denial by delay specifically: ask how long first, then ask about deadlines (SDP plan year, fair hearing window, IPP anniversary), then ask about health, safety, or functional impact on the person. All three shape the pace.',
+  'For "waiting for an answer" specifically: first ask what they are waiting for (general response, SDP spending plan approval, or FMS authorization). If SDP-related, ask for the year-end date. Then ask whether things feel like they are moving or completely stuck -- that judgment call shapes the response tier.',
   'Your job is to meet them exactly where they are -- not where the process says they should be.',
   '',
   '=== DENIAL BY DELAY -- KNOW THIS COLD ===',
@@ -847,7 +847,7 @@ let msgCounter   = 0;
 
 // -- STUCK POINT ENTRY --
 const STUCK_WELCOMES = {
-  delay: `What you're describing is real, and you're not imagining it. People wait and wait, and nothing ever officially gets denied -- so there's nothing to appeal. It's one of the most common and exhausting patterns in the RC system.\n\nBefore we figure out next steps, I want to understand where you are.\n\nHow long has this been going on?\n\n[A few weeks] [1-2 months] [Several months] [More than 6 months]`,
+  delay: `I hear you -- waiting without an answer is really hard, especially when so much depends on it. Let me ask a couple of things so I can point you in the right direction.\n\nWhat specifically are you waiting for?\n\n[A general response from RC] [An approved SDP spending plan] [RC to send the authorization to my FMS] [Something else]`,
 
   preference: `"That's a preference, not a need" is one of the most common deflections people hear -- and it's often not accurate. The Lanterman Act says RC must fund services based on functional need, not just what the RC thinks is important.\n\nLet's figure out what's actually going on here.\n\nWhat did you ask for, and what reason did they give for calling it a preference?`,
 
@@ -863,7 +863,7 @@ const STUCK_WELCOMES = {
 };
 
 const STUCK_WELCOMES_ES = {
-  delay: `Lo que describe es real y no se lo está imaginando. Las familias esperan y esperan, y nunca se niega nada oficialmente -- así que no hay nada que apelar. Es uno de los patrones más comunes y agotadores del sistema de RC.\n\nAntes de ver los próximos pasos, necesito entender dónde está usted en este proceso.\n\n¿Cuánto tiempo lleva así?\n\n[Unas semanas] [1-2 meses] [Varios meses] [Más de 6 meses]`,
+  delay: `Entiendo -- esperar sin recibir una respuesta es muy difícil, especialmente cuando tanto depende de ello. Déjeme hacerle un par de preguntas para orientarle mejor.\n\n¿Qué específicamente está esperando?\n\n[Una respuesta general del RC] [Un plan de gastos de SDP aprobado] [Que el RC envíe la autorización a mi FMS] [Algo más]`,
 
   preference: `"Eso es una preferencia, no una necesidad" es una de las respuestas más comunes -- y muchas veces no es correcta. La Ley Lanterman dice que el RC debe financiar servicios según la necesidad funcional, no solo lo que el RC considera importante.\n\nVamos a ver qué está pasando realmente.\n\n¿Qué solicitó usted, y qué razón le dieron para llamarlo una preferencia?`,
 
@@ -901,7 +901,7 @@ function startStuck(type) {
   sessionId    = 'family-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
   sessionTopic = type;
   // Start breadcrumb trail with the entry card label
-  const cardLabels2 = { delay:'Denial by delay', 'sdp-gap':'SDP renewal gap', generic:'Generic resource deflection', ipp:'Goal not in IPP', spending:'Spending Plan budget', preference:'Preference not a need', unsure:'Not sure / open' };
+  const cardLabels2 = { delay:"We're waiting for an answer", 'sdp-gap':'SDP renewal gap', generic:'Generic resource deflection', ipp:'Goal not in IPP', spending:'Spending Plan budget', preference:'Preference not a need', unsure:'Not sure / open' };
   pathTrail.length = 0;
   pathTrail.push(cardLabels2[type] || type);
 
@@ -929,7 +929,7 @@ function openChat(type) {
 
 async function writeSessionRecord(cardType) {
   const cardLabels = {
-    'delay':      'Denial by delay',
+    'delay':      "We're waiting for an answer",
     'sdp-gap':    'SDP renewal gap',
     'generic':    'Generic resource deflection',
     'ipp':        'Goal not in IPP',
