@@ -342,6 +342,35 @@
   .fb-persistent-btn:hover { border-color: var(--teal); color: var(--teal); }
   .fb-persistent-btn.active-helpful { background: var(--teal-lt); border-color: var(--teal); color: var(--teal); }
   .fb-persistent-btn.active-nothelpful { background: #fdf0ee; border-color: #e07060; color: #c0392b; }
+
+  .save-bar {
+    padding: .4rem 1.25rem .5rem;
+    border-top: 1px solid var(--border);
+    display: none;
+    align-items: center;
+    gap: .625rem;
+    background: var(--white);
+  }
+  .save-bar-label {
+    font-size: .9375rem;
+    color: var(--muted);
+    flex-shrink: 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-save {
+    display: flex; align-items: center; gap: .3rem;
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: .25rem .8rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9375rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .btn-save:hover { border-color: var(--teal); color: var(--teal); }
+  .btn-save.copied { background: var(--teal-lt); border-color: var(--teal); color: var(--teal); }
   .fb-general-wrap {
     padding: .4rem 1.25rem .5rem;
     border-top: 1px solid var(--border);
@@ -619,6 +648,11 @@
     <div class="fb-general-wrap" id="fb-general-wrap" style="display:flex; flex-direction:row;">
       <textarea id="fb-general-text" rows="2" placeholder="Help us make DAN better (optional)"></textarea>
       <button class="btn-send-fb-general" onclick="submitGeneralFeedback()">Send</button>
+    </div>
+    <div class="save-bar" id="save-bar">
+      <span class="save-bar-label">Save your conversation:</span>
+      <button class="btn-save" id="btn-copy" onclick="copyConversation()">📋 Copy</button>
+      <button class="btn-save" onclick="downloadConversation()">⬇ Download</button>
     </div>
   </div>
 </div>
@@ -986,6 +1020,7 @@ function appendDanMessage(text, showFeedback) {
   // Hide text box when DAN gives buttons; show when open-ended
   const hasButtons = /\[[^\]]+\]/.test(text);
   document.getElementById('input-row-wrap').style.display = hasButtons ? 'none' : 'flex';
+  maybeShowSaveBar();
 
 }
 
@@ -1021,6 +1056,79 @@ function showTyping() {
 function removeTyping(id) {
   const el = document.getElementById(id);
   if (el) el.remove();
+}
+
+
+// -- SAVE CONVERSATION --
+function getConversationText() {
+  const rows = document.querySelectorAll('.msg-row');
+  const lines = [];
+  lines.push('DAN — Disability Access Navigator');
+  lines.push('Conversation saved: ' + new Date().toLocaleString());
+  lines.push('─'.repeat(40));
+  lines.push('');
+  for (const row of rows) {
+    const bubble = row.querySelector('.msg-bubble');
+    if (!bubble) continue;
+    if (row.classList.contains('user')) {
+      lines.push('YOU:');
+      lines.push(bubble.textContent.trim());
+    } else {
+      lines.push('DAN:');
+      // Get text content, stripping button labels from option-buttons
+      const clone = bubble.cloneNode(true);
+      clone.querySelectorAll('.option-buttons').forEach(el => el.remove());
+      lines.push(clone.textContent.trim());
+    }
+    lines.push('');
+  }
+  lines.push('─'.repeat(40));
+  lines.push('DAN is a navigation tool, not legal advice.');
+  lines.push('Captain's View Advocacy / SDTA');
+  return lines.join('\n');
+}
+
+function copyConversation() {
+  const text = getConversationText();
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('btn-copy');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2500);
+  }).catch(() => {
+    // Fallback for browsers that block clipboard
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const btn = document.getElementById('btn-copy');
+    btn.innerHTML = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = '📋 Copy'; btn.classList.remove('copied'); }, 2500);
+  });
+}
+
+function downloadConversation() {
+  const text = getConversationText();
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'DAN-conversation-' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function maybeShowSaveBar() {
+  // Show after user has sent at least 2 messages
+  const userMsgs = document.querySelectorAll('.msg-row.user').length;
+  if (userMsgs >= 2) {
+    document.getElementById('save-bar').style.display = 'flex';
+  }
 }
 
 function scrollToBottom() {
