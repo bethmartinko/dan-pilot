@@ -862,6 +862,22 @@ const STUCK_WELCOMES = {
   unsure: `No problem -- let's figure it out together.\n\nTell me what's been happening with your Regional Center, and I'll help you identify what you're dealing with and what your options are.`
 };
 
+const STUCK_WELCOMES_ES = {
+  delay: `Lo que describe es real y no se lo está imaginando. Las familias esperan y esperan, y nunca se niega nada oficialmente -- así que no hay nada que apelar. Es uno de los patrones más comunes y agotadores del sistema de RC.\n\nAntes de ver los próximos pasos, necesito entender dónde está usted en este proceso.\n\n¿Cuánto tiempo lleva así?\n\n[Unas semanas] [1-2 meses] [Varios meses] [Más de 6 meses]`,
+
+  preference: `"Eso es una preferencia, no una necesidad" es una de las respuestas más comunes -- y muchas veces no es correcta. La Ley Lanterman dice que el RC debe financiar servicios según la necesidad funcional, no solo lo que el RC considera importante.\n\nVamos a ver qué está pasando realmente.\n\n¿Qué solicitó usted, y qué razón le dieron para llamarlo una preferencia?`,
+
+  ipp: `Si el RC dice "esa meta no está en el IPP", puede que tengan razón en que el IPP necesita actualizarse -- pero eso tiene solución, y no es razón para negar el servicio de inmediato.\n\nEl IPP es un documento legal y usted tiene derecho a pedir una reunión de planificación para actualizarlo en cualquier momento.\n\n¿Qué servicio estaba solicitando, y hay alguna meta en el IPP que parezca relacionada, aunque las palabras no sean exactas?`,
+
+  spending: `Las categorías del Spending Plan son una de las limitaciones más frustrantes del SDP. El presupuesto es suyo -- pero las reglas dicen que no puede mover dinero entre categorías sin un proceso formal de modificación, aunque otra forma de usarlo sea mejor para su familiar.\n\nVamos a ver con qué está trabajando.\n\n¿Qué categorías están involucradas -- dónde está el dinero y dónde lo necesita?`,
+
+  generic: `La respuesta de "hay un recurso comunitario para eso" es complicada porque el RC puede considerar recursos comunitarios -- pero solo si esos recursos realmente funcionan para su familiar. "Disponible en general" no significa "disponible para su familia específicamente".\n\n¿A qué recurso lo dirigieron, y por qué no funciona para su situación?`,
+
+  sdp: `Las renovaciones del SDP las debe iniciar el RC -- no usted. Si su renovación está vencida y no la han iniciado, eso es responsabilidad del RC, no suya.\n\nVamos a ver cómo están las cosas.\n\n¿Sabe cuándo se suponía que se renovaba su acuerdo SDP actual?`,
+
+  unsure: `No hay problema -- lo resolveremos juntos.\n\nCuénteme qué ha estado pasando con su Regional Center y le ayudaré a identificar qué situación está enfrentando y cuáles son sus opciones.`
+};
+
 // -- DEMOGRAPHICS STATE --
 let demoData = { age: null, rc: null, race: null };
 let pendingStuckType = null;
@@ -906,7 +922,8 @@ function openChat(type) {
   // Write one session record to Airtable — demographics + entry card
   writeSessionRecord(type);
 
-  var welcome = STUCK_WELCOMES[type] || STUCK_WELCOMES['unsure'];
+  var welcomeMap = currentLang === 'es' ? STUCK_WELCOMES_ES : STUCK_WELCOMES;
+  var welcome = welcomeMap[type] || welcomeMap['unsure'];
   appendDanMessage(welcome, false);
 }
 
