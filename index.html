@@ -855,7 +855,23 @@ const DAN_SYSTEM_PROMPT = [
   '=== SDP SPENDING PLAN -- THREE DISTINCT PROBLEMS ===',
   'Families arrive at this card with one of three different problems. The opening branches to identify which one before going further.',
   '',
-  'PROBLEM 1 -- RC REQUIRES SPENDING TO MATCH PLAN EXACTLY:',
+  'PROBLEM 1 -- FAMILY SAYS: I WANT TO USE MY BUDGET DIFFERENTLY THAN HOW IT\'S WRITTEN:',
+  'This button uses the family\'s voice. When they pick it, DAN names both perspectives and builds the bridge between them.',
+  '',
+  'WHAT RC IS SAYING: The Spending Plan must match the approved budget category for category. Staff hours in the budget must equal staff hours on the Spending Plan. OT in the budget must be shown as OT on the Spending Plan. This is how some Regional Centers interpret their oversight obligation -- the approved budget and the Spending Plan are meant to mirror each other at the service code level.',
+  '',
+  'WHAT THE FAMILY IS FEELING: They have money allocated but cannot use it in the way that actually makes sense for their person right now. The budget was written months ago and life has changed, or the original service is not available, or a different use would clearly serve the same need better.',
+  '',
+  'THE BRIDGE: These two things are not always in conflict. The question is whether there is a genuine, documentable connection between the budget category and what the family actually wants to do. Example: respite hours were in the budget. The person attends a swimming class next to the parent\'s medical appointment -- this provides community exposure for the person and serves the same underlying need as respite for the family. The connection must be real, not fabricated. DAN helps the family find and articulate that connection.',
+  '',
+  'DIAGNOSTIC -- ask one at a time:',
+  '1. What service category is in your budget?',
+  '2. What do you actually want to use it for?',
+  '3. Is there a genuine connection between those two things -- does the actual use serve the same underlying need that was planned?',
+  '4. If yes: help them document that connection clearly in writing to RC.',
+  '5. If no clear connection: the modification process (Problem 2) may be the right path instead.',
+  '',
+  'IMPORTANT FRAMING: Some Regional Centers interpret DDS guidance as requiring the Spending Plan to match the budget exactly. Others allow more flexibility. There is no current definitive ruling that overrides RC interpretation on this. Do not tell the family their RC is wrong -- say: some Regional Centers interpret it this way; the practical path within that interpretation is to find and document the genuine connection between what was planned and what is needed now.',
   'Some Regional Centers interpret DDS guidance as requiring that spending match the approved Spending Plan exactly -- service by service, dollar by dollar. Others allow more flexibility. There is no current definitive ruling that overrides RC interpretation on this. Do not tell the family their RC is wrong -- say: some Regional Centers interpret the law and DDS guidance this way; others allow more flexibility; until there is a definitive ruling, the practical path is to work within their RC\'s interpretation.',
   'WORKAROUND: Help the family find a genuine connection between the original budget need and the actual activity. Example: respite was in the plan; the person ends up attending a swimming class next to the parent\'s doctor office -- this provides community exposure for the person and effectively serves as respite for the parent. The connection must be real, not fabricated. The goal is to document how the actual use serves the same underlying need that was in the plan.',
   'Also: back up to the need. Sometimes rephrasing the goal more broadly in the spending plan -- around what the person needs to accomplish rather than a specific vendor or activity -- creates legitimate flexibility within the same service code.',
@@ -963,7 +979,7 @@ const STUCK_WELCOMES = {
 
   ipp: `When RC says that, they're actually telling you something useful -- they've shown you exactly where the chain is broken. And broken chains are fixable.\n\nLet's back up to the need and rebuild from there.\n\nWhat does your person actually need to be able to do, be part of, or stay safe doing? Tell me in plain terms -- not the service name, just what they need.`,
 
-  spending: `SDP gives you control over your budget -- but families run into a few different walls with the Spending Plan itself. Let me make sure I understand which one you're dealing with.\n\nWhat's the problem you're hitting?\n\n[RC says I have to spend exactly what's on the plan -- no flexibility] [I need to move money between service categories] [A specific service on my plan isn't being approved] [Something else]`,
+  spending: `SDP gives you control over your budget -- but families run into a few different walls with the Spending Plan itself. Let me make sure I understand which one you're dealing with.\n\nWhat's the problem you're hitting?\n\n[I want to use my budget differently than how it's written] [I need to move money between service categories] [A specific service on my plan isn't being approved] [Something else]`,
 
   generic: `RC is actually required by law to consider generic resources before they can fund a service -- so this isn't a brushoff, it's a real step in the process. The question worth asking together is: does this resource genuinely work for your person, either on its own or in combination with RC support?\n\nSometimes a free or low-cost resource combined with an RC-funded aide can actually open more doors than a funded service alone. And other families are often the best source of knowledge about what's really available locally.\n\nLet me ask one thing at a time. What resource did RC point to?\n\n[Insurance] [The school system] [A community program or service] [Something else]`,
 
@@ -979,7 +995,7 @@ const STUCK_WELCOMES_ES = {
 
   ipp: `Cuando el RC dice eso, en realidad le está dando información útil -- le está mostrando exactamente dónde está rota la cadena. Y las cadenas rotas se pueden reparar.\n\nVamos a retroceder hasta la necesidad y reconstruir desde ahí.\n\n¿Qué necesita realmente su familiar poder hacer, participar, o hacer de forma segura? Cuénteme en palabras simples -- no el nombre del servicio, sino la necesidad en sí.`,
 
-  spending: `El SDP le da control sobre su presupuesto -- pero las familias se encuentran con varios obstáculos diferentes con el Plan de Gastos. Déjeme asegurarme de entender cuál es el suyo.\n\n¿Cuál es el problema que está enfrentando?\n\n[El RC dice que tengo que gastar exactamente lo que está en el plan -- sin flexibilidad] [Necesito mover dinero entre categorías de servicio] [Un servicio específico en mi plan no está siendo aprobado] [Otra cosa]`,
+  spending: `El SDP le da control sobre su presupuesto -- pero las familias se encuentran con varios obstáculos diferentes con el Plan de Gastos. Déjeme asegurarme de entender cuál es el suyo.\n\n¿Cuál es el problema que está enfrentando?\n\n[Quiero usar mi presupuesto de manera diferente a como está escrito] [Necesito mover dinero entre categorías de servicio] [Un servicio específico en mi plan no está siendo aprobado] [Otra cosa]`,
 
   generic: `El RC está legalmente obligado a considerar recursos genéricos antes de poder financiar un servicio -- así que esto no es un rechazo, es un paso real en el proceso. La pregunta que vale la pena responder juntos es: ¿este recurso realmente funciona para su familiar, solo o en combinación con apoyo del RC?\n\nA veces un programa gratuito o de bajo costo combinado con un asistente financiado por el RC puede abrir más puertas que un servicio financiado solo. Y otras familias suelen ser la mejor fuente de información sobre lo que realmente está disponible en la comunidad.\n\nDéjeme preguntarle una cosa a la vez. ¿A qué recurso señaló el RC?\n\n[Seguro médico] [El sistema escolar] [Un programa o servicio comunitario] [Algo más]`,
 
