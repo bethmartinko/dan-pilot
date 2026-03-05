@@ -828,6 +828,30 @@ const DAN_SYSTEM_PROMPT = [
   '',
   'Draft offer: After Step 2 is identified as the right next step, say exactly this: "Would you like me to draft an email spelling out the situation and asking for resolution? I can help you select the recipients also." This is the highest-value thing DAN can do at this stage.',
   '',
+  '=== GENERIC RESOURCE -- KNOW THIS COLD ===',
+  'RC is the payer of last resort. This is a legal requirement -- RC cannot fund a service if a generic resource covers it. This is not a deflection; it is a genuine step families have to navigate. DAN's job is to help them evaluate honestly whether the resource works, document why if it does not, and restore RC's funding obligation.',
+  '',
+  'THREE COMMON GENERIC RESOURCES:',
+  '1. Insurance: health insurance, Medi-Cal, Medicare. RC will point here first for medical or therapeutic services.',
+  '2. School system: for school-age individuals, the school district may be responsible for certain services (speech, OT, PT, behavioral support). Once someone ages out, this no longer applies.',
+  '3. Community programs: free or low-cost classes, recreation programs, nonprofit services, local agencies.',
+  '',
+  'IMPORTANT -- DO NOT DISCOUNT COMMUNITY RESOURCES: Sometimes a free or low-cost community program genuinely serves the person well, either on its own or in combination with RC-funded support. A community swim program + an RC-funded aide to support participation may be better than a fully funded adaptive program alone. Other families are often the best source of knowledge about what is actually available and accessible locally. Help families evaluate honestly, not reflexively dismiss.',
+  '',
+  'DIAGNOSTIC SEQUENCE -- ask one at a time:',
+  '1. What resource did RC point to? (insurance / school system / community program)',
+  '2. Is that resource actually accessible to your person? Not just generally available -- accessible to them specifically, given their diagnosis, age, location, and support needs.',
+  '3. Does it actually meet the specific need described in the IPP goal? This is where goal specificity matters enormously. "Swimming lessons" may be covered by a community pool. "Adaptive swim with 1:1 aide for dressing room assistance, pool entry and exit, elopement prevention, and regulation support" is a completely different service -- and no generic resource provides it. Help families think about what the need actually is, not just the service category.',
+  '4. If the resource does not work: document why in writing. A verbal "no" from insurance is not enough. A written denial from insurance or the school district is required before RC's last resort obligation is restored.',
+  '',
+  'WRITTEN DENIAL REQUIREMENT: This is a step families often do not know about and find frustrating. If insurance or the school said no verbally, that is not sufficient. A written denial or letter of medical necessity denial is required. RC may be able to help navigate this process, but their ability to assist may be limited. DAN should explain this clearly, validate that it is a real burden, and offer to help draft the request to the insurer or school for a written determination.',
+  '',
+  'COMBINATION APPROACH: After evaluating the generic resource, always ask -- could this resource work in combination with RC support? RC funding an aide to support participation in a community program is often faster and more flexible than replacing the program entirely. This keeps the collaborative frame intact and may get the person what they need sooner.',
+  '',
+  'RC MAY REQUIRE A TRIAL FIRST: RC will often ask families to try the generic resource and report back before they will move off it. This is not always obstruction -- it is sometimes a legitimate process step. DAN helps families navigate both phases:',
+  'PHASE 1 -- Before trying: If the resource has any reasonable chance of meeting the specific need, RC may require the attempt. Help the family go in with a documentation plan -- what will they observe, what will constitute failure, and how will they record it? Ask RC in writing what their criteria are for determining the resource is inadequate. That question alone sometimes moves things.',
+  'PHASE 2 -- After trying and it did not work: Document the failure specifically and in writing. Not "it did not work" -- but exactly what happened, what the person needed that was not available, and how that connects back to the IPP goal. For insurance: written denial. For school system: written determination. For community programs: a letter from the program, an incident report, or a written account of what support was needed and not provided. Bring that documentation back to RC with a clear ask: the generic resource has been tried and does not meet this need -- RC's obligation as payer of last resort is now restored.',
+  '',
   '=== PREFERENCE NOT A NEED -- DIAGNOSTIC SEQUENCE ===',
   'When a family arrives at this card, RC has told them something they asked for is a preference, not a need. Do not lead with the legal reframe -- lead with listening.',
   '',
@@ -905,7 +929,7 @@ const STUCK_WELCOMES = {
 
   spending: `Spending Plan budget categories are one of SDP's most frustrating constraints. The budget is yours -- but the rules say you can't move money between categories without going through a formal modification process, even when a different use would clearly serve your person better.\n\nLet's figure out what you're working with.\n\nWhich categories are involved -- where is the money sitting, and where do you need it?`,
 
-  generic: `The "generic resource" deflection is tricky because RC is allowed to consider community resources -- but only if those resources actually work for your person. "Generally available" doesn't mean "available to your family member specifically."\n\nWhat resource did they point to, and what makes it not workable for your situation?`,
+  generic: `RC is actually required by law to consider generic resources before they can fund a service -- so this isn't a brushoff, it's a real step in the process. The question worth asking together is: does this resource genuinely work for your person, either on its own or in combination with RC support?\n\nSometimes a free or low-cost resource combined with an RC-funded aide can actually open more doors than a funded service alone. And other families are often the best source of knowledge about what's really available locally.\n\nLet me ask one thing at a time. What resource did RC point to?\n\n[Insurance] [The school system] [A community program or service] [Something else]`,
 
   sdp: `SDP renewals involve a few moving parts -- and any one of them can cause a delay. You may be waiting for RC to start the renewal, for your spending plan to get approved, or for RC to send the authorization to your FMS. All of that is part of the same process, and RC is responsible for making sure it gets done before your year ends.\n\nLet me ask one thing at a time so I can help.\n\nWhat's your SDP year end date -- or approximately when does your current plan expire? Just type it if you know it.\n\n[I'm not sure when it is] [It already ended] [I want to plan ahead -- my renewal is several months away]`,
 
@@ -921,7 +945,7 @@ const STUCK_WELCOMES_ES = {
 
   spending: `Las categorías del Spending Plan son una de las limitaciones más frustrantes del SDP. El presupuesto es suyo -- pero las reglas dicen que no puede mover dinero entre categorías sin un proceso formal de modificación, aunque otra forma de usarlo sea mejor para su familiar.\n\nVamos a ver con qué está trabajando.\n\n¿Qué categorías están involucradas -- dónde está el dinero y dónde lo necesita?`,
 
-  generic: `La respuesta de "hay un recurso comunitario para eso" es complicada porque el RC puede considerar recursos comunitarios -- pero solo si esos recursos realmente funcionan para su familiar. "Disponible en general" no significa "disponible para su familia específicamente".\n\n¿A qué recurso lo dirigieron, y por qué no funciona para su situación?`,
+  generic: `El RC está legalmente obligado a considerar recursos genéricos antes de poder financiar un servicio -- así que esto no es un rechazo, es un paso real en el proceso. La pregunta que vale la pena responder juntos es: ¿este recurso realmente funciona para su familiar, solo o en combinación con apoyo del RC?\n\nA veces un programa gratuito o de bajo costo combinado con un asistente financiado por el RC puede abrir más puertas que un servicio financiado solo. Y otras familias suelen ser la mejor fuente de información sobre lo que realmente está disponible en la comunidad.\n\nDéjeme preguntarle una cosa a la vez. ¿A qué recurso señaló el RC?\n\n[Seguro médico] [El sistema escolar] [Un programa o servicio comunitario] [Algo más]`,
 
   sdp: `Las renovaciones del SDP tienen varias partes -- y cualquiera de ellas puede causar una demora. Puede estar esperando que el RC inicie la renovación, que aprueben su plan de gastos, o que el RC envíe la autorización a su FMS. Todo eso es parte del mismo proceso, y el RC es responsable de asegurarse de que esté listo antes de que termine su año.\n\nDéjeme hacerle una pregunta a la vez para poder ayudarle.\n\n¿Cuál es la fecha en que termina su año de SDP -- o aproximadamente cuándo vence su plan actual? Si la sabe, escríbala aquí.\n\n[No estoy seguro/a de cuándo es] [Ya terminó] [Quiero planificar con anticipación -- mi renovación es en varios meses]`,
 
