@@ -1104,15 +1104,6 @@ function openChat(type) {
 }
 
 async function writeSessionRecord(cardType) {
-  const cardLabels = {
-    'delay':      "We're waiting for an answer",
-    'sdp-gap':    'SDP renewal gap',
-    'generic':    'Generic resource deflection',
-    'ipp':        'Goal not in IPP',
-    'spending':   'SDP Spending Plan',
-    'preference': 'Preference not a need',
-    'unsure':     'Not sure / open',
-  };
   try {
     await fetch('/.netlify/functions/proxy', {
       method: 'POST',
@@ -1120,14 +1111,9 @@ async function writeSessionRecord(cardType) {
       body: JSON.stringify({
         url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}`,
         fields: {
-          'Session ID':    sessionId,
-          'Flow Type':     'Family',
-          'Language':      currentLang === 'es' ? 'Spanish' : 'English',
-          'Timestamp':     new Date().toISOString(),
-          'Entry Card':    cardLabels[cardType] || cardType,
-          'Age Range':     demoData.age  || '',
-          'Regional Center': demoData.rc || '',
-          'Race / Ethnicity': demoData.race || '',
+          'Session ID':  sessionId,
+          'Flow Type':   'Family',
+          'Timestamp':   new Date().toISOString(),
         }
       }),
     });
@@ -1546,10 +1532,8 @@ async function sendMsgFeedback(msgId, rating, comment, msgText, convPath) {
         fields: {
           'Session ID':               sessionId,
           'Flow Type':                'Family',
-          'Language':               currentLang === 'es' ? 'Spanish' : 'English',
           'Timestamp':                new Date().toISOString(),
           'Message (DAN response)':   msgText,
-          'Conversation Path':        convPath || '',
           'Rating':                   rating,
           'What were you expecting?': comment,
         }
