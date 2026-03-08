@@ -1506,6 +1506,10 @@ function rateDan(msgId, rating) {
 }
 
 function sendFbComment(msgId) {
+  // guard against double-click Send
+  if (fbState[msgId] && fbState[msgId].commentSubmitted) return;
+  if (fbState[msgId]) fbState[msgId].commentSubmitted = true;
+
   const comment  = document.getElementById(`fb-text-${msgId}`).value.trim();
   const rating   = (fbState[msgId] || {}).rating || 'Not Helpful';
   const recordId = (fbState[msgId] || {}).airtableId;
