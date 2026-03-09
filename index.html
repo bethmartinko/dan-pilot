@@ -413,6 +413,17 @@
     flex-shrink: 0;
     font-family: 'DM Sans', sans-serif;
   }
+  .save-reminder {
+    display: none;
+    font-size: .875rem;
+    color: var(--navy);
+    background: #fff8e6;
+    border: 1.5px solid #f0c84a;
+    border-radius: 8px;
+    padding: .35rem .75rem;
+    margin: 0 1.25rem .4rem;
+    font-family: 'DM Sans', sans-serif;
+  }
   .btn-save {
     display: flex; align-items: center; gap: .3rem;
     background: none;
@@ -710,6 +721,9 @@
         </button>
       </div>
       <p class="input-hint" id="input-hint"></p>
+    </div>
+    <div class="save-reminder" id="save-reminder">
+      💾 <strong>Reminder:</strong> If you close this window, your conversation will be gone — download it to save it or pick up where you left off next time.
     </div>
     <div class="save-bar" id="save-bar">
       <span class="save-bar-label">Save your conversation:</span>
@@ -1062,6 +1076,8 @@ function goBack() {
   document.getElementById('btn-copy-header').style.display = 'none';
   document.getElementById('btn-dl-header').style.display = 'none';
   document.getElementById('input-row-wrap').style.display = 'none';
+  document.getElementById('save-bar').style.display = 'none';
+  document.getElementById('save-reminder').style.display = 'none';
   // Reset all session state
   pathTrail.length = 0;
   sessionTopic = null;
@@ -1385,7 +1401,15 @@ function getConversationText() {
   }
   lines.push('----------------------------------------');
   lines.push('DAN is an informational tool, not legal advice. For your specific situation, seek guidance from a qualified advocate or attorney.');
-  lines.push("Captains View Advocacy / SDTA");
+  lines.push('Captain\'s View Advocacy / SDTA');
+  lines.push('');
+  lines.push('--- WANT TO PICK UP WHERE YOU LEFT OFF? ---');
+  lines.push('DAN doesn\'t remember past conversations, but you can bring it back up to speed.');
+  lines.push('Next time you open DAN, paste this message to start:');
+  lines.push('');
+  lines.push('"Here\'s a summary of our last conversation. Please read it and then help me continue from where we left off: [paste this transcript here]"');
+  lines.push('');
+  lines.push('DAN will read your transcript and pick up from there.');
   return lines.join('\n');
 }
 
@@ -1429,6 +1453,10 @@ function maybeShowSaveBar() {
   if (userMsgs >= 1) {
     document.getElementById('btn-copy-header').style.display = 'flex';
     document.getElementById('btn-dl-header').style.display = 'flex';
+    document.getElementById('save-bar').style.display = 'flex';
+  }
+  if (userMsgs >= 3) {
+    document.getElementById('save-reminder').style.display = 'block';
   }
 }
 
@@ -1610,6 +1638,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
+    }
+  });
+
+  // Auto-download on window close if there's conversation content
+  window.addEventListener('beforeunload', (e) => {
+    const userMsgs = document.querySelectorAll('.msg-row.user');
+    if (userMsgs.length >= 1) {
+      downloadConversation();
+      e.preventDefault();
+      e.returnValue = 'Your DAN conversation will be downloaded automatically. Save the file so you can pick up where you left off next time.';
     }
   });
 });
