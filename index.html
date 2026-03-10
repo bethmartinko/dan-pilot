@@ -242,7 +242,7 @@
   .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 1.5rem 1.25rem;
+    padding: 1.5rem 1.25rem 7rem;  /* bottom padding ensures last message clears the input bar */
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -1585,8 +1585,7 @@ function scrollToBottom() {
 function scrollToMessage(row) {
   // Short timeout ensures buttons/content are fully rendered before scrolling
   setTimeout(() => {
-    const c = document.getElementById('chat-messages');
-    c.scrollTop = row.offsetTop - c.offsetTop - 12;
+    row.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, 50);
 }
 
