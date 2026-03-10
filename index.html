@@ -626,20 +626,21 @@
 <div id="demo-screen" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:2rem; background:var(--sand);">
   <div class="survey-inner">
     <h2 data-en="Before we start" data-es="Antes de comenzar">Before we start</h2>
-    <p class="survey-sub" data-en="A few optional questions — this helps us understand who DAN is serving and make the case for funding. You can skip any of these." data-es="Algunas preguntas opcionales — esto nos ayuda a entender a quién sirve DAN y a justificar el financiamiento. Puede omitir cualquiera de estas.">A few optional questions — this helps us understand who DAN is serving and make the case for funding. You can skip any of these.</p>
+    <p class="survey-sub" data-en="Your Regional Center helps DAN give you accurate guidance. Age and race/ethnicity are optional — they help us understand who DAN is serving and make the case for funding." data-es="Su Regional Center ayuda a DAN a darle orientación precisa. La edad y la raza/etnia son opcionales — nos ayudan a entender a quién sirve DAN y a justificar el financiamiento.">Your Regional Center helps DAN give you accurate guidance. Age and race/ethnicity are optional — they help us understand who DAN is serving and make the case for funding.</p>
 
     <div class="survey-field">
-      <label data-en="Age of the person with the disability" data-es="Edad de la persona con discapacidad">Age of the person with the disability</label>
+      <label data-en="Age of the person with the disability (optional)" data-es="Edad de la persona con discapacidad (opcional)">Age of the person with the disability <span style="font-weight:400; color:var(--muted);">(optional)</span></label>
       <div class="yn-row" style="flex-wrap:wrap; gap:.5rem;">
-        <button class="yn-btn" onclick="setDemoField('age', this)">0–3</button>
-        <button class="yn-btn" onclick="setDemoField('age', this)">4–22</button>
-        <button class="yn-btn" onclick="setDemoField('age', this)">23+</button>
+        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="0–3" data-es="0–3">0–3</button>
+        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="4–21" data-es="4–21">4–21</button>
+        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="22–56" data-es="22–56">22–56</button>
+        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="57+" data-es="57+">57+</button>
         <button class="yn-btn" onclick="setDemoField('age', this)" data-en="Prefer not to say" data-es="Prefiero no decir">Prefer not to say</button>
       </div>
     </div>
 
-    <div class="survey-field" style="border:2px solid var(--border); border-radius:var(--radius); padding:1rem 1.25rem; background:var(--white);">
-      <label data-en="Your Regional Center" data-es="Su Regional Center">Your Regional Center</label>
+    <div class="survey-field" style="border:2px solid var(--teal); border-radius:var(--radius); padding:1rem 1.25rem; background:var(--white);">
+      <label data-en="Your Regional Center (required)" data-es="Su Regional Center (requerido)">Your Regional Center <span style="font-weight:600; color:var(--teal);">*</span></label>
       <select id="demo-rc" style="width:100%; padding:.5rem .75rem; border:1.5px solid var(--slate-lt); border-radius:6px; font-family:inherit; font-size:.9375rem; color:var(--ink); background:white;">
         <option value="" data-en="— Select your Regional Center —" data-es="— Seleccione su Regional Center —">— Select your Regional Center —</option>
         <option>Alta California Regional Center</option>
@@ -668,7 +669,7 @@
     </div>
 
     <div class="survey-field">
-      <label data-en="Race / ethnicity" data-es="Raza / etnia">Race / ethnicity</label>
+      <label data-en="Race / ethnicity (optional)" data-es="Raza / etnia (opcional)">Race / ethnicity <span style="font-weight:400; color:var(--muted);">(optional)</span></label>
       <div class="yn-row" style="flex-wrap:wrap; gap:.5rem;">
         <button class="yn-btn" onclick="setDemoField('race', this)" data-en="White" data-es="Blanco/a">White</button>
         <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Black / African American" data-es="Negro/a / Afroamericano/a">Black / African American</button>
@@ -681,7 +682,12 @@
       </div>
     </div>
 
-    <button class="btn-submit-survey" onclick="submitDemographics()" data-en="Continue to DAN →" data-es="Continuar a DAN →">Continue to DAN →</button>
+    <p style="font-size:.8125rem; color:var(--muted); line-height:1.6; margin-top:1.5rem; padding:.75rem 1rem; background:var(--sand-dk); border-radius:var(--radius-sm);">
+      <span data-en="By continuing, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization." data-es="Al continuar, reconoce que DAN proporciona información general solamente — no asesoramiento legal. DAN no es abogado ni representante autorizado. Para asuntos legales, consulte a un abogado calificado u organización de derechos para personas con discapacidad.">By continuing, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization.</span>
+    </p>
+
+    <button class="btn-submit-survey" id="btn-continue-dan" onclick="submitDemographics()" data-en="Continue to DAN →" data-es="Continuar a DAN →" disabled style="opacity:.5; cursor:not-allowed;">Continue to DAN →</button>
+    <p style="font-size:.75rem; color:var(--muted); margin-top:.5rem; text-align:center;" id="rc-required-note" data-en="Please select your Regional Center to continue." data-es="Por favor seleccione su Regional Center para continuar.">Please select your Regional Center to continue.</p>
   </div>
 </div>
 
@@ -1104,8 +1110,35 @@ function setDemoField(field, btn) {
   btn.classList.add('active');
 }
 
+// Enable Continue button only when RC is selected
+document.addEventListener('DOMContentLoaded', function() {
+  var rcSelect = document.getElementById('demo-rc');
+  if (rcSelect) {
+    rcSelect.addEventListener('change', function() {
+      var btn  = document.getElementById('btn-continue-dan');
+      var note = document.getElementById('rc-required-note');
+      if (this.value) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor  = 'pointer';
+        if (note) note.style.display = 'none';
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '1'.replace('1','0.5');
+        btn.style.cursor  = 'not-allowed';
+        if (note) note.style.display = 'block';
+      }
+    });
+  }
+});
+
 function submitDemographics() {
   demoData.rc = document.getElementById('demo-rc').value;
+  if (!demoData.rc) {
+    document.getElementById('rc-required-note').style.display = 'block';
+    document.getElementById('demo-rc').focus();
+    return;
+  }
   document.getElementById('demo-screen').style.display = 'none';
   openChat(pendingStuckType);
 }
