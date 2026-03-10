@@ -438,6 +438,18 @@
   }
   .btn-save:hover { border-color: var(--teal); color: var(--teal); }
   .btn-save.copied { background: var(--teal-lt); border-color: var(--teal); color: var(--teal); }
+
+  /* inline email copy button — appears under DAN messages that contain a draft */
+  .btn-copy-email {
+    display: inline-flex; align-items: center; gap: .35rem;
+    margin-top: .5rem;
+    background: var(--teal-lt); border: 1px solid var(--teal);
+    color: var(--teal); border-radius: 99px;
+    padding: .35rem .85rem; font-size: .8125rem; font-weight: 500;
+    cursor: pointer; transition: all .15s; font-family: inherit;
+  }
+  .btn-copy-email:hover { background: var(--teal); color: var(--white); }
+  .btn-copy-email.copied { background: var(--teal); color: var(--white); cursor: default; }
   .fb-general-wrap {
     padding: .4rem 1.25rem .6rem;
     border-top: none;
@@ -565,10 +577,44 @@
   .chat-messages::-webkit-scrollbar { width: 5px; }
   .chat-messages::-webkit-scrollbar-track { background: transparent; }
   .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
-  @media (max-width: 520px) {
+  @media (max-width: 600px) {
+    /* Landing */
     .flow-cards { grid-template-columns: 1fr; }
-    .dan-wordmark { font-size: 2.25rem; }
+    .dan-wordmark { font-size: 2rem; }
+    .landing-inner { padding: 1.5rem 1rem; }
     .option-btn { font-size: .75rem; padding: 5px 11px; }
+
+    /* Chat shell — full width, no side margins */
+    #chat-shell { max-width: 100%; }
+
+    /* Header — tighter, no wrapping */
+    .chat-header { padding: .6rem .875rem; flex-wrap: nowrap; }
+    .header-wordmark { font-size: 1.1rem; }
+    .btn-end { font-size: .75rem; padding: .3rem .55rem; }
+    .btn-save-header { font-size: .7rem; padding: .3rem .5rem; }
+    .lang-toggle { gap: 2px; }
+    .lang-btn { padding: .2rem .45rem; font-size: .7rem; }
+    .chat-header-right { gap: .375rem; }
+
+    /* Messages — larger text for easier reading */
+    .chat-messages { padding: 1rem .75rem; gap: 1rem; }
+    .msg-row { max-width: 100%; }
+    .msg-bubble {
+      font-size: 1rem;        /* prevents iOS text-too-small issues */
+      line-height: 1.65;
+      padding: .75rem .875rem;
+    }
+    .msg-avatar { width: 28px; height: 28px; font-size: .65rem; }
+
+    /* Input — font-size 16px prevents iOS auto-zoom on focus */
+    .chat-input-area { padding: .625rem .75rem; }
+    #user-input { font-size: 1rem; }
+
+    /* Save bar — stack vertically on very small screens */
+    .save-bar { flex-wrap: wrap; gap: .375rem; }
+
+    /* Email copy button — full width on mobile */
+    .btn-copy-email { font-size: .875rem; padding: .45rem .875rem; }
   }
 </style>
 </head>
@@ -1311,6 +1357,19 @@ function appendDanMessage(text, showFeedback) {
   const row       = document.createElement('div');
   row.className   = 'msg-row dan';
 
+  // Detect if this message contains an email draft
+  // Looks for Subject: line or "Dear {" patterns DAN uses
+  const emailMatch = text.match(/(Subject:[\s\S]+)/i) ||
+                     text.match(/(Dear\s+\{[\s\S]+)/i);
+  const emailText  = emailMatch ? emailMatch[1].trim() : null;
+
+  const copyEmailHtml = emailText ? `
+    <div style="padding: 0 .125rem;">
+      <button class="btn-copy-email" id="copy-email-${msgId}" onclick="copyEmailDraft('${msgId}')">
+        📋 Copy email draft
+      </button>
+    </div>` : '';
+
   const fbHtml = showFeedback ? `
     <div class="msg-feedback" id="fb-${msgId}">
       <span class="fb-label">Helpful?</span>
@@ -1326,13 +1385,15 @@ function appendDanMessage(text, showFeedback) {
     <div class="msg-avatar">D</div>
     <div class="msg-content">
       <div class="msg-bubble" id="bubble-${msgId}">${formatDanText(text)}</div>
+      ${copyEmailHtml}
       ${fbHtml}
     </div>`;
   container.appendChild(row);
   scrollToMessage(row);
 
-  row.dataset.text  = text;
-  row.dataset.msgId = msgId;
+  row.dataset.text    = text;
+  row.dataset.msgId   = msgId;
+  if (emailText) row.dataset.emailText = emailText;
 
   // Hide text box when DAN gives buttons; show when open-ended
   const hasButtons = /\[[^\]]+\]/.test(text);
@@ -1434,6 +1495,29 @@ function copyConversation() {
     btn.innerHTML = '✓ Copied!';
     btn.classList.add('copied');
     setTimeout(() => { btn.innerHTML = '📋 Copy'; btn.classList.remove('copied'); }, 2500);
+  });
+}
+
+function copyEmailDraft(msgId) {
+  const row  = document.querySelector(`[data-msg-id="${msgId}"]`);
+  const text = row ? (row.dataset.emailText || row.dataset.text) : '';
+  const btn  = document.getElementById(`copy-email-${msgId}`);
+
+  const doCopy = (t) => {
+    btn.innerHTML = '✓ Copied!';
+    btn.classList.add('copied');
+    // don't reset — "copied" is a done state for this button
+  };
+
+  navigator.clipboard.writeText(text).then(() => doCopy(text)).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    doCopy(text);
   });
 }
 
