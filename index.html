@@ -318,6 +318,51 @@
   }
   .btn-back:hover { background: var(--sand-dk); color: var(--navy); }
 
+  /* -- ROADMAP STRIP -- */
+  .roadmap-strip {
+    display: none;
+    align-items: center;
+    gap: 0;
+    padding: .5rem 1.25rem;
+    background: var(--sand);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-shrink: 0;
+  }
+  .roadmap-strip::-webkit-scrollbar { display: none; }
+  .roadmap-step {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .roadmap-label {
+    font-size: .75rem;
+    color: var(--muted);
+    white-space: nowrap;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: .2rem .5rem;
+    border-radius: 99px;
+    transition: background .2s, color .2s;
+  }
+  .roadmap-label.current {
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 600;
+  }
+  .roadmap-label.past {
+    color: var(--teal);
+  }
+  .roadmap-arrow {
+    font-size: .625rem;
+    color: var(--border);
+    padding: 0 .1rem;
+    flex-shrink: 0;
+  }
+
   .typing-indicator {
     display: flex; gap: 4px; padding: .875rem 1rem;
     background: var(--white); border: 1px solid var(--border);
@@ -760,6 +805,7 @@
       <button class="btn-save-header" id="btn-dl-header" onclick="downloadConversation()" style="display:none;" data-en="⬇ Download" data-es="⬇ Descargar">⬇ Download</button>
     </div>
   </div>
+  <div class="roadmap-strip" id="roadmap-strip"></div>
   <div class="chat-messages" id="chat-messages"></div>
   <div class="chat-input-area">
     <div class="input-row-wrap" id="input-row-wrap" style="display:none;">
@@ -1159,6 +1205,8 @@ function goBack() {
   document.getElementById('save-reminder').style.display = 'none';
   // Reset all session state
   pathTrail.length = 0;
+  const strip = document.getElementById('roadmap-strip');
+  if (strip) { strip.innerHTML = ''; strip.style.display = 'none'; }
   sessionTopic = null;
   currentFlow = null;
   sessionId = null;
@@ -1263,6 +1311,7 @@ document.addEventListener('click', function(e) {
   }
   document.getElementById('user-input').value = label;
   pathTrail.push(label); // record choice in breadcrumb
+  updateRoadmap();
   sendMessage();
 });
 
@@ -1286,6 +1335,7 @@ async function sendMessage() {
   appendUserMessage(text);
   messages.push({ role: 'user', content: text });
   pathTrail.push(text.length > 60 ? text.slice(0, 57) + '...' : text); // record typed reply
+  updateRoadmap();
 
   if (!sessionTopic) {
     const t = text.toLowerCase();
@@ -1431,6 +1481,16 @@ function appendDanMessage(text, showFeedback) {
   // Hide text box when DAN gives buttons; show when open-ended
   const hasButtons = /\[[^\]]+\]/.test(text);
   document.getElementById('input-row-wrap').style.display = hasButtons ? 'none' : 'flex';
+
+  // Endpoint footer: show "if this doesn't work" nudge when DAN reaches a natural stopping point
+  // (has an email draft, OR no buttons and this is at least the 3rd DAN message)
+  if (showFeedback && (emailText || (!hasButtons && msgCounter >= 3))) {
+    const footer = document.createElement('div');
+    footer.style.cssText = 'font-size:.8125rem; color:var(--muted); padding:.5rem .25rem .25rem; line-height:1.5; border-top:1px solid var(--border); margin-top:.5rem;';
+    footer.innerHTML = '💬 <em>If this doesn\'t move things, come back and DAN will help you with the next step.</em>';
+    row.querySelector('.msg-content').appendChild(footer);
+  }
+
   maybeShowSaveBar();
 
 }
@@ -1606,6 +1666,32 @@ function getConversationPath(upToMsgId) {
 
 const fbState = {};
 const pathTrail = []; // breadcrumb of user choices
+
+function updateRoadmap() {
+  const strip = document.getElementById('roadmap-strip');
+  if (!strip || pathTrail.length === 0) return;
+  strip.style.display = 'flex';
+  strip.innerHTML = '';
+  pathTrail.forEach(function(step, i) {
+    const stepEl = document.createElement('div');
+    stepEl.className = 'roadmap-step';
+    const label = document.createElement('span');
+    label.className = 'roadmap-label ' + (i === pathTrail.length - 1 ? 'current' : 'past');
+    // Truncate long typed replies for display
+    label.textContent = step.length > 40 ? step.slice(0, 37) + '…' : step;
+    label.title = step;
+    stepEl.appendChild(label);
+    if (i < pathTrail.length - 1) {
+      const arrow = document.createElement('span');
+      arrow.className = 'roadmap-arrow';
+      arrow.textContent = ' › ';
+      stepEl.appendChild(arrow);
+    }
+    strip.appendChild(stepEl);
+  });
+  // Scroll to end so current step is always visible
+  strip.scrollLeft = strip.scrollWidth;
+}
 
 function rateDan(msgId, rating) {
   fbState[msgId] = fbState[msgId] || {};
