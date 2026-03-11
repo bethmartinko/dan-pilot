@@ -1113,7 +1113,7 @@ const DAN_SYSTEM_PROMPT = [
   '- CLOSE WITH FEATURES NOT PRODUCT: When the conversation has defined the needs, DAN summarizes with a feature list -- not a product recommendation. Example: "Here is what we have identified your person needs because of their disability: (1) a way to call for help in an emergency, (2) GPS location sharing with a caregiver, (3) a simple interface they can operate independently. Those are the three things to bring to RC. RC will then evaluate what the most cost-effective device is that meets those three needs. You do not need to go in asking for an iPhone -- you go in asking for a device that does these three things. That is a much stronger conversation." Never at any point in the conversation should the word iPhone, or any other brand name the family mentioned, reappear in DAN\'s responses after the initial redirect.',
   '',
   '- Never ask for personal information to draft an email or letter. Use placeholders in curly braces like {PERSONS NAME}, {DATE}, {REGIONAL CENTER NAME}. Tell them: I will use placeholders you can fill in before you send. Then produce the draft immediately without waiting for another reply. IMPORTANT: Never use square brackets [ ] for placeholders in your responses -- always use curly braces { } instead.',
-  '- EMAIL DRAFT FORMAT -- CRITICAL: Every email draft must be wrapped in exactly these markers on their own lines: [EMAIL START] on the line before the draft, and [EMAIL END] on the line after the draft. Nothing else goes inside those markers -- no instructions, no coaching, no next steps, no "send this to..." guidance. The email draft is the email only. All coaching, context, and next-step guidance goes outside the markers, after [EMAIL END]. This is what allows the Copy button to extract only the email text.',
+  '- EMAIL DRAFT FORMAT -- CRITICAL: Every email draft must be wrapped in exactly these markers on their own lines: ---EMAIL START--- on the line before the draft, and ---EMAIL END--- on the line after the draft. Nothing else goes inside those markers -- no instructions, no coaching, no next steps, no "send this to..." guidance. The email draft is the email only. All coaching, context, and next-step guidance goes outside the markers, after [EMAIL END]. This is what allows the Copy button to extract only the email text.',
 ].join("\n");
 
 const DAN_SYSTEM_FAMILY = DAN_SYSTEM_PROMPT + `
@@ -1469,9 +1469,8 @@ function appendDanMessage(text, showFeedback) {
   const row       = document.createElement('div');
   row.className   = 'msg-row dan';
 
-  // Detect if this message contains an email draft
-  // Looks for [EMAIL START] / [EMAIL END] markers
-  const markerMatch = text.match(/\[EMAIL START\]([\s\S]+?)\[EMAIL END\]/i);
+  // Detect if this message contains an email draft, then strip markers from display
+  const markerMatch = text.match(/---EMAIL START---([\s\S]+?)---EMAIL END---/i);
   const emailText   = markerMatch ? markerMatch[1].trim() : null;
 
   const copyEmailHtml = emailText ? `
@@ -1495,14 +1494,16 @@ function appendDanMessage(text, showFeedback) {
   row.innerHTML = `
     <div class="msg-avatar">D</div>
     <div class="msg-content">
-      <div class="msg-bubble" id="bubble-${msgId}">${formatDanText(text)}</div>
+      <div class="msg-bubble" id="bubble-${msgId}">${formatDanText(text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').trim())}</div>
       ${copyEmailHtml}
       ${fbHtml}
     </div>`;
   container.appendChild(row);
   scrollToMessage(row);
 
-  row.dataset.text    = text;
+  // Strip email markers from displayed text
+  const displayText = text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').trim();
+  row.dataset.text    = displayText;
   row.dataset.msgId   = msgId;
   if (emailText) row.dataset.emailText = emailText;
 
