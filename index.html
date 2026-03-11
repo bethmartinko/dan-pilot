@@ -727,10 +727,6 @@
       </div>
     </div>
 
-    <p style="font-size:.8125rem; color:var(--muted); line-height:1.6; margin-top:1.5rem; padding:.75rem 1rem; background:var(--sand-dk); border-radius:var(--radius-sm);">
-      <span data-en="By continuing, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization." data-es="Al continuar, reconoce que DAN proporciona información general solamente — no asesoramiento legal. DAN no es abogado ni representante autorizado. Para asuntos legales, consulte a un abogado calificado u organización de derechos para personas con discapacidad.">By continuing, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization.</span>
-    </p>
-
     <button class="btn-submit-survey" id="btn-continue-dan" onclick="submitDemographics()" data-en="Let's get started →" data-es="Empecemos →" disabled style="opacity:.5; cursor:not-allowed;">Let's get started →</button>
     <p style="font-size:.75rem; color:var(--muted); margin-top:.5rem; text-align:center;" id="rc-required-note" data-en="Please select your Regional Center to continue." data-es="Por favor seleccione su Regional Center para continuar.">Please select your Regional Center to continue.</p>
   </div>
@@ -755,7 +751,10 @@
     <div class="privacy-box">
       <strong data-en="Before we start:" data-es="Antes de comenzar:">Before we start:</strong> <span data-en="DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes." data-es="DAN es una herramienta informativa -- no asesoría legal. Para su situación específica, debe buscar orientación de un defensor o abogado calificado. Todo lo que comparte permanece en esta conversación -- nada se guarda ni se vincula a usted. Esta es una versión piloto, y sus comentarios ayudan a mejorarla.">DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes.</span>
     </div>
-    <button class="btn-submit-survey" onclick="showDemoScreen()" style="margin-top:1.5rem;" data-en="Let's get started →" data-es="Empecemos →">Let's get started →</button>
+    <p style="font-size:.875rem; color:var(--muted); line-height:1.6; margin-top:1.5rem; padding:.75rem 1rem; background:var(--sand-dk); border-radius:var(--radius-sm);">
+      <span data-en="By clicking Let's get started, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization." data-es="Al hacer clic en Empecemos, reconoce que DAN proporciona información general solamente — no asesoramiento legal. DAN no es abogado ni representante autorizado. Para asuntos legales, consulte a un abogado calificado u organización de derechos para personas con discapacidad.">By clicking <strong>Let's get started</strong>, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization.</span>
+    </p>
+    <button class="btn-submit-survey" onclick="showDemoScreen()" style="margin-top:.75rem;" data-en="Let's get started →" data-es="Empecemos →">Let's get started →</button>
   </div>
 </div>
 
@@ -1114,6 +1113,7 @@ const DAN_SYSTEM_PROMPT = [
   '- CLOSE WITH FEATURES NOT PRODUCT: When the conversation has defined the needs, DAN summarizes with a feature list -- not a product recommendation. Example: "Here is what we have identified your person needs because of their disability: (1) a way to call for help in an emergency, (2) GPS location sharing with a caregiver, (3) a simple interface they can operate independently. Those are the three things to bring to RC. RC will then evaluate what the most cost-effective device is that meets those three needs. You do not need to go in asking for an iPhone -- you go in asking for a device that does these three things. That is a much stronger conversation." Never at any point in the conversation should the word iPhone, or any other brand name the family mentioned, reappear in DAN\'s responses after the initial redirect.',
   '',
   '- Never ask for personal information to draft an email or letter. Use placeholders in curly braces like {PERSONS NAME}, {DATE}, {REGIONAL CENTER NAME}. Tell them: I will use placeholders you can fill in before you send. Then produce the draft immediately without waiting for another reply. IMPORTANT: Never use square brackets [ ] for placeholders in your responses -- always use curly braces { } instead.',
+  '- EMAIL DRAFT FORMAT -- CRITICAL: Every email draft must be wrapped in exactly these markers on their own lines: [EMAIL START] on the line before the draft, and [EMAIL END] on the line after the draft. Nothing else goes inside those markers -- no instructions, no coaching, no next steps, no "send this to..." guidance. The email draft is the email only. All coaching, context, and next-step guidance goes outside the markers, after [EMAIL END]. This is what allows the Copy button to extract only the email text.',
 ].join("\n");
 
 const DAN_SYSTEM_FAMILY = DAN_SYSTEM_PROMPT + `
@@ -1470,10 +1470,9 @@ function appendDanMessage(text, showFeedback) {
   row.className   = 'msg-row dan';
 
   // Detect if this message contains an email draft
-  // Looks for Subject: line or "Dear {" patterns DAN uses
-  const emailMatch = text.match(/(Subject:[\s\S]+)/i) ||
-                     text.match(/(Dear\s+\{[\s\S]+)/i);
-  const emailText  = emailMatch ? emailMatch[1].trim() : null;
+  // Looks for [EMAIL START] / [EMAIL END] markers
+  const markerMatch = text.match(/\[EMAIL START\]([\s\S]+?)\[EMAIL END\]/i);
+  const emailText   = markerMatch ? markerMatch[1].trim() : null;
 
   const copyEmailHtml = emailText ? `
     <div style="padding: 0 .125rem;">
