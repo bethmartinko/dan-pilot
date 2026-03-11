@@ -670,7 +670,7 @@
      ══════════════════════════════════════════════════ -->
 <div id="demo-screen" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:2rem; background:var(--sand);">
   <div class="survey-inner">
-    <h2 data-en="Before we start" data-es="Antes de comenzar">Before we start</h2>
+    <h2 data-en="A couple of quick questions" data-es="Un par de preguntas rápidas">A couple of quick questions</h2>
     <p class="survey-sub" data-en="Your Regional Center helps DAN give you accurate guidance. Age and race/ethnicity are optional — they help us understand who DAN is serving and make the case for funding." data-es="Su Regional Center ayuda a DAN a darle orientación precisa. La edad y la raza/etnia son opcionales — nos ayudan a entender a quién sirve DAN y a justificar el financiamiento.">Your Regional Center helps DAN give you accurate guidance. Age and race/ethnicity are optional — they help us understand who DAN is serving and make the case for funding.</p>
 
     <div class="survey-field">
@@ -731,13 +731,16 @@
       <span data-en="By continuing, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization." data-es="Al continuar, reconoce que DAN proporciona información general solamente — no asesoramiento legal. DAN no es abogado ni representante autorizado. Para asuntos legales, consulte a un abogado calificado u organización de derechos para personas con discapacidad.">By continuing, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization.</span>
     </p>
 
-    <button class="btn-submit-survey" id="btn-continue-dan" onclick="submitDemographics()" data-en="Continue to DAN →" data-es="Continuar a DAN →" disabled style="opacity:.5; cursor:not-allowed;">Continue to DAN →</button>
+    <button class="btn-submit-survey" id="btn-continue-dan" onclick="submitDemographics()" data-en="Let's get started →" data-es="Empecemos →" disabled style="opacity:.5; cursor:not-allowed;">Let's get started →</button>
     <p style="font-size:.75rem; color:var(--muted); margin-top:.5rem; text-align:center;" id="rc-required-note" data-en="Please select your Regional Center to continue." data-es="Por favor seleccione su Regional Center para continuar.">Please select your Regional Center to continue.</p>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════
+     WELCOME SCREEN
+     ══════════════════════════════════════════════════ -->
 <div id="landing">
-  <div class="landing-inner" style="max-width:720px;">
+  <div class="landing-inner" style="max-width:580px;">
     <div style="display:flex; justify-content:flex-end; margin-bottom:1rem;">
       <div class="lang-toggle" id="landing-lang-toggle">
         <button class="lang-btn active" id="landing-btn-en" onclick="setLang('en')">EN</button>
@@ -749,13 +752,19 @@
     <p class="landing-intro">
       <span data-en="DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time." data-es="DAN le ayuda a navegar el sistema de Regional Centers de California -- qué pedir, cómo pedirlo, y qué hacer cuando la primera respuesta es no. Gratis, confidencial, disponible en cualquier momento.">DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time.</span>
     </p>
-
     <div class="privacy-box">
       <strong data-en="Before we start:" data-es="Antes de comenzar:">Before we start:</strong> <span data-en="DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes." data-es="DAN es una herramienta informativa -- no asesoría legal. Para su situación específica, debe buscar orientación de un defensor o abogado calificado. Todo lo que comparte permanece en esta conversación -- nada se guarda ni se vincula a usted. Esta es una versión piloto, y sus comentarios ayudan a mejorarla.">DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes.</span>
     </div>
+    <button class="btn-submit-survey" onclick="showDemoScreen()" style="margin-top:1.5rem;" data-en="Let's get started →" data-es="Empecemos →">Let's get started →</button>
+  </div>
+</div>
 
+<!-- ══════════════════════════════════════════════════
+     CARDS SCREEN
+     ══════════════════════════════════════════════════ -->
+<div id="cards-screen" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:2rem; background:var(--sand);">
+  <div class="landing-inner" style="max-width:720px;">
     <p class="stuck-prompt" data-en="Which of these sounds like your situation?" data-es="¿Cuál de estas situaciones se parece a la suya?">Which of these sounds like your situation?</p>
-
     <div class="stuck-grid">
       <div class="stuck-card featured" onclick="startStuck('delay')">
         <div class="stuck-quote" data-en="We're waiting for an answer" data-es="Estamos esperando una respuesta">We're waiting for an answer</div>
@@ -782,7 +791,6 @@
         <div class="stuck-desc" data-en="RC reframes a genuine support need as something you just want" data-es="El RC reencuadra una necesidad genuina de apoyo como algo que usted simplemente desea">RC reframes a genuine support need as something you just want</div>
       </div>
     </div>
-
     <p class="landing-note" style="margin-top:1.5rem;">
       <span data-en="Not sure which fits?" data-es="¿No está seguro/a cuál le corresponde?">Not sure which fits?</span> <a href="#" onclick="startStuck('unsure'); return false;" style="color:var(--teal);text-decoration:underline;" data-en="Tell DAN what's happening" data-es="Cuéntele a DAN lo que está pasando">Tell DAN what's happening</a> <span data-en="and we'll figure it out together." data-es="y lo resolveremos juntos.">and we'll figure it out together.</span>
     </p>
@@ -1196,14 +1204,25 @@ function submitDemographics() {
     return;
   }
   document.getElementById('demo-screen').style.display = 'none';
-  openChat(pendingStuckType);
+  showCardsScreen();
+}
+
+function showDemoScreen() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('demo-screen').style.display = 'flex';
+}
+
+function showCardsScreen() {
+  document.getElementById('demo-screen').style.display = 'none';
+  document.getElementById('cards-screen').style.display = 'flex';
 }
 
 function goBack() {
   // Reset session state
   document.getElementById('chat-shell').style.display = 'none';
   document.getElementById('demo-screen').style.display = 'none';
-  document.getElementById('landing').style.display = 'flex';
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('cards-screen').style.display = 'flex';
   // Clear chat messages and conversation history
   document.getElementById('chat-messages').innerHTML = '';
   messages.length = 0;
@@ -1234,8 +1253,8 @@ function startStuck(type) {
   pathTrail.length = 0;
   pathTrail.push(cardLabels2[type] || type);
 
-  document.getElementById('landing').style.display = 'none';
-  document.getElementById('demo-screen').style.display = 'flex';
+  document.getElementById('cards-screen').style.display = 'none';
+  openChat(type);
 }
 
 function openChat(type) {
