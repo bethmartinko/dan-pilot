@@ -751,7 +751,21 @@
     <div class="privacy-box">
       <strong data-en="Before we start:" data-es="Antes de comenzar:">Before we start:</strong> <span data-en="DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes." data-es="DAN es una herramienta informativa -- no asesoría legal. Para su situación específica, debe buscar orientación de un defensor o abogado calificado. Todo lo que comparte permanece en esta conversación -- nada se guarda ni se vincula a usted. Esta es una versión piloto, y sus comentarios ayudan a mejorarla.">DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes.</span>
     </div>
-    <p style="font-size:.875rem; color:var(--muted); line-height:1.6; margin-top:1.5rem; padding:.75rem 1rem; background:var(--sand-dk); border-radius:var(--radius-sm);">
+    <div style="margin-top:1.5rem; text-align:left; display:flex; flex-direction:column; gap:.625rem;">
+      <div style="display:flex; gap:.75rem; align-items:flex-start;">
+        <span style="color:var(--teal); font-size:1.1rem; line-height:1.4; flex-shrink:0;">→</span>
+        <span style="font-size:.9375rem; color:var(--ink); line-height:1.5;" data-en="DAN asks one question at a time. Click the button that fits — or type your own answer." data-es="DAN hace una pregunta a la vez. Haga clic en el botón que corresponda — o escriba su propia respuesta.">DAN asks one question at a time. Click the button that fits — or type your own answer.</span>
+      </div>
+      <div style="display:flex; gap:.75rem; align-items:flex-start;">
+        <span style="color:var(--teal); font-size:1.1rem; line-height:1.4; flex-shrink:0;">→</span>
+        <span style="font-size:.9375rem; color:var(--ink); line-height:1.5;" data-en="When the right next step is a written request, DAN drafts the email for you. Copy it and fill in the blanks." data-es="Cuando el siguiente paso es una solicitud por escrito, DAN redacta el correo por usted. Cópielo y complete los espacios en blanco.">When the right next step is a written request, DAN drafts the email for you. Copy it and fill in the blanks.</span>
+      </div>
+      <div style="display:flex; gap:.75rem; align-items:flex-start;">
+        <span style="color:var(--teal); font-size:1.1rem; line-height:1.4; flex-shrink:0;">→</span>
+        <span style="font-size:.9375rem; color:var(--ink); line-height:1.5;" data-en="Download your conversation before you close — nothing is saved between sessions." data-es="Descargue su conversación antes de cerrar — nada se guarda entre sesiones.">Download your conversation before you close — nothing is saved between sessions.</span>
+      </div>
+    </div>
+    <p style="font-size:.875rem; color:var(--muted); line-height:1.6; margin-top:1.25rem; padding:.75rem 1rem; background:var(--sand-dk); border-radius:var(--radius-sm);">
       <span data-en="By clicking Let's get started, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization." data-es="Al hacer clic en Empecemos, reconoce que DAN proporciona información general solamente — no asesoramiento legal. DAN no es abogado ni representante autorizado. Para asuntos legales, consulte a un abogado calificado u organización de derechos para personas con discapacidad.">By clicking <strong>Let's get started</strong>, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization.</span>
     </p>
     <button class="btn-submit-survey" onclick="showDemoScreen()" style="margin-top:.75rem;" data-en="Let's get started →" data-es="Empecemos →">Let's get started →</button>
@@ -1068,7 +1082,7 @@ const DAN_SYSTEM_PROMPT = [
   '- DDS SDP Ombudsperson (SDP situations only): SDP.Ombudsperson@dds.ca.gov | 877-658-9731.',
   '- Ombudsperson CC rule: when the written escalation path has not produced a response, CC the appropriate Ombudsperson on the next email. For SDP use SDP.Ombudsperson@dds.ca.gov; for traditional services use Ombudsperson@dds.ca.gov. Frame it factually, not as a threat.',
   '- ILS: skill-building (cooking, budgeting, community navigation). SLS: ongoing support for people in their own home.',
-  '- ILS/SLS FIRST RULE: Before routing ANY request involving daily living skills, community access, cooking, safety, budgeting, transportation, or personal care to an IPP meeting -- ask first: does your person currently receive ILS or SLS? If yes, the goal likely already exists and the service may already be in scope. This is a coverage or provider question, not a missing goal. Skipping this check and jumping straight to an IPP meeting recommendation is the single most common diagnostic error. Do not make it.',
+  '- ILS/SLS FIRST RULE -- ASK THIS BEFORE ANYTHING ELSE: Before routing ANY request involving daily living skills, community access, cooking, safety, budgeting, transportation, or personal care -- ask two things first, ONE AT A TIME: (1) Does your person currently receive ILS (Independent Living Services) or SLS (Supported Living Services)? (2) Do they live at home with family or in their own place? These two answers completely change the right path. If they have ILS or SLS, a relevant goal likely already exists and this is a coverage or provider question -- not a missing goal and not an IPP meeting. If they live at home, ILS is the likely right frame. If they live independently, SLS may already be in place. Skipping these two questions and jumping straight to an IPP meeting recommendation is the single most common diagnostic error. Do not make it. Ask before you advise.',
   '- Shadow policies: RCs sometimes apply internal interpretations that go beyond what DDS has formally required. When RC cites a rule, it is fair to ask them to point to the specific directive or statute. If they cannot, that is worth noting. For RC-specific patterns, refer families to a local advocate or IF who knows how that particular RC operates.',
   '',
   '=== SDP RENEWAL -- KNOW THIS COLD ===',
@@ -1091,7 +1105,7 @@ const DAN_SYSTEM_PROMPT = [
   '- ONE question at a time. Never stack questions.',
   '- Plain language. Explain any term you use.',
   '- Never predict outcomes or promise results.',
-  '- DRAFT RULE -- NO EXCEPTIONS: When a next step is clear and it involves communicating with RC, a service coordinator, an FMS, or a provider, do not offer to draft -- just draft it. Produce the email or talking points in that same response, with placeholders for anything personal. A draft with placeholders is always better than a question. If you have already offered and the family said yes, the draft appears immediately in your next response -- not after more questions. Never give a family a template or a list of things to include. Give them the actual words. INFORMAL FIRST CLOSE: When the recommended next step is a casual verbal conversation with an ILS provider or SC, give them a suggested sentence or two they can use -- then add: "If you would rather put it in writing, I can draft a short email you can send instead." This gives them the words either way without making the informal path feel like a formal process.',
+  '- DRAFT RULE -- NO EXCEPTIONS: When a next step is clear and it involves communicating with RC, a service coordinator, an FMS, or a provider, do not offer to draft -- just draft it. Produce the email or talking points in that same response, with placeholders for anything personal. A draft with placeholders is always better than a question. If you have already offered and the family said yes, the draft appears immediately in your next response -- not after more questions. Never give a family a template or a list of things to include. Give them the actual words.  DRAFT TRIGGER -- MANDATORY CLOSE: At the end of EVERY response where you have given a family a concrete next step -- whether that step is talking to their SC, writing to RC, contacting an FMS, or following up on a service -- you MUST either (a) produce a draft email or call script in that same response, or (b) if the step is verbal, give them the exact words to say AND offer to write it up instead. No response that ends with a next step should end without words in the family\'s hand. This is not optional and does not require the family to ask. INFORMAL FIRST CLOSE: When the recommended next step is a casual verbal conversation with an ILS provider or SC, give them a suggested sentence or two they can use -- then add: "If you would rather put it in writing, I can draft a short email you can send instead." This gives them the words either way without making the informal path feel like a formal process.',
   '- RC as partner, not adversary: the goal is always to meet the individual\'s needs. When RC says no, DAN coaches the family to ask two questions: (1) Why not -- what specifically is the barrier? (2) What could we do differently to meet this need? These questions keep the conversation open and often surface a path RC is willing to take. Escalation is for when that path is exhausted, not before.',
   '- Think about the real need, not the service category: help families frame requests around what the person actually needs to do -- go to a restaurant and order food, get to work independently, stay safe at home -- rather than a specific vendor or service type. RC is more likely to engage when the need is concrete and the service is flexible.',
   '- THE MAD OR THE NEED TEST: When a family has been told no and is frustrated, DAN gently surfaces this question -- not as a challenge, but as a tool: "Am I frustrated because they said no, or because my person genuinely needs this?" Both feelings are valid. But the answer shapes what the most useful next step is. If the answer is genuine need -- the need is real, disability-specific, and RC\'s denial is not well-founded -- that is a fight worth having and DAN helps prepare for it. If the answer is honest reflection -- the ask may not have been the strongest case, or there are more cost-effective ways to meet the same need -- that is equally useful information. DAN does not judge either answer. It helps the family figure out which one they are dealing with so their energy goes in the right direction.',
@@ -1318,6 +1332,45 @@ document.addEventListener('click', function(e) {
     return;
   }
 
+  // Spending sub-choice: "A specific service on my plan isn't being approved"
+  // Route directly rather than cold API call to avoid empty-response errors
+  var labelLower = label.toLowerCase();
+  if (labelLower.indexOf('a specific service on my plan') === 0 || labelLower.indexOf('un servicio específico') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    var p3msg = currentLang === 'es'
+      ? 'Entendido -- cuando RC no aprueba un servicio específico en el SDP, generalmente hay una de tres razones. Déjeme ayudarle a identificar cuál es.\n\n¿Le dijo RC por qué no están aprobando el servicio?\n\n[Dijeron que no cumple con los requisitos de HCBS] [Dijeron que el objetivo no está en el IPP] [Dijeron que es demasiado caro] [No dieron una razón clara]'
+      : 'Got it -- when RC won\'t approve a specific service on the Spending Plan, there are usually one of three reasons. Let me help you figure out which one you\'re dealing with.\n\nDid RC tell you why they\'re not approving the service?\n\n[They said it doesn\'t meet HCBS requirements] [They said the goal isn\'t in the IPP] [They said it\'s too expensive] [They didn\'t give a clear reason]';
+    messages.push({ role: 'assistant', content: p3msg });
+    appendDanMessage(p3msg, true);
+    return;
+  }
+
+  // Generic resource sub-choice: "A community program or service"
+  // Also route directly to avoid cold API failure on this path
+  if (labelLower.indexOf('a community program or service') === 0 || labelLower.indexOf('un programa o servicio comunitario') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    var commMsg = currentLang === 'es'
+      ? 'Programas comunitarios -- esto incluye un paso importante que muchas familias no conocen.\n\nEl RC tiene que ver si el recurso realmente funciona para su familiar -- no solo si existe, sino si es accesible para ellos específicamente, dado su diagnóstico, edad, ubicación y necesidades de apoyo.\n\nPrimero: ¿cuál es el programa o servicio específico al que el RC le está dirigiendo?'
+      : 'Community programs -- this one has an important step a lot of families don\'t know about.\n\nRC has to evaluate whether the resource actually works for your person -- not just whether it exists, but whether it\'s accessible to them specifically, given their diagnosis, age, location, and support needs.\n\nFirst: what specific program or service is RC pointing you to?';
+    messages.push({ role: 'assistant', content: commMsg });
+    appendDanMessage(commMsg, true);
+    return;
+  }
+
   // "Tell me more" reveals the text box instead of sending
   if (label.toLowerCase().indexOf('tell me more') === 0) {
     if (groupId) {
@@ -1345,6 +1398,64 @@ document.addEventListener('click', function(e) {
 });
 
 // -- SEND MESSAGE --
+// -- RETRY HELPER --
+async function fetchWithRetry(payload, typingId, maxAttempts) {
+  maxAttempts = maxAttempts || 3;
+  var delays = [0, 3000, 7000]; // immediate, 3s, 7s
+  var retryMsgId = null;
+
+  for (var attempt = 0; attempt < maxAttempts; attempt++) {
+    if (attempt > 0) {
+      // Show a gentle retry status inside the typing bubble rather than a new message
+      var typingEl = document.getElementById(typingId);
+      if (typingEl) {
+        var dots = typingEl.querySelector('.typing-indicator');
+        if (dots) {
+          dots.innerHTML = '<span style="font-size:.8rem;color:var(--muted);font-style:italic;">Connection slow -- retrying (' + attempt + ' of ' + (maxAttempts - 1) + ')...</span>';
+        }
+      }
+      await new Promise(function(r) { setTimeout(r, delays[attempt]); });
+    }
+
+    try {
+      var response = await fetch('/.netlify/functions/proxy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-target': 'anthropic' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        console.warn('HTTP ' + response.status + ' on attempt ' + (attempt + 1));
+        continue; // retry on non-200
+      }
+
+      var data = await response.json();
+
+      if (data.content && data.content[0] && data.content[0].type === 'text') {
+        return { ok: true, reply: data.content[0].text };
+      } else if (data.error) {
+        var errType = data.error.type || '';
+        console.error('API error on attempt ' + (attempt + 1) + ':', data.error);
+        // overloaded errors are worth retrying; auth errors are not
+        if (errType === 'overloaded_error' || errType === 'rate_limit_error' || errType === 'api_error') {
+          continue;
+        }
+        return { ok: false, fatal: true, msg: 'DAN ran into a problem (' + errType + '). Please try again.' };
+      } else {
+        console.error('Unexpected response on attempt ' + (attempt + 1) + ':', JSON.stringify(data));
+        continue;
+      }
+    } catch (err) {
+      console.error('Fetch error on attempt ' + (attempt + 1) + ':', err);
+      // network error -- worth retrying
+      continue;
+    }
+  }
+
+  // All attempts exhausted
+  return { ok: false, fatal: false };
+}
+
 async function sendMessage() {
   const input = document.getElementById('user-input');
   const text  = input.value.trim();
@@ -1363,7 +1474,7 @@ async function sendMessage() {
 
   appendUserMessage(text);
   messages.push({ role: 'user', content: text });
-  pathTrail.push(text.length > 60 ? text.slice(0, 57) + '...' : text); // record typed reply
+  pathTrail.push(text.length > 60 ? text.slice(0, 57) + '...' : text);
   updateRoadmap();
 
   if (!sessionTopic) {
@@ -1376,38 +1487,38 @@ async function sendMessage() {
   }
 
   const typingId = showTyping();
+  const systemPrompt = currentLang === 'es' ? systemPromptES : DAN_SYSTEM_FAMILY;
 
-  try {
-    const systemPrompt = currentLang === 'es' ? systemPromptES : DAN_SYSTEM_FAMILY;
+  const result = await fetchWithRetry({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 2048,
+    system: systemPrompt,
+    messages: messages,
+  }, typingId, 3);
 
-    const response = await fetch('/.netlify/functions/proxy', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-target': 'anthropic',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        system: systemPrompt,
-        messages: messages,
-      }),
-    });
+  removeTyping(typingId);
 
-    const data = await response.json();
-    removeTyping(typingId);
-
-    if (data.content && data.content[0]) {
-      const reply = data.content[0].text;
-      messages.push({ role: 'assistant', content: reply });
-      appendDanMessage(reply, true);
-    } else {
-      appendSystemMessage('Something went wrong -- please try again.');
+  if (result.ok) {
+    messages.push({ role: 'assistant', content: result.reply });
+    appendDanMessage(result.reply, true);
+  } else if (result.fatal) {
+    // Hard API error -- show message but keep input open so they can try again
+    appendSystemMessage(result.msg);
+    // Roll back the last user message from history so a retry sends cleanly
+    if (messages.length && messages[messages.length - 1].role === 'user') {
+      messages.pop();
     }
-  } catch (err) {
-    removeTyping(typingId);
-    appendSystemMessage('Connection error -- please check your internet and try again.');
-    console.error(err);
+    document.getElementById('user-input').value = text; // restore their text
+    document.getElementById('input-row-wrap').style.display = 'flex';
+  } else {
+    // All retries failed -- connection issue, session preserved
+    appendSystemMessage('DAN couldn\'t reach the server after a few tries. Your conversation is still here -- tap the text box below and send your last message again when your connection is back.');
+    // Roll back the user message so a retry sends cleanly
+    if (messages.length && messages[messages.length - 1].role === 'user') {
+      messages.pop();
+    }
+    document.getElementById('user-input').value = text; // restore their text
+    document.getElementById('input-row-wrap').style.display = 'flex';
   }
 
   document.getElementById('send-btn').disabled = false;
