@@ -1493,7 +1493,7 @@ async function sendMessage() {
   const systemPrompt = currentLang === 'es' ? systemPromptES : DAN_SYSTEM_FAMILY;
 
   const result = await fetchWithRetry({
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-4-6',
     max_tokens: 2048,
     system: systemPrompt,
     messages: messages,
