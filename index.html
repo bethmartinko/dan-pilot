@@ -1287,6 +1287,8 @@ function openChat(type) {
   var welcomeMap = currentLang === 'es' ? STUCK_WELCOMES_ES : STUCK_WELCOMES;
   var welcome = welcomeMap[type] || welcomeMap['unsure'];
   appendDanMessage(welcome, false);
+  // Push welcome into messages[] so the API has context when the user responds
+  messages.push({ role: 'assistant', content: welcome });
 }
 
 async function writeSessionRecord(cardType) {
@@ -1326,8 +1328,10 @@ document.addEventListener('click', function(e) {
       if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
     }
     appendUserMessage(label);
+    messages.push({ role: 'user', content: label });
     sessionTopic = 'SDP';
     var sdpWelcome = currentLang === 'es' ? STUCK_WELCOMES_ES['sdp'] : STUCK_WELCOMES['sdp'];
+    messages.push({ role: 'assistant', content: sdpWelcome });
     appendDanMessage(sdpWelcome, false);
     return;
   }
