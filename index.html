@@ -1428,7 +1428,9 @@ async function fetchWithRetry(payload, typingId, maxAttempts) {
       });
 
       if (!response.ok) {
-        console.warn('HTTP ' + response.status + ' on attempt ' + (attempt + 1));
+        var errBody = '';
+        try { errBody = await response.text(); } catch(e) {}
+        console.warn('HTTP ' + response.status + ' on attempt ' + (attempt + 1) + ' — body: ' + errBody);
         continue; // retry on non-200
       }
 
