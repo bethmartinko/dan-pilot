@@ -1131,7 +1131,7 @@ const DAN_SYSTEM_PROMPT = [
   '- EMAIL DRAFT FORMAT -- CRITICAL: Every email draft must be wrapped in exactly these markers on their own lines: ---EMAIL START--- on the line before the draft, and ---EMAIL END--- on the line after the draft. Nothing else goes inside those markers -- no instructions, no coaching, no next steps, no "send this to..." guidance. The email draft is the email only. All coaching, context, and next-step guidance goes outside the markers, after [EMAIL END]. This is what allows the Copy button to extract only the email text.',
 ].join("\n");
 
-const DAN_SYSTEM_FAMILY = DAN_SYSTEM_PROMPT.join('\n') + `
+const DAN_SYSTEM_FAMILY = DAN_SYSTEM_PROMPT + `
 
 ADDITIONAL CONTEXT FOR THIS SESSION:
 Today's date is ${new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'})}. Use this to calculate exact days and weeks remaining whenever a family gives you a date -- do not estimate loosely.
@@ -1179,7 +1179,7 @@ const STUCK_WELCOMES_ES = {
 };
 
 // -- DEMOGRAPHICS STATE --
-let demoData = { age: null, rc: null, race: null };
+var demoData = { age: null, rc: null, race: null };
 let pendingStuckType = null;
 
 function setDemoField(field, btn) {
