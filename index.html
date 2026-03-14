@@ -770,6 +770,14 @@
       <span data-en="By clicking Let's get started, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization." data-es="Al hacer clic en Empecemos, reconoce que DAN proporciona información general solamente — no asesoramiento legal. DAN no es abogado ni representante autorizado. Para asuntos legales, consulte a un abogado calificado u organización de derechos para personas con discapacidad.">By clicking <strong>Let's get started</strong>, you acknowledge that DAN provides general information only — not legal advice. DAN is not a lawyer or an authorized representative. For legal matters, consult a qualified attorney or disability rights organization.</span>
     </p>
     <button class="btn-submit-survey" onclick="showDemoScreen()" style="margin-top:.75rem;" data-en="Let's get started →" data-es="Empecemos →">Let's get started →</button>
+
+    <!-- RETURNING USER SECTION -->
+    <div id="return-section" style="margin-top:2rem; border-top:1px solid var(--border); padding-top:1.5rem;">
+      <p style="font-size:.9375rem; font-weight:600; color:var(--ink); margin-bottom:.5rem;" data-en="Been here before?" data-es="¿Ya usó DAN antes?">Been here before?</p>
+      <p style="font-size:.875rem; color:var(--muted); line-height:1.6; margin-bottom:.75rem;" data-en="DAN doesn't remember past sessions — but you can bring it up to speed. If you downloaded or copied your last conversation, paste it below and DAN will pick up where you left off." data-es="DAN no recuerda sesiones anteriores — pero puede ponerlo al día. Si descargó o copió su conversación anterior, péguela aquí y DAN continuará desde donde lo dejaron.">DAN doesn't remember past sessions — but you can bring it up to speed. If you downloaded or copied your last conversation, paste it below and DAN will pick up where you left off.</p>
+      <textarea id="return-paste" rows="4" placeholder="Paste your previous conversation here..." data-en-placeholder="Paste your previous conversation here..." data-es-placeholder="Pegue su conversación anterior aquí..." style="width:100%; padding:.75rem; font-size:.875rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); background:white; color:var(--ink); resize:vertical; line-height:1.5; font-family:inherit;"></textarea>
+      <button onclick="startWithReturn()" style="margin-top:.625rem; background:var(--teal); color:white; border:none; border-radius:var(--radius-sm); padding:.625rem 1.25rem; font-size:.875rem; font-weight:600; cursor:pointer;" data-en="Continue my conversation →" data-es="Continuar mi conversación →">Continue my conversation →</button>
+    </div>
   </div>
 </div>
 
@@ -925,7 +933,7 @@ const CONFIG = {
 
 // -- SYSTEM PROMPT --
 const DAN_SYSTEM_PROMPT = [
-  'You are DAN -- the Disability Access Navigator. You help people navigate California Regional Center (RC) services for individuals with developmental disabilities and their families.',
+  'You are DAN -- the Disability Access Navigator. You help people navigate California Regional Center (RC) services for individuals with developmental disabilities and their families. DAN serves people of all ages -- children, transition-age youth, and adults. If someone is navigating services for a child, help them; if for an adult, help them. DAN does not cover IEP or school-based services -- if someone asks about school services, acknowledge the question and explain clearly: \"DAN focuses on Regional Center services under the Lanterman Act. For IEP and school-based services, you\'ll want to connect with a special education advocate. I can help you with anything on the Regional Center side.\" Do not attempt to navigate school or IEP issues.',
   '',
   '=== IMMEDIATE SAFETY -- THIS OVERRIDES EVERYTHING ELSE ===',
   'If at any point the person describes a situation involving serious and immediate risk to the health or safety of any person -- including the individual with a disability -- stop the navigation conversation immediately. Do not continue diagnosing the RC situation. Say clearly: "What you\'re describing sounds like an immediate safety concern. Please call 911 right now if anyone is in danger. Once the situation is safe, come back and I can help you with the RC side of things." Then provide ONE button only: [It\'s not a 911 situation \u2014 let\'s continue]. Do NOT ask any follow-up question. Do NOT offer open text. Wait for the person to use that button. If they do, resume navigation from where you left off. This is a hard stop.',
@@ -1101,6 +1109,8 @@ const DAN_SYSTEM_PROMPT = [
   '',
   'SPENDING PLAN TRIAGE: If one or two items are holding up approval and are not critical to start the year, offer the triage workaround -- remove them to get the year started, open a parallel path to resolve them, add back via spending plan revision. Frame it clearly: you are not giving up those items, you are protecting everything else while we keep working.',
   '',
+  'FMS ACCOUNTING HANDOFF -- CRITICAL GAP FAMILIES HIT: RC approving the spending plan does NOT mean the FMS has the authorization. After RC approves, the authorization has to move through RC accounting before it reaches the FMS. This is a separate step that can take days to weeks and is a common source of confusion at year start. When a family says their plan is approved but their FMS says they have no authorization, this is almost always the cause. Help them check: (1) Ask RC accounting directly -- has the authorization been generated and sent to the FMS? Get a name and date. (2) Contact the FMS independently -- do they show a pending or active authorization? (3) If RC accounting says it was sent and FMS says they have nothing, that is a handoff failure -- help the family escalate to their SC in writing with both pieces of information. Never let a family assume that RC approval = FMS ready to go.',
+  '',
   '=== YOUR VOICE ===',
   '- Start with brief validation of what they said.',
   '- ONE question at a time. Never stack questions.',
@@ -1219,12 +1229,42 @@ function submitDemographics() {
     return;
   }
   document.getElementById('demo-screen').style.display = 'none';
+
+  // If returning user pasted a prior conversation, go straight to chat
+  if (window._returnContext) {
+    showCardsScreen();
+    // Small delay so cards screen is visible, then auto-start return flow
+    setTimeout(function() {
+      startStuck('unsure');
+      // Inject the prior context as the first user message
+      setTimeout(function() {
+        var returnMsg = 'Here is a summary of my last DAN conversation. Please read it and help me continue from where I left off:\n\n' + window._returnContext;
+        document.getElementById('user-input').value = returnMsg;
+        sendMessage();
+        window._returnContext = null;
+      }, 400);
+    }, 100);
+    return;
+  }
+
   showCardsScreen();
 }
 
 function showDemoScreen() {
   document.getElementById('landing').style.display = 'none';
   document.getElementById('demo-screen').style.display = 'flex';
+}
+
+function startWithReturn() {
+  var pastedText = document.getElementById('return-paste').value.trim();
+  if (!pastedText) {
+    document.getElementById('return-paste').focus();
+    document.getElementById('return-paste').placeholder = 'Please paste your previous conversation first...';
+    return;
+  }
+  // Store the return context to inject after demographics
+  window._returnContext = pastedText;
+  showDemoScreen();
 }
 
 function showCardsScreen() {
@@ -1354,6 +1394,25 @@ document.addEventListener('click', function(e) {
       : 'Got it -- when RC won\'t approve a specific service on the Spending Plan, there are usually one of three reasons. Let me help you figure out which one you\'re dealing with.\n\nDid RC tell you why they\'re not approving the service?\n\n[They said it doesn\'t meet HCBS requirements] [They said the goal isn\'t in the IPP] [They said it\'s too expensive] [They didn\'t give a clear reason]';
     messages.push({ role: 'assistant', content: p3msg });
     appendDanMessage(p3msg, true);
+    return;
+  }
+
+  // Generic resource sub-choice: "Recreation services" or similar
+  // Route directly to avoid cold API failure on this path
+  if (labelLower.indexOf('recreation') === 0 || labelLower.indexOf('recreaci') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    var recMsg = currentLang === 'es'
+      ? 'Entendido -- los servicios de recreación pueden ser parte de un plan del IPP cuando están vinculados a una necesidad relacionada con la discapacidad.\\n\\nAntes de continuar, déjeme hacerle una pregunta.\\n\\n¿RC le señaló un programa de recreación comunitario específico, o está preguntando si el RC puede financiar actividades recreativas en general?\\n\\n[Me señalaron un programa específico] [Quiero saber si el RC puede financiar recreación] [Algo más]'
+      : 'Got it -- recreation services can be part of an IPP when they connect to a disability-related need.\\n\\nBefore we go further, let me ask one thing.\\n\\nDid RC point you to a specific community recreation program, or are you asking whether RC can fund recreational activities in general?\\n\\n[They pointed me to a specific program] [I want to know if RC can fund recreation] [Something else]';
+    messages.push({ role: 'assistant', content: recMsg });
+    appendDanMessage(recMsg, true);
     return;
   }
 
