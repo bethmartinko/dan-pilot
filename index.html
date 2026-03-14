@@ -1230,16 +1230,25 @@ function submitDemographics() {
   }
   document.getElementById('demo-screen').style.display = 'none';
 
-  // If returning user pasted a prior conversation, show cards screen with a banner
-  // Context gets injected silently into messages[] when they pick a card
+  // If returning user pasted a prior conversation, skip cards and go straight to chat
   if (window._returnContext) {
-    showCardsScreen();
-    var banner = document.createElement('div');
-    banner.id = 'return-banner';
-    banner.style.cssText = 'background:var(--teal); color:white; border-radius:var(--radius-sm); padding:.75rem 1rem; margin-bottom:1rem; font-size:.875rem; line-height:1.5;';
-    banner.innerHTML = '📋 <strong>Prior conversation loaded.</strong> Pick the card that best matches where you left off — DAN will pick up from there.';
-    var cardsInner = document.querySelector('#cards-screen .landing-inner');
-    if (cardsInner) cardsInner.insertBefore(banner, cardsInner.firstChild);
+    var returnContext = window._returnContext;
+    window._returnContext = null;
+    // Set up session as 'unsure' path so state is clean
+    startStuck('unsure');
+    // After the welcome renders, replace it with the return message and send
+    setTimeout(function() {
+      // Clear the unsure welcome from messages and DOM — DAN shouldn't see it
+      messages = [];
+      var chatMessages = document.getElementById('chat-messages');
+      chatMessages.innerHTML = '';
+      msgCounter = 0;
+      // Now inject the prior context as the first user message and send
+      document.getElementById('input-row-wrap').style.display = 'flex';
+      var input = document.getElementById('user-input');
+      input.value = 'Here is my previous DAN conversation. Please read it and continue helping me from where we left off:\n\n' + returnContext;
+      sendMessage();
+    }, 100);
     return;
   }
 
@@ -1323,16 +1332,6 @@ function openChat(type) {
 
   var welcomeMap = currentLang === 'es' ? STUCK_WELCOMES_ES : STUCK_WELCOMES;
   var welcome = welcomeMap[type] || welcomeMap['unsure'];
-
-  // If returning user has prior context, inject it silently before the welcome
-  if (window._returnContext) {
-    messages.push({ role: 'user', content: 'Here is a summary of my last DAN conversation. Please read it and help me continue from where I left off:\n\n' + window._returnContext });
-    messages.push({ role: 'assistant', content: 'Got it -- I\'ve read your previous conversation and I\'m ready to continue from where you left off.' });
-    window._returnContext = null;
-    // Remove the banner
-    var banner = document.getElementById('return-banner');
-    if (banner) banner.remove();
-  }
 
   appendDanMessage(welcome, false);
   // Push welcome into messages[] so the API has context when the user responds
