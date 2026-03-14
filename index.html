@@ -1232,18 +1232,15 @@ function submitDemographics() {
 
   // If returning user pasted a prior conversation, go straight to chat
   if (window._returnContext) {
-    showCardsScreen();
-    // Small delay so cards screen is visible, then auto-start return flow
+    var returnContext = window._returnContext;
+    window._returnContext = null;
+    startStuck('unsure');
     setTimeout(function() {
-      startStuck('unsure');
-      // Inject the prior context as the first user message
-      setTimeout(function() {
-        var returnMsg = 'Here is a summary of my last DAN conversation. Please read it and help me continue from where I left off:\n\n' + window._returnContext;
-        document.getElementById('user-input').value = returnMsg;
-        sendMessage();
-        window._returnContext = null;
-      }, 400);
-    }, 100);
+      var input = document.getElementById('user-input');
+      document.getElementById('input-row-wrap').style.display = 'flex';
+      input.value = 'Here is a summary of my last DAN conversation. Please read it and help me continue from where I left off:\n\n' + returnContext;
+      sendMessage();
+    }, 350);
     return;
   }
 
@@ -1360,6 +1357,25 @@ document.addEventListener('click', function(e) {
   var label = btn.getAttribute('data-label');
   var groupId = btn.getAttribute('data-group');
   if (!label) return;
+
+  // Delay sub-choice: "A general response from RC"
+  // Route directly with time-elapsed buttons rather than cold API call
+  if (labelLower.indexOf('a general response from rc') === 0 || labelLower.indexOf('una respuesta general del rc') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    var delayMsg = currentLang === 'es'
+      ? 'Entendido. Para ayudarle mejor, necesito saber un poco más sobre la situación.\\n\\n¿Cuánto tiempo lleva esperando una respuesta?\\n\\n[Menos de una semana] [Una o dos semanas] [Más de un mes] [Varios meses]'
+      : 'Got it. To help you figure out the right move, I need a little more context.\\n\\nHow long have you been waiting for a response?\\n\\n[Less than a week] [A week or two] [More than a month] [Several months]';
+    messages.push({ role: 'assistant', content: delayMsg });
+    appendDanMessage(delayMsg, true);
+    return;
+  }
 
   // SDP routing -- if family picks SDP option from delay card, switch to SDP welcome
   if (sessionTopic === null && label.toLowerCase().indexOf('something about my sdp renewal') === 0) {
