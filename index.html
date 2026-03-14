@@ -1230,17 +1230,16 @@ function submitDemographics() {
   }
   document.getElementById('demo-screen').style.display = 'none';
 
-  // If returning user pasted a prior conversation, go straight to chat
+  // If returning user pasted a prior conversation, show cards screen with a banner
+  // Context gets injected silently into messages[] when they pick a card
   if (window._returnContext) {
-    var returnContext = window._returnContext;
-    window._returnContext = null;
-    startStuck('unsure');
-    setTimeout(function() {
-      var input = document.getElementById('user-input');
-      document.getElementById('input-row-wrap').style.display = 'flex';
-      input.value = 'Here is a summary of my last DAN conversation. Please read it and help me continue from where I left off:\n\n' + returnContext;
-      sendMessage();
-    }, 350);
+    showCardsScreen();
+    var banner = document.createElement('div');
+    banner.id = 'return-banner';
+    banner.style.cssText = 'background:var(--teal); color:white; border-radius:var(--radius-sm); padding:.75rem 1rem; margin-bottom:1rem; font-size:.875rem; line-height:1.5;';
+    banner.innerHTML = '📋 <strong>Prior conversation loaded.</strong> Pick the card that best matches where you left off — DAN will pick up from there.';
+    var cardsInner = document.querySelector('#cards-screen .landing-inner');
+    if (cardsInner) cardsInner.insertBefore(banner, cardsInner.firstChild);
     return;
   }
 
@@ -1324,6 +1323,17 @@ function openChat(type) {
 
   var welcomeMap = currentLang === 'es' ? STUCK_WELCOMES_ES : STUCK_WELCOMES;
   var welcome = welcomeMap[type] || welcomeMap['unsure'];
+
+  // If returning user has prior context, inject it silently before the welcome
+  if (window._returnContext) {
+    messages.push({ role: 'user', content: 'Here is a summary of my last DAN conversation. Please read it and help me continue from where I left off:\n\n' + window._returnContext });
+    messages.push({ role: 'assistant', content: 'Got it -- I\'ve read your previous conversation and I\'m ready to continue from where you left off.' });
+    window._returnContext = null;
+    // Remove the banner
+    var banner = document.getElementById('return-banner');
+    if (banner) banner.remove();
+  }
+
   appendDanMessage(welcome, false);
   // Push welcome into messages[] so the API has context when the user responds
   messages.push({ role: 'assistant', content: welcome });
@@ -1358,9 +1368,11 @@ document.addEventListener('click', function(e) {
   var groupId = btn.getAttribute('data-group');
   if (!label) return;
 
+  var labelLower = label.toLowerCase();
+
   // Delay sub-choice: "A general response from RC"
   // Route directly with time-elapsed buttons rather than cold API call
-  if (labelLower.indexOf('a general response from rc') === 0 || labelLower.indexOf('una respuesta general del rc') === 0) {
+  if (labelLower.indexOf('a general response from rc') === 0 || labelLower.indexOf('general response from rc') !== -1 || labelLower.indexOf('una respuesta general del rc') === 0) {
     if (groupId) {
       var group = document.getElementById(groupId);
       if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
@@ -1370,8 +1382,8 @@ document.addEventListener('click', function(e) {
     updateRoadmap();
     messages.push({ role: 'user', content: label });
     var delayMsg = currentLang === 'es'
-      ? 'Entendido. Para ayudarle mejor, necesito saber un poco más sobre la situación.\\n\\n¿Cuánto tiempo lleva esperando una respuesta?\\n\\n[Menos de una semana] [Una o dos semanas] [Más de un mes] [Varios meses]'
-      : 'Got it. To help you figure out the right move, I need a little more context.\\n\\nHow long have you been waiting for a response?\\n\\n[Less than a week] [A week or two] [More than a month] [Several months]';
+      ? 'Entendido. Para ayudarle mejor, necesito saber un poco m\u00e1s sobre la situaci\u00f3n.\n\n\u00bfCu\u00e1nto tiempo lleva esperando una respuesta?\n\n[Menos de una semana] [Una o dos semanas] [M\u00e1s de un mes] [Varios meses]'
+      : 'Got it. To help you figure out the right move, I need a little more context.\n\nHow long have you been waiting for a response?\n\n[Less than a week] [A week or two] [More than a month] [Several months]';
     messages.push({ role: 'assistant', content: delayMsg });
     appendDanMessage(delayMsg, true);
     return;
@@ -1395,7 +1407,6 @@ document.addEventListener('click', function(e) {
 
   // Spending sub-choice: "A specific service on my plan isn't being approved"
   // Route directly rather than cold API call to avoid empty-response errors
-  var labelLower = label.toLowerCase();
   if (labelLower.indexOf('a specific service on my plan') === 0 || labelLower.indexOf('un servicio específico') === 0) {
     if (groupId) {
       var group = document.getElementById(groupId);
