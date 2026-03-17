@@ -1244,8 +1244,8 @@ function buildSystemPrompt() {
   }
 
   if (known.length > 0) {
-    context += '\n\nWHAT YOU ALREADY KNOW ABOUT THIS PERSON (collected at intake -- do not ask again):\n' + known.join('\n');
-    context += '\nUse this naturally in your responses. Reference their RC and FMS by name when relevant. Never ask for information you already have.';
+    context += '\n\nWHAT YOU ALREADY KNOW ABOUT THIS PERSON (collected at intake):\n' + known.join('\n');
+    context += '\nIMPORTANT: At the very start of the first response, briefly confirm this information with the person using buttons -- for example: "I see you are with [RC] and your FMS is [FMS] -- is that right? [Yes, that\'s right] [Let me correct that]". If they confirm, proceed. If they correct it, update your understanding and continue. After confirmation, never ask for this information again and reference it by name throughout the session.';
   }
 
   return DAN_SYSTEM_PROMPT + context;
