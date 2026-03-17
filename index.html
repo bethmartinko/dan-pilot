@@ -1245,7 +1245,7 @@ function buildSystemPrompt() {
 
   if (known.length > 0) {
     context += '\n\nWHAT YOU ALREADY KNOW ABOUT THIS PERSON (collected at intake):\n' + known.join('\n');
-    context += '\nIMPORTANT: At the very start of the first response, briefly confirm this information with the person using buttons -- for example: "I see you are with [RC] and your FMS is [FMS] -- is that right? [Yes, that\'s right] [Let me correct that]". If they confirm, proceed. If they correct it, update your understanding and continue. After confirmation, never ask for this information again and reference it by name throughout the session.';
+    context += '\nIMPORTANT: At the very start of the first response, briefly confirm this information with the person using buttons -- for example: "I see you are with [RC] and your FMS is [FMS] -- is that right? [Yes, that\'s right] [Let me correct that]". If they confirm, proceed. If they correct it, update your understanding and continue. After confirmation, never ask for this information again and reference it by name throughout the session. If they have an FMS provider listed, they are enrolled in SDP -- do not ask whether they are in SDP or traditional services.';
   }
 
   return DAN_SYSTEM_PROMPT + context;
