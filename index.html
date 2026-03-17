@@ -1821,9 +1821,10 @@ function appendDanMessage(text, showFeedback) {
   row.dataset.msgId   = msgId;
   if (emailText) row.dataset.emailText = emailText;
 
-  // Hide text box when DAN gives buttons; show when open-ended
+  // Hide text box when DAN gives buttons; always show when open-ended or email draft
   const hasButtons = /\[[^\]]+\]/.test(text);
-  document.getElementById('input-row-wrap').style.display = hasButtons ? 'none' : 'flex';
+  const hasEmailDraft = !!emailText;
+  document.getElementById('input-row-wrap').style.display = (hasButtons && !hasEmailDraft) ? 'none' : 'flex';
 
   // Endpoint footer: show "if this doesn't work" nudge when DAN reaches a natural stopping point
   // (has an email draft, OR no buttons and this is at least the 3rd DAN message)
