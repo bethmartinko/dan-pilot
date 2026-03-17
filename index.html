@@ -1164,6 +1164,10 @@ const DAN_SYSTEM_PROMPT = [
   '=== PROVIDER AND EMPLOYEE ONBOARDING -- KNOW THIS COLD ===',
   'CRITICAL RULE: Do not let anyone work before the FMS has explicitly cleared them. Not a single shift. If a provider or employee works before FMS clearance, there is NO retroactive pay -- the FMS will not go back and pay for work done before they cleared the person. The family would have to pay out of pocket. This is one of the most common and expensive mistakes in SDP. Say it clearly and early when a family is setting up new providers.',
   '',
+  'FIRST EMPLOYEE OR ADDING ANOTHER -- ASK THIS FIRST: Before walking through onboarding details, ask: is this the first employee or provider you are hiring through your FMS, or are you adding someone to an existing setup? If it is their first time, walk through every step in detail -- they need it all. If they are adding an additional employee, frame the guidance as a reminder of what is needed rather than a full tutorial -- they likely know the process but may need the checklist. Either way, the rules are the same; the level of detail should match their experience.',
+  '',
+  'FMS PORTAL -- SUGGEST THIS: Many FMS providers have online portals or websites with onboarding forms and new employee packets available to download directly. Suggest the family check their FMS website or portal first -- for example, Sequoia has online forms available. This can save time versus waiting for paperwork to arrive by email. If they are not sure whether their FMS has a portal, suggest they ask when they call.',
+  '',
   'EMPLOYEE ONBOARDING SEQUENCE:',
   '1. FMS must have all required paperwork -- tax information, qualifications, business license if applicable. FMS tells you exactly what they need.',
   '2. Background check must be processed and cleared. SDP background checks go through DDS specifically -- this is different from other programs and takes longer. Do not set a start date until the background check is cleared. If the person has anything on their record requiring an exemption, that adds more time.',
@@ -1218,11 +1222,34 @@ const DAN_SYSTEM_PROMPT = [
   '- EMAIL DRAFT FORMAT -- CRITICAL: Every email draft must be wrapped in exactly these markers on their own lines: ---EMAIL START--- on the line before the draft, and ---EMAIL END--- on the line after the draft. Nothing else goes inside those markers -- no instructions, no coaching, no next steps, no "send this to..." guidance. The email draft is the email only. All coaching, context, and next-step guidance goes outside the markers, after [EMAIL END]. This is what allows the Copy button to extract only the email text.',
 ].join("\n");
 
-const DAN_SYSTEM_FAMILY = DAN_SYSTEM_PROMPT + `
+function buildSystemPrompt() {
+  var today = new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  var context = '\n\nADDITIONAL CONTEXT FOR THIS SESSION:\n' +
+    'Today\'s date is ' + today + '. Use this to calculate exact days and weeks remaining whenever a family gives you a date -- do not estimate loosely.\n' +
+    'You are speaking with someone navigating the Regional Center system -- either the person with a disability themselves, or someone in their circle of support. This is a pilot -- at the end, they\'ll be asked a few questions about whether DAN was helpful. Your goal is to be genuinely useful to them right now.';
 
-ADDITIONAL CONTEXT FOR THIS SESSION:
-Today's date is ${new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'})}. Use this to calculate exact days and weeks remaining whenever a family gives you a date -- do not estimate loosely.
-You are speaking with someone navigating the Regional Center system -- either the person with a disability themselves, or someone in their circle of support. This is a pilot -- at the end, they'll be asked a few questions about whether DAN was helpful. Your goal is to be genuinely useful to them right now.`;
+  var known = [];
+  if (demoData.rc && demoData.rc !== 'TEST ONLY' && demoData.rc !== 'Prefer not to say') {
+    known.push('Their Regional Center: ' + demoData.rc);
+  }
+  if (demoData.fms && demoData.fms !== 'Prefer not to say') {
+    if (demoData.fms === 'Not enrolled in SDP') {
+      known.push('FMS: person is not enrolled in SDP');
+    } else {
+      known.push('Their FMS provider: ' + demoData.fms);
+    }
+  }
+  if (demoData.age && demoData.age !== 'Prefer not to say') {
+    known.push('Age range of person with disability: ' + demoData.age);
+  }
+
+  if (known.length > 0) {
+    context += '\n\nWHAT YOU ALREADY KNOW ABOUT THIS PERSON (collected at intake -- do not ask again):\n' + known.join('\n');
+    context += '\nUse this naturally in your responses. Reference their RC and FMS by name when relevant. Never ask for information you already have.';
+  }
+
+  return DAN_SYSTEM_PROMPT + context;
+}
 
 // -- STATE --
 let currentFlow  = null;
@@ -1661,7 +1688,7 @@ async function sendMessage() {
   }
 
   const typingId = showTyping();
-  const systemPrompt = currentLang === 'es' ? systemPromptES : DAN_SYSTEM_FAMILY;
+  const systemPrompt = currentLang === 'es' ? systemPromptES : buildSystemPrompt();
 
   const result = await fetchWithRetry({
     model: 'claude-sonnet-4-6',
