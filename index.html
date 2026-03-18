@@ -383,6 +383,7 @@
   .chat-input-area {
     background: var(--white);
     border-top: 1px solid var(--border);
+    padding-top: .375rem;
   }
   .input-row-wrap { padding: 1rem 1.25rem .625rem; }
   .input-row {
@@ -416,6 +417,7 @@
   .feedback-bar {
     padding: .5rem 1.25rem .6rem;
     border-top: 2px solid var(--teal);
+    margin-top: .75rem;
     display: flex;
     align-items: center;
     gap: .625rem;
@@ -1153,6 +1155,8 @@ const DAN_SYSTEM_PROMPT = [
   '45 days before renewal: Target having the spending plan fully approved by this date. After RC approves, the authorization still has to move through RC accounting before the FMS receives it. RC accounting needs time to generate the authorization, and the FMS needs time to update their systems before the year starts.',
   'Check in with your FMS independently around this time -- do not assume RC sending the authorization means the FMS has it loaded.',
   '',
+  'PROACTIVE PATH -- CONVERSATION INSTRUCTION: When a family selects or indicates they are planning ahead with several months of runway, do NOT lead with a request for their exact year-end date. Instead: (1) affirm that starting early is the right move and briefly name why -- RC workload means every step takes longer than expected; (2) ask approximately how far out their renewal is using broad time ranges; (3) use their answer to orient them to the right part of the proactive timeline below -- do not deliver the full checklist at once. If they are 5-6 months out, start with the documentation question (ask RC in writing what they will need for renewal). If 3-4 months out, start with the budget ask. If closer than 3 months and nothing has started, shift to urgent mode. Always end with one concrete next step they can take this week. The exact year-end date is useful for date math but is not required before giving the family something actionable.',
+  '',
   'CURRENT REALITY (2025-2026) -- TELL FAMILIES THIS UPFRONT: RC and FMS are currently requiring formal spending plan revisions for virtually any change -- including vendor name changes -- even where the law does not strictly require it. This is driven by the fall 2025 DDS directive and increased RC scrutiny of spending plans. Build extra time into every step. A vendor swap that seems administrative will often trigger the same approval process as a new service. Start the revision before the old provider stops -- never let a coverage gap open up while waiting for approval.',
   '',
   'DOLLAR-FOR-DOLLAR ALIGNMENT -- KNOW THIS: Most RCs now expect clinical services (behavior therapy, speech, OT, adaptive skills) and social recreation to match the specific hours and amounts from the assessment or service authorization that was used to build the budget. If the assessment recommends 25 hours/month of behavior support, RC expects to see 25 hours/month in the spending plan. IPP goal language matters enormously here -- vague language gives RC room to question the connection. Line item detail in the spending plan matters equally -- RC needs to see the connection without having to ask. This is not just an interpretation issue; it is current-year practice at most RCs.',
@@ -1275,7 +1279,7 @@ const STUCK_WELCOMES = {
 
   generic: `RC is actually required by law to consider generic resources before they can fund a service -- so this isn't a brushoff, it's a real step in the process. The question worth asking together is: does this resource genuinely work for your person, either on its own or in combination with RC support?\n\nSometimes a free or low-cost resource combined with an RC-funded aide can actually open more doors than a funded service alone. And other families are often the best source of knowledge about what's really available locally.\n\nLet me ask one thing at a time. What resource did RC point to?\n\n[Insurance] [The school system] [A community program or service] [Something else]`,
 
-  sdp: `SDP renewals involve a few moving parts -- and any one of them can cause a delay. You may be waiting for RC to start the renewal, for your spending plan to get approved, or for RC to send the authorization to your FMS. All of that is part of the same process, and RC is responsible for making sure it gets done before your year ends.\n\nLet me ask one thing at a time so I can help.\n\nWhat's your SDP year end date -- or approximately when does your current plan expire? Just type it if you know it.\n\n[I'm not sure when it is] [It already ended] [I want to plan ahead -- my renewal is several months away]`,
+  sdp: `Planning ahead or in the middle of it -- either way, let's figure out where you are so I can point you in the right direction.\n\nWhat's your situation?\n\n[I want to plan ahead -- my renewal is several months away] [Something isn't moving and my year end is coming] [It already ended or I'm past my year end] [I'm not sure when my year ends]`,
 
   unsure: `No problem -- let's figure it out together.\n\nTell me what's been happening with your Regional Center, and I'll help you identify what you're dealing with and what your options are.`
 };
@@ -1291,7 +1295,7 @@ const STUCK_WELCOMES_ES = {
 
   generic: `El RC está legalmente obligado a considerar recursos genéricos antes de poder financiar un servicio -- así que esto no es un rechazo, es un paso real en el proceso. La pregunta que vale la pena responder juntos es: ¿este recurso realmente funciona para su familiar, solo o en combinación con apoyo del RC?\n\nA veces un programa gratuito o de bajo costo combinado con un asistente financiado por el RC puede abrir más puertas que un servicio financiado solo. Y otras familias suelen ser la mejor fuente de información sobre lo que realmente está disponible en la comunidad.\n\nDéjeme preguntarle una cosa a la vez. ¿A qué recurso señaló el RC?\n\n[Seguro médico] [El sistema escolar] [Un programa o servicio comunitario] [Algo más]`,
 
-  sdp: `Las renovaciones del SDP tienen varias partes -- y cualquiera de ellas puede causar una demora. Puede estar esperando que el RC inicie la renovación, que aprueben su plan de gastos, o que el RC envíe la autorización a su FMS. Todo eso es parte del mismo proceso, y el RC es responsable de asegurarse de que esté listo antes de que termine su año.\n\nDéjeme hacerle una pregunta a la vez para poder ayudarle.\n\n¿Cuál es la fecha en que termina su año de SDP -- o aproximadamente cuándo vence su plan actual? Si la sabe, escríbala aquí.\n\n[No estoy seguro/a de cuándo es] [Ya terminó] [Quiero planificar con anticipación -- mi renovación es en varios meses]`,
+  sdp: `Planificando con anticipación o en medio del proceso -- de cualquier manera, averigüemos dónde está para poder orientarle mejor.\n\n¿Cuál es su situación?\n\n[Quiero planificar con anticipación -- mi renovación es en varios meses] [Algo no avanza y mi año de SDP está por terminar] [Ya terminó o ya pasé mi fecha de vencimiento] [No estoy seguro/a de cuándo vence mi año]`,
 
   unsure: `No hay problema -- vamos a resolverlo juntos.\n\nCuénteme qué ha pasado con su Regional Center, y le ayudaré a identificar qué está enfrentando y cuáles son sus opciones.`
 };
@@ -1943,22 +1947,53 @@ function copyEmailDraft(msgId) {
   if (!text) return;  // safety: don't copy if no email draft found
   const btn  = document.getElementById(`copy-email-${msgId}`);
 
-  const doCopy = (t) => {
+  const doCopy = () => {
     btn.innerHTML = '✓ Copied!';
     btn.classList.add('copied');
     // don't reset — "copied" is a done state for this button
   };
 
-  navigator.clipboard.writeText(text).then(() => doCopy(text)).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    doCopy(text);
-  });
+  const doFail = () => {
+    btn.innerHTML = '⚠ Try again';
+    btn.style.borderColor = '#e07060';
+    btn.style.color = '#c0392b';
+    setTimeout(() => {
+      btn.innerHTML = '📋 Copy email draft';
+      btn.style.borderColor = '';
+      btn.style.color = '';
+    }, 2000);
+  };
+
+  // Use setTimeout(0) to ensure clipboard write runs after click event fully settles
+  setTimeout(() => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(doCopy).catch(() => {
+        // Clipboard API failed — try legacy fallback
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          ok ? doCopy() : doFail();
+        } catch(e) { doFail(); }
+      });
+    } else {
+      // No Clipboard API — go straight to fallback
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        ok ? doCopy() : doFail();
+      } catch(e) { doFail(); }
+    }
+  }, 0);
 }
 
 function downloadConversation() {
