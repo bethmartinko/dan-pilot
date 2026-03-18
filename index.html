@@ -1836,7 +1836,7 @@ function appendDanMessage(text, showFeedback) {
   row.innerHTML = `
     <div class="msg-avatar">D</div>
     <div class="msg-content">
-      <div class="msg-bubble" id="bubble-${msgId}">${formatDanText(text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').trim())}</div>
+      <div class="msg-bubble" id="bubble-${msgId}">${formatDanText(text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').replace(/---FH LINK---/gi, '').trim())}</div>
       ${fhLinkHtml}
       ${copyEmailHtml}
       ${fbHtml}
