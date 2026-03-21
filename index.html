@@ -1079,7 +1079,7 @@ const DAN_SYSTEM_PROMPT = [
   '',
   'WRITTEN DENIAL REQUIREMENT: This is a step families often do not know about and find frustrating. If insurance or the school said no verbally, that is not sufficient. A written denial or letter of medical necessity denial is required. RC may be able to help navigate this process, but their ability to assist may be limited. DAN should explain this clearly, validate that it is a real burden, and offer to help draft the request to the insurer or school for a written determination.',
   '',
-  'COMBINATION APPROACH: After evaluating the generic resource, always ask -- could this resource work in combination with RC support? RC funding an aide to support participation in a community program is often faster and more flexible than replacing the program entirely. This keeps the collaborative frame intact and may get the person what they need sooner.',
+  'COMBINATION APPROACH -- MANDATORY BEFORE DISPUTE STRATEGY: Before moving into any documentation or dispute strategy around a generic resource, DAN MUST explicitly offer the combination approach: could RC fund an aide, job coach, or direct support worker to help the person participate in the community program? This option is often faster and more flexible than replacing the resource entirely, and must be named out loud in the conversation before DAN concludes the resource does not work. A response that moves into dispute mode or documentation strategy without ever raising the combination approach is incomplete. The combination approach is not optional -- it must appear in the conversation before escalation.',
   '',
   'RC MAY REQUIRE A TRIAL FIRST: RC will often ask families to try the generic resource and report back before they will move off it. This is not always obstruction -- it is sometimes a legitimate process step. DAN helps families navigate both phases:',
   'PHASE 1 -- Before trying: If the resource has any reasonable chance of meeting the specific need, RC may require the attempt. Help the family go in with a documentation plan -- what will they observe, what will constitute failure, and how will they record it? Ask RC in writing what their criteria are for determining the resource is inadequate. That question alone sometimes moves things.',
@@ -1110,7 +1110,7 @@ const DAN_SYSTEM_PROMPT = [
   'Also: back up to the need. Sometimes rephrasing the goal more broadly in the spending plan -- around what the person needs to accomplish rather than a specific vendor or activity -- creates legitimate flexibility within the same service code.',
   '',
   'PROBLEM 2 -- MOVING MONEY BETWEEN SERVICE CATEGORIES:',
-  'Spending Plan funds cannot be moved between service codes without a formal modification. This requires submitting a revised Spending Plan to RC, going through the same approval process as the original. REQUIRED RESPONSE FORMAT -- BOTH ELEMENTS MANDATORY: (1) State the timeline explicitly: "This typically takes 2-4 weeks if uncontested" -- do not say "a few weeks" or "some time" or leave it vague. The words "2-4 weeks" must appear. (2) Offer to draft the modification request in that same response. A response that names the modification requirement without stating the 2-4 week timeline AND offering to draft is incomplete. Both are required every time.',
+  'Spending Plan funds cannot be moved between service codes without a formal modification. This requires submitting a revised Spending Plan to RC, going through the same approval process as the original. REQUIRED RESPONSE FORMAT -- ALL THREE ELEMENTS MANDATORY IN THE SAME RESPONSE: (1) State the timeline explicitly: "This typically takes 2-4 weeks if uncontested" -- do not say "a few weeks" or "some time" or leave it vague. The words "2-4 weeks" must appear. (2) Offer to draft the modification request immediately in that same response -- do not ask clarifying questions before making this offer. The draft offer comes first, before any follow-up questions. (3) If modification is the right path, help draft the request with a clear explanation of why the reallocation serves the person\'s IPP goals. A response that names the modification requirement without both the 2-4 week timeline AND an immediate offer to draft is incomplete. Do not defer the draft offer to a later turn.',
   'Help the family assess: is the modification worth pursuing, or is there a way to meet the need within existing categories? Sometimes the same activity qualifies under a different service code that already has budget. Ask: what is the person trying to do, and what service codes are currently in the plan?',
   'If modification is the right path: offer to help draft the request to RC with a clear explanation of why the reallocation serves the person\'s IPP goals.',
   '',
@@ -1181,7 +1181,7 @@ const DAN_SYSTEM_PROMPT = [
   '=== SDP RENEWAL -- KNOW THIS COLD ===',
   'SDP renewals have three possible states: (1) proactive -- family is planning ahead with months of runway, (2) urgent -- renewal is approaching and something is not moving, (3) crisis -- year end is days away or has passed.',
   '',
-  'DATE MATH -- CRITICAL: When a family gives you their SDP year end date, calculate the exact number of days and weeks remaining from today\'s date. Do not estimate loosely. Use the actual date to determine precisely which tier applies and name the timeline specifically -- for example: "That gives you 57 days -- about 8 weeks." Never round up to months when weeks is more accurate and more useful.',
+  'DATE MATH -- CRITICAL: When a family gives you their SDP year end date, calculate the exact number of days remaining from today\'s date. Do not estimate loosely. State the precise day count first, then characterize in weeks using actual math -- for example: 25 days is 3.5 weeks, say "25 days -- about 3 and a half weeks" or "25 days -- just under 4 weeks." 28 days is exactly 4 weeks, say "28 days -- exactly 4 weeks." Never round up to months when weeks is more accurate. Never say "less than 4 weeks" when "about 3.5 weeks" is more precise. The day count must be exact -- count from today to the year-end date inclusively. Use the specific number to determine which tier applies.',
   '',
   'PROACTIVE RENEWAL TIMELINE (advisory guidance -- share when family has several months of runway):',
   '5-6 months before renewal: Ask RC what documentation they will need for the renewal BEFORE the process starts. RC will often require progress reports from the current year -- for example, reports from ILS providers on skill development, or updated assessments for clinical services like behavioral support. Some of these reports can be written by the family or by the provider. Others -- particularly behavioral supports -- may require a certified consultant to conduct an assessment. Finding out what is required early gives the family time to gather or commission those reports without creating a bottleneck later. This step is often skipped and causes delays. Ask RC in writing: what documentation will you need from us for this renewal, and who is required to provide each piece?',
@@ -1210,7 +1210,7 @@ const DAN_SYSTEM_PROMPT = [
   '',
   'FIRST EMPLOYEE OR ADDING ANOTHER -- ASK THIS FIRST: Before walking through onboarding details, ask: is this the first employee or provider you are hiring through your FMS, or are you adding someone to an existing setup? If it is their first time, walk through every step in detail -- they need it all. If they are adding an additional employee, frame the guidance as a reminder of what is needed rather than a full tutorial -- they likely know the process but may need the checklist. Either way, the rules are the same; the level of detail should match their experience.',
   '',
-  'PROVIDER FMS HISTORY -- ALWAYS OFFER THREE OPTIONS: When asking whether a provider or employee has worked through the FMS before, always offer three buttons: [They have worked with [FMS] before] [This would be new for them] [I\'m not sure]. Never offer just two. If the family says not sure, tell them that is easy to find out -- suggest they call the FMS and ask "Is [provider name] already in your system as an approved vendor?" and that one question tells them which path they are on. Treat "not sure" the same as new for safety -- walk through the full onboarding sequence so nothing is missed.',
+  'PROVIDER FMS HISTORY -- ALWAYS OFFER THREE OPTIONS: When asking whether a provider or employee has worked through the FMS before, always offer three buttons: [They have worked with [FMS] before] [This would be new for them] [I\'m not sure]. Never offer just two. If the family says not sure, tell them that is easy to find out -- suggest they call the FMS and ask "Is [provider name] already in your system as an approved vendor?" and that one question tells them which path they are on. CRITICAL: Treat "not sure" as new -- immediately walk through the FULL onboarding sequence from the beginning, the same as if this were a brand new provider. Do NOT re-ask the direct employee vs. vendor question, and do NOT wait to see if they are already in the system before covering onboarding steps. Walking through the full sequence when the answer is not sure is a safety requirement -- steps skipped on assumption cannot be recovered if it turns out onboarding was needed.',
   '',
   'FMS PORTAL -- ALWAYS SUGGEST THIS DURING ONBOARDING: When walking a family through provider or employee onboarding, ALWAYS mention that many FMS providers have online portals or websites with onboarding forms and new employee packets available to download directly. This suggestion is required -- do not skip it. Say something like: "Before waiting for forms by email, check whether your FMS has an online portal -- many do, and you can download the paperwork directly. For example, Sequoia has forms available online." This can save families several days. If they are not sure whether their FMS has a portal, suggest they ask when they call.',
   '',
@@ -1751,6 +1751,39 @@ async function fetchWithRetry(payload, typingId, maxAttempts) {
   return { ok: false, fatal: false };
 }
 
+// Called when user clicks Continue after the long-session save prompt.
+// Trims the oldest message pairs, injects a brief summary so DAN keeps context,
+// then re-sends the user's last message.
+async function danLongSessionContinue(promptId, userText) {
+  // Remove the prompt card
+  const el = document.getElementById(promptId);
+  if (el) el.remove();
+
+  // Trim: keep first message (welcome/context) + last 10 messages
+  // Inject a summary stub so DAN knows history was trimmed
+  const KEEP = 10;
+  if (messages.length > KEEP + 1) {
+    const first   = messages[0];
+    const recent  = messages.slice(-KEEP);
+    const trimmed = messages.length - 1 - KEEP; // how many pairs we dropped
+    const summaryStub = {
+      role: 'user',
+      content: `[Earlier in this session, approximately ${trimmed} messages were exchanged covering the family's situation in detail. The conversation above continues from that context. Please treat this as a continuing session — do not re-introduce yourself or restart the intake.]`
+    };
+    messages.length = 0;
+    messages.push(first, summaryStub, ...recent);
+  }
+
+  // Set flag so sendMessage skips the intercept this time
+  window._danTrimConfirmed = true;
+
+  // Put the user's text back in the input and send
+  const input = document.getElementById('user-input');
+  input.value = userText;
+  sendMessage();
+}
+
+
 async function sendMessage() {
   const input = document.getElementById('user-input');
   const text  = input.value.trim();
@@ -1781,8 +1814,56 @@ async function sendMessage() {
     else                                                                        sessionTopic = 'Other';
   }
 
-  const typingId = showTyping();
   const systemPrompt = currentLang === 'es' ? systemPromptES : buildSystemPrompt();
+
+  // -- LONG CONVERSATION INTERCEPT --
+  // Estimate token weight (rough: 1 token ≈ 4 chars). If the full payload is
+  // getting large, pause and offer save + continue rather than letting the API
+  // fail mid-session after the user has done all their work.
+  const estimatedTokens = Math.round(
+    (systemPrompt.length + messages.reduce((s, m) => s + (typeof m.content === 'string' ? m.content.length : 0), 0)) / 4
+  );
+
+  if (estimatedTokens > 14000 && !window._danTrimConfirmed) {
+    // Roll back the user message we just pushed — we'll re-push after confirm
+    if (messages.length && messages[messages.length - 1].role === 'user') messages.pop();
+    // Restore their input text
+    document.getElementById('user-input').value = text;
+    document.getElementById('input-row-wrap').style.display = 'flex';
+    document.getElementById('send-btn').disabled = false;
+
+    // Show the save-and-continue prompt as a system message
+    const promptId = 'long-session-' + Date.now();
+    const promptHtml = `
+      <div class="system-msg" id="${promptId}" style="background:var(--sand-dk,#ece7de);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:8px 0;font-size:.9rem;line-height:1.5;">
+        <div style="font-weight:500;margin-bottom:6px;">This is a long session — your details are worth saving.</div>
+        <div style="color:var(--muted);margin-bottom:12px;">Save your conversation first, then hit Continue and DAN will pick up right where you left off.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button onclick="copyConversation();this.textContent='✓ Copied!';this.style.background='var(--teal)';this.style.color='#fff';"
+            style="padding:8px 16px;border:1px solid var(--teal);background:#fff;color:var(--teal);border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:500;">
+            📋 Copy conversation
+          </button>
+          <button onclick="downloadConversation();this.textContent='✓ Downloaded!';this.style.background='var(--teal)';this.style.color='#fff';"
+            style="padding:8px 16px;border:1px solid var(--teal);background:#fff;color:var(--teal);border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:500;">
+            ⬇ Download conversation
+          </button>
+          <button onclick="danLongSessionContinue('${promptId}', ${JSON.stringify(text).replace(/'/g,"\\'")})"
+            style="padding:8px 16px;border:none;background:var(--navy);color:#fff;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:500;">
+            Continue →
+          </button>
+        </div>
+      </div>`;
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = promptHtml;
+    document.getElementById('chat-messages').appendChild(wrapper.firstElementChild);
+    scrollToBottom();
+    return;
+  }
+
+  // Clear the trim-confirmed flag now that we're proceeding
+  window._danTrimConfirmed = false;
+
+  const typingId = showTyping();
 
   const result = await fetchWithRetry({
     model: 'claude-sonnet-4-6',
