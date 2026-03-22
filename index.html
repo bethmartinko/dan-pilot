@@ -2006,8 +2006,8 @@ function appendDanMessage(text, showFeedback) {
   const fbHtml = showFeedback ? `
     <div class="msg-feedback" id="fb-${msgId}">
       <span class="fb-label">Helpful?</span>
-      <button class="fb-btn" id="fb-up-${msgId}"   onclick="rateDan('${msgId}','Helpful')">+1</button>
-      <button class="fb-btn" id="fb-down-${msgId}" onclick="rateDan('${msgId}','Not Helpful')">-1</button>
+      <button class="fb-btn" id="fb-up-${msgId}"   onclick="rateDan('${msgId}','Helpful')">👍</button>
+      <button class="fb-btn" id="fb-down-${msgId}" onclick="rateDan('${msgId}','Not Helpful')">👎</button>
     </div>
     <div id="fb-follow-${msgId}" style="display:none;" class="fb-followup">
       <textarea rows="2" placeholder="What were you expecting? (optional)" id="fb-text-${msgId}"></textarea>
