@@ -1752,31 +1752,139 @@ async function fetchWithRetry(payload, typingId, maxAttempts) {
 }
 
 // Called when user clicks Continue after the long-session save prompt.
-// Trims the oldest message pairs, injects a brief summary so DAN keeps context,
-// then re-sends the user's last message.
-async function danLongSessionContinue(promptId, userText) {
-  // Remove the prompt card
-  const el = document.getElementById(promptId);
-  if (el) el.remove();
-
-  // Trim: keep first message (welcome/context) + last 10 messages
-  // Inject a summary stub so DAN knows history was trimmed
+// Auto-trim: fires when the session gets long. Generates a structured summary
+// of the messages about to be dropped, shows it as a visible card the user can
+// read and correct, then continues the session without requiring any action.
+async function danAutoTrim(userText) {
   const KEEP = 10;
-  if (messages.length > KEEP + 1) {
-    const first   = messages[0];
-    const recent  = messages.slice(-KEEP);
-    const trimmed = messages.length - 1 - KEEP;
-    const summaryStub = {
-      role: 'user',
-      content: `[Earlier in this session, approximately ${trimmed} messages were exchanged covering the family's situation in detail. The conversation above continues from that context. Please treat this as a continuing session — do not re-introduce yourself or restart the intake.]`
-    };
-    messages.length = 0;
-    messages.push(first, summaryStub, ...recent);
+  if (messages.length <= KEEP + 1) {
+    // Nothing to trim — just send normally (shouldn't reach here, but safe fallback)
+    messages.push({ role: 'user', content: userText });
+    return danSendAfterTrim(userText);
   }
 
-  // The user message bubble is already painted in the DOM (rendered before the intercept fired).
-  // Push directly to messages[] and call the API — do NOT go through sendMessage()
-  // which would re-paint the bubble and hit the intercept check again.
+  const first   = messages[0];
+  const toTrim  = messages.slice(1, messages.length - KEEP);
+  const recent  = messages.slice(-KEEP);
+
+  // --- Step 1: Generate a smart summary of the messages being dropped ---
+  // Show a subtle "catching up" indicator
+  const catchingId = 'catching-' + Date.now();
+  const catchingEl = document.createElement('div');
+  catchingEl.id = catchingId;
+  catchingEl.style.cssText = 'color:var(--muted);font-size:.8rem;font-style:italic;padding:6px 4px;text-align:center;';
+  catchingEl.textContent = '⏳ Catching up on our conversation…';
+  document.getElementById('chat-messages').appendChild(catchingEl);
+  scrollToBottom();
+
+  const summaryPrompt = `You are reviewing the early part of a help session between a navigation assistant (DAN) and a family navigating California's Regional Center system.
+
+Summarize what was established in the messages below. Be specific — capture names of Regional Centers, FMS providers, dollar amounts, dates, service types, denial reasons, and anything the family has already tried. This summary will be injected as context so the session can continue without losing key details.
+
+Return ONLY a JSON object with these exact keys (omit any key where you have no information):
+{
+  "rc": "Regional Center name",
+  "enrollment": "SDP or Traditional RC services or Not enrolled or Unknown",
+  "fms": "FMS provider name if applicable",
+  "person": "brief description — age range, disability context if shared (no names)",
+  "issue": "the core stuck point they came in with",
+  "tried": "what has already been attempted or discussed",
+  "in_progress": "any draft, email, or next step currently in motion",
+  "key_details": "any specific dates, amounts, provider names, or facts that must not be lost"
+}
+
+Messages to summarize:
+${toTrim.map(m => `[${m.role.toUpperCase()}]: ${typeof m.content === 'string' ? m.content.slice(0, 800) : ''}`).join('\n\n')}`;
+
+  let summaryData = null;
+  try {
+    const summaryResult = await fetchWithRetry({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 600,
+      system: 'You extract structured session context. Return only valid JSON, no markdown, no backticks.',
+      messages: [{ role: 'user', content: summaryPrompt }],
+    }, null, 2);
+
+    if (summaryResult.ok) {
+      try {
+        summaryData = JSON.parse(summaryResult.reply.replace(/```json|```/g, '').trim());
+      } catch(e) {
+        console.warn('Summary parse failed, using fallback stub', e);
+      }
+    }
+  } catch(e) {
+    console.warn('Summary API call failed, using fallback stub', e);
+  }
+
+  // Remove the catching indicator
+  const cEl = document.getElementById(catchingId);
+  if (cEl) cEl.remove();
+
+  // --- Step 2: Build the visible summary card ---
+  const fields = [
+    ['Regional Center',  summaryData?.rc],
+    ['Enrollment',       summaryData?.enrollment],
+    ['FMS Provider',     summaryData?.fms],
+    ['Person',           summaryData?.person],
+    ['Issue',            summaryData?.issue],
+    ['What\'s been tried', summaryData?.tried],
+    ['In progress',      summaryData?.in_progress],
+    ['Key details',      summaryData?.key_details],
+  ].filter(([, val]) => val && val.trim() && val.toLowerCase() !== 'unknown');
+
+  const rowsHtml = fields.map(([label, val]) =>
+    `<div style="display:flex;gap:8px;margin-bottom:5px;">
+      <span style="font-weight:600;color:var(--navy);min-width:130px;flex-shrink:0;">${label}:</span>
+      <span style="color:var(--text);">${val}</span>
+    </div>`
+  ).join('');
+
+  const fallbackNote = fields.length === 0
+    ? `<div style="color:var(--muted);font-style:italic;">Couldn't extract specific details — DAN has the recent conversation and will continue from where we left off.</div>`
+    : '';
+
+  const cardHtml = `
+    <div style="background:var(--sand-dk,#ece7de);border:1px solid var(--border);border-radius:10px;padding:16px;margin:10px 0;font-size:.875rem;line-height:1.6;">
+      <div style="font-weight:600;color:var(--navy);margin-bottom:4px;font-size:.95rem;">📋 Catching up on our conversation</div>
+      <div style="color:var(--muted);font-size:.8rem;margin-bottom:12px;">This is a long session — here's what I have on your situation. If anything's missing or off, just add it in the text box below.</div>
+      ${rowsHtml}${fallbackNote}
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <span style="color:var(--muted);font-size:.78rem;flex-shrink:0;">Save your full conversation:</span>
+        <button onclick="copyConversation();this.textContent='✓ Copied!';this.style.background='var(--teal)';this.style.color='#fff';"
+          style="padding:6px 14px;border:1px solid var(--teal);background:#fff;color:var(--teal);border-radius:6px;cursor:pointer;font-size:.8rem;font-weight:500;">
+          📋 Copy
+        </button>
+        <button onclick="downloadConversation();this.textContent='✓ Downloaded!';this.style.background='var(--teal)';this.style.color='#fff';"
+          style="padding:6px 14px;border:1px solid var(--teal);background:#fff;color:var(--teal);border-radius:6px;cursor:pointer;font-size:.8rem;font-weight:500;">
+          ⬇ Download
+        </button>
+      </div>
+    </div>`;
+
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = cardHtml;
+  document.getElementById('chat-messages').appendChild(wrapper.firstElementChild);
+  scrollToBottom();
+
+  // --- Step 3: Build the context stub DAN sees (summary + structured fields) ---
+  const stubParts = ['[SESSION CONTEXT — earlier messages were trimmed to manage length. Key details from the full session:]'];
+  fields.forEach(([label, val]) => stubParts.push(`${label}: ${val}`));
+  if (fields.length === 0) stubParts.push('(Summary unavailable — treat recent messages as continuation of an established session.)');
+  stubParts.push('[Do not re-introduce yourself or restart intake. Continue as a seamlessly ongoing session.]');
+
+  const summaryStub = { role: 'user', content: stubParts.join('\n') };
+
+  // --- Step 4: Trim messages and inject summary ---
+  messages.length = 0;
+  messages.push(first, summaryStub, ...recent);
+
+  // --- Step 5: Continue with the user's pending message ---
+  return danSendAfterTrim(userText);
+}
+
+// Sends the user's message after a trim has already been applied.
+// Sends the user's message after auto-trim — skips the intercept and does not re-paint the bubble.
+async function danSendAfterTrim(userText) {
   messages.push({ role: 'user', content: userText });
 
   const systemPrompt = currentLang === 'es' ? systemPromptES : buildSystemPrompt();
@@ -1798,7 +1906,7 @@ async function danLongSessionContinue(promptId, userText) {
     appendDanMessage(result.reply, true);
   } else if (result.fatal) {
     appendSystemMessage(result.msg);
-    messages.pop(); // roll back user message for clean retry
+    messages.pop();
     document.getElementById('user-input').value = userText;
   } else {
     appendSystemMessage('DAN couldn\'t reach the server. Your conversation is still here — send your last message again when your connection is back.');
@@ -1848,44 +1956,13 @@ async function sendMessage() {
     (systemPrompt.length + messages.reduce((s, m) => s + (typeof m.content === 'string' ? m.content.length : 0), 0)) / 4
   );
 
-  if (estimatedTokens > 60000 && !window._danTrimConfirmed) {
-    // Roll back the user message we just pushed — we'll re-push after confirm
+  if (estimatedTokens > 95000) {
+    // Session is getting long — auto-trim with smart summary, no gate.
+    // Roll back the user message we just pushed (danAutoTrim will re-push it after trim).
     if (messages.length && messages[messages.length - 1].role === 'user') messages.pop();
-    // Restore their input text
-    document.getElementById('user-input').value = text;
-    document.getElementById('input-row-wrap').style.display = 'flex';
-    document.getElementById('send-btn').disabled = false;
-
-    // Show the save-and-continue prompt as a system message
-    const promptId = 'long-session-' + Date.now();
-    const promptHtml = `
-      <div class="system-msg" id="${promptId}" style="background:var(--sand-dk,#ece7de);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:8px 0;font-size:.9rem;line-height:1.5;">
-        <div style="font-weight:500;margin-bottom:6px;">This is a long session — your details are worth saving.</div>
-        <div style="color:var(--muted);margin-bottom:12px;">Save your conversation first, then hit Continue and DAN will pick up right where you left off.</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button onclick="copyConversation();this.textContent='✓ Copied!';this.style.background='var(--teal)';this.style.color='#fff';"
-            style="padding:8px 16px;border:1px solid var(--teal);background:#fff;color:var(--teal);border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:500;">
-            📋 Copy conversation
-          </button>
-          <button onclick="downloadConversation();this.textContent='✓ Downloaded!';this.style.background='var(--teal)';this.style.color='#fff';"
-            style="padding:8px 16px;border:1px solid var(--teal);background:#fff;color:var(--teal);border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:500;">
-            ⬇ Download conversation
-          </button>
-          <button onclick="danLongSessionContinue('${promptId}', ${JSON.stringify(text).replace(/'/g,"\\'")})"
-            style="padding:8px 16px;border:none;background:var(--navy);color:#fff;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:500;">
-            Continue →
-          </button>
-        </div>
-      </div>`;
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = promptHtml;
-    document.getElementById('chat-messages').appendChild(wrapper.firstElementChild);
-    scrollToBottom();
-    return;
+    // User bubble is already painted in the DOM — danAutoTrim will NOT re-paint it.
+    return danAutoTrim(text);
   }
-
-  // Clear the trim-confirmed flag now that we're proceeding
-  window._danTrimConfirmed = false;
 
   const typingId = showTyping();
 
