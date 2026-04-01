@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAN Status</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #1F3864;
+    --teal:    #1A7A7A;
+    --teal-lt: #e8f4f4;
+    --sand:    #F8F6F2;
+    --sand-dk: #EDE8DF;
+    --ink:     #1a1a1a;
+    --muted:   #374151;
+    --border:  #d9d3c8;
+    --white:   #ffffff;
+    --danger:  #c0392b;
+    --success: #1A7A7A;
+    --warn:    #d4880f;
+    --radius:  12px;
+    --shadow:  0 2px 12px rgba(31,56,100,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--navy);
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .overall-banner {
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .overall-banner.ok {
+    background: var(--teal-lt);
+    color: var(--teal);
+    border: 1px solid #b5dada;
+  }
+  .overall-banner.degraded {
+    background: #fef3e2;
+    color: var(--warn);
+    border: 1px solid #f0d4a0;
+  }
+  .overall-banner.down {
+    background: #fde8e8;
+    color: var(--danger);
+    border: 1px solid #e8b4b4;
+  }
+  .overall-banner.loading {
+    background: var(--sand-dk);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot.ok { background: var(--teal); }
+  .dot.fail { background: var(--danger); }
+  .dot.degraded { background: var(--warn); }
+  .dot.loading { background: var(--muted); opacity: 0.4; }
+
+  .checks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .check-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .check-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .check-name {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .check-meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .check-detail {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .badge.ok { background: var(--teal-lt); color: var(--teal); }
+  .badge.fail { background: #fde8e8; color: var(--danger); }
+
+  .footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .footer a { color: var(--teal); text-decoration: none; }
+
+  .refresh-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .refresh-btn:hover { background: var(--sand-dk); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .loading .dot { animation: pulse 1.2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.25rem;">
+    <h1>DAN System Status</h1>
+    <button class="refresh-btn" onclick="runCheck()">Refresh</button>
+  </div>
+  <p class="subtitle" id="timestamp">Checking...</p>
+
+  <div id="overall" class="overall-banner loading">
+    <div class="dot loading"></div>
+    Running health checks...
+  </div>
+
+  <div class="checks" id="checks">
+    <div class="check-card loading">
+      <div class="check-header">
+        <span class="check-name"><div class="dot loading"></div>Website</span>
+      </div>
+      <div class="check-detail">Checking...</div>
+    </div>
+    <div class="check-card loading">
+      <div class="check-header">
+        <span class="check-name"><div class="dot loading"></div>Chat Engine (Anthropic)</span>
+      </div>
+      <div class="check-detail">Checking...</div>
+    </div>
+    <div class="check-card loading">
+      <div class="check-header">
+        <span class="check-name"><div class="dot loading"></div>Database (Airtable)</span>
+      </div>
+      <div class="check-detail">Checking...</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="/">Back to DAN</a>
+  </div>
+</div>
+
+<script>
+const LABELS = {
+  site: "Website",
+  anthropic: "Chat Engine (Anthropic)",
+  airtable: "Database (Airtable)",
+};
+
+const OVERALL_TEXT = {
+  ok: "All systems operational",
+  degraded: "Partial outage",
+  down: "Major outage",
+};
+
+function renderResults(data) {
+  // Overall banner
+  const el = document.getElementById("overall");
+  el.className = "overall-banner " + data.overall;
+  el.innerHTML =
+    '<div class="dot ' + data.overall + '"></div>' +
+    (OVERALL_TEXT[data.overall] || data.overall);
+
+  // Timestamp
+  const ts = new Date(data.timestamp);
+  document.getElementById("timestamp").textContent =
+    "Last checked: " + ts.toLocaleString();
+
+  // Individual checks
+  const container = document.getElementById("checks");
+  container.innerHTML = "";
+  for (const [key, check] of Object.entries(data.checks)) {
+    const card = document.createElement("div");
+    card.className = "check-card";
+    const rt = check.responseTime ? check.responseTime + "ms" : "";
+    card.innerHTML =
+      '<div class="check-header">' +
+        '<span class="check-name">' +
+          '<div class="dot ' + check.status + '"></div>' +
+          (LABELS[key] || key) +
+        "</span>" +
+        '<span class="check-meta">' + rt + "</span>" +
+      "</div>" +
+      '<div class="check-detail">' + check.detail + "</div>";
+    container.appendChild(card);
+  }
+}
+
+function renderError(msg) {
+  const el = document.getElementById("overall");
+  el.className = "overall-banner down";
+  el.innerHTML = '<div class="dot fail"></div>' + msg;
+  document.getElementById("timestamp").textContent = "Check failed at " + new Date().toLocaleString();
+}
+
+async function runCheck() {
+  const el = document.getElementById("overall");
+  el.className = "overall-banner loading";
+  el.innerHTML = '<div class="dot loading"></div>Running health checks...';
+  try {
+    const res = await fetch("/.netlify/functions/health");
+    const data = await res.json();
+    renderResults(data);
+  } catch (err) {
+    renderError("Could not reach health endpoint: " + err.message);
+  }
+}
+
+runCheck();
+</script>
+</body>
+</html>
