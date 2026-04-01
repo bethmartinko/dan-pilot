@@ -15,14 +15,11 @@ exports.handler = async function (event) {
     overall: "ok",
   };
 
-  // 1. Site check — fetch the main page
+  // 1. Site check - fetch the main page
   results.checks.site = await checkSite();
 
-  // 2. Anthropic API check — lightweight messages request
+  // 2. Anthropic API check - lightweight messages request
   results.checks.anthropic = await checkAnthropic();
-
-  // 3. Airtable check — read-only list request
-  results.checks.airtable = await checkAirtable();
 
   // Determine overall status
   const statuses = Object.values(results.checks).map((c) => c.status);
@@ -49,16 +46,16 @@ exports.handler = async function (event) {
 function httpsGet(url, headers, timeoutMs) {
   timeoutMs = timeoutMs || 10000;
   return new Promise((resolve, reject) => {
-    const urlObj = new URL(url);
-    const options = {
+    var urlObj = new URL(url);
+    var options = {
       hostname: urlObj.hostname,
       path: urlObj.pathname + urlObj.search,
       method: "GET",
       headers: headers || {},
       timeout: timeoutMs,
     };
-    const req = https.request(options, (res) => {
-      let data = "";
+    var req = https.request(options, (res) => {
+      var data = "";
       res.on("data", (chunk) => (data += chunk));
       res.on("end", () => resolve({ status: res.statusCode, body: data }));
     });
@@ -74,16 +71,16 @@ function httpsGet(url, headers, timeoutMs) {
 function httpsPost(url, headers, body, timeoutMs) {
   timeoutMs = timeoutMs || 15000;
   return new Promise((resolve, reject) => {
-    const urlObj = new URL(url);
-    const options = {
+    var urlObj = new URL(url);
+    var options = {
       hostname: urlObj.hostname,
       path: urlObj.pathname + urlObj.search,
       method: "POST",
-      headers: { ...headers, "Content-Length": Buffer.byteLength(body) },
+      headers: Object.assign({}, headers, { "Content-Length": Buffer.byteLength(body) }),
       timeout: timeoutMs,
     };
-    const req = https.request(options, (res) => {
-      let data = "";
+    var req = https.request(options, (res) => {
+      var data = "";
       res.on("data", (chunk) => (data += chunk));
       res.on("end", () => resolve({ status: res.statusCode, body: data }));
     });
@@ -98,12 +95,12 @@ function httpsPost(url, headers, body, timeoutMs) {
 }
 
 async function checkSite() {
-  const start = Date.now();
+  var start = Date.now();
   try {
-    const siteUrl = process.env.URL || "https://dan-pilot.netlify.app";
-    const res = await httpsGet(siteUrl, {}, 10000);
-    const ms = Date.now() - start;
-    const ok = res.status === 200 && res.body.includes("Disability Access Navigator");
+    var siteUrl = process.env.URL || "https://dan-pilot.netlify.app";
+    var res = await httpsGet(siteUrl, {}, 10000);
+    var ms = Date.now() - start;
+    var ok = res.status === 200 && res.body.includes("Disability Access Navigator");
     return {
       status: ok ? "ok" : "fail",
       responseTime: ms,
@@ -120,19 +117,18 @@ async function checkSite() {
 }
 
 async function checkAnthropic() {
-  const start = Date.now();
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  var start = Date.now();
+  var apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return { status: "fail", detail: "ANTHROPIC_API_KEY not set" };
   }
   try {
-    // Minimal request — short system message, 1 max token
-    const body = JSON.stringify({
+    var body = JSON.stringify({
       model: "claude-sonnet-4-20250514",
       max_tokens: 1,
       messages: [{ role: "user", content: "ping" }],
     });
-    const res = await httpsPost(
+    var res = await httpsPost(
       "https://api.anthropic.com/v1/messages",
       {
         "Content-Type": "application/json",
@@ -142,45 +138,13 @@ async function checkAnthropic() {
       body,
       15000
     );
-    const ms = Date.now() - start;
-    const ok = res.status === 200;
+    var ms = Date.now() - start;
+    var ok = res.status === 200;
     return {
       status: ok ? "ok" : "fail",
       responseTime: ms,
       httpStatus: res.status,
       detail: ok ? "Anthropic API responding" : "HTTP " + res.status,
-    };
-  } catch (err) {
-    return {
-      status: "fail",
-      responseTime: Date.now() - start,
-      detail: err.message,
-    };
-  }
-}
-
-async function checkAirtable() {
-  const start = Date.now();
-  const token = process.env.AIRTABLE_TOKEN;
-  if (!token) {
-    return { status: "fail", detail: "AIRTABLE_TOKEN not set" };
-  }
-  try {
-    // Read 1 record from sessions table — uses existing token permissions
-    const baseId = "applBHiDsZwGSmFS8";
-    const tableId = "tblbD7M4U56FMlZwE";
-    const res = await httpsGet(
-      "https://api.airtable.com/v0/" + baseId + "/" + tableId + "?maxRecords=1",
-      { Authorization: "Bearer " + token },
-      10000
-    );
-    const ms = Date.now() - start;
-    const ok = res.status === 200;
-    return {
-      status: ok ? "ok" : "fail",
-      responseTime: ms,
-      httpStatus: res.status,
-      detail: ok ? "Airtable API responding" : "HTTP " + res.status,
     };
   } catch (err) {
     return {
