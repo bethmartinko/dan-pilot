@@ -2,4 +2,4 @@
   directory = "netlify/functions"
 
 [functions.proxy]
-  timeout = 26
+  timeout = 60
