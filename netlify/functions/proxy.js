@@ -8,7 +8,7 @@ exports.handler = async function (event) {
   const target = event.headers["x-target"];
 
   function httpsPost(url, headers, body, timeoutMs) {
-    timeoutMs = timeoutMs || 25000;
+    timeoutMs = timeoutMs || 55000;
     return new Promise((resolve, reject) => {
       const urlObj = new URL(url);
       const options = {
@@ -63,7 +63,7 @@ exports.handler = async function (event) {
           "anthropic-version": "2023-06-01",
         },
         event.body,
-        25000
+        55000
       );
       return {
         statusCode: result.status,
