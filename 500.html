@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAN — Temporarily Unavailable</title>
+<style>
+  :root {
+    --navy:    #1F3864;
+    --teal:    #1A7A7A;
+    --sand:    #F8F6F2;
+    --sand-dk: #EDE8DF;
+    --ink:     #1a1a1a;
+    --muted:   #374151;
+    --border:  #d9d3c8;
+    --white:   #ffffff;
+    --radius:  12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+  .container {
+    max-width: 480px;
+    text-align: center;
+  }
+  .icon {
+    margin-bottom: 1.5rem;
+  }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--navy);
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+  }
+  .body-text {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .btn-retry {
+    display: inline-block;
+    background: var(--teal);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .btn-retry:hover {
+    opacity: 0.9;
+  }
+  .status-link {
+    color: var(--teal);
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+  .status-link:hover {
+    text-decoration: underline;
+  }
+  .footer {
+    margin-top: 3rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 104" width="80" height="80">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <clipPath id="clip-icon">
+          <rect x="0" y="0" width="104" height="104" rx="22"/>
+        </clipPath>
+      </defs>
+      <rect x="0" y="0" width="104" height="104" rx="22" fill="#1F3864"/>
+      <g clip-path="url(#clip-icon)">
+        <rect x="0" y="0" width="104" height="28" fill="#1A7A7A"/>
+        <text x="52" y="12" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="white" letter-spacing="0.08em">HERE FOR YOU</text>
+        <line x1="0" y1="28" x2="104" y2="28" stroke="white" stroke-width="0.8" opacity="0.2"/>
+      </g>
+      <path d="M34,34 L34,74 M34,34 L70,34" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <rect x="34" y="34" width="36" height="40" rx="3" fill="none" stroke="white" stroke-width="1.5" opacity="0.15"/>
+      <circle cx="52" cy="50" r="6" fill="white" opacity="0.95"/>
+      <line x1="52" y1="74" x2="52" y2="90" stroke="#1A7A7A" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+    </svg>
+  </div>
+
+  <h1>DAN is temporarily unavailable</h1>
+  <p class="body-text">
+    We're sorry — DAN is experiencing a brief interruption.
+    Please try again in a few minutes.
+  </p>
+
+  <div class="actions">
+    <button class="btn-retry" onclick="location.reload()">Try Again</button>
+    <a href="/status.html" class="status-link">Check Service Status</a>
+  </div>
+
+  <div class="footer">
+    Disability Access Navigator — Free navigation for California families
+  </div>
+</div>
+</body>
+</html>
