@@ -25,7 +25,23 @@
     --shadow-lg: 0 8px 32px rgba(31,56,100,0.14);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 19px; -webkit-font-smoothing: antialiased; }
+  html { font-size: 20px; -webkit-font-smoothing: antialiased; }
+
+  /* -- SKIP LINK (accessibility) -- */
+  .skip-link {
+    position: absolute; top: -100%; left: 1rem;
+    background: var(--navy); color: var(--white);
+    padding: .75rem 1.25rem; border-radius: var(--radius-sm);
+    font-size: 1rem; font-weight: 600; text-decoration: none;
+    z-index: 9999;
+  }
+  .skip-link:focus { top: 1rem; }
+
+  /* -- GLOBAL FOCUS VISIBLE -- */
+  a:focus-visible, button:focus-visible, select:focus-visible, textarea:focus-visible, input:focus-visible {
+    outline: 3px solid var(--navy);
+    outline-offset: 2px;
+  }
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--sand);
@@ -399,7 +415,7 @@
     font-family: inherit; font-size: 1.0625rem; color: var(--ink);
     line-height: 1.5; resize: none; max-height: 140px;
   }
-  #user-input::placeholder { color: #aaa; }
+  #user-input::placeholder { color: #767676; }
   .btn-send {
     background: var(--navy); color: var(--white);
     border: none; border-radius: var(--radius-sm);
@@ -550,7 +566,8 @@
     background: var(--teal-lt);
     border: 1.5px solid var(--teal);
     border-radius: 20px;
-    padding: 6px 14px;
+    padding: 10px 16px;
+    min-height: 48px;
     font-family: 'DM Sans', sans-serif;
     font-size: 1rem;
     font-weight: 500;
@@ -610,6 +627,7 @@
   .yn-btn {
     flex: 1; background: none; border: 1.5px solid var(--border);
     border-radius: var(--radius-sm); padding: .5rem;
+    min-height: 48px;
     font-size: .875rem; font-weight: 500; cursor: pointer;
     color: var(--muted); transition: all .15s; text-align: center;
   }
@@ -638,7 +656,7 @@
     .flow-cards { grid-template-columns: 1fr; }
     .dan-wordmark { font-size: 3.5rem; }
     .landing-inner { padding: 1.5rem 1rem; }
-    .option-btn { font-size: .75rem; padding: 5px 11px; }
+    .option-btn { font-size: .875rem; padding: 8px 14px; min-height: 44px; }
 
     /* Chat shell — full width, no side margins */
     #chat-shell { max-width: 100%; }
@@ -675,6 +693,8 @@
 </style>
 </head>
 <body>
+
+<a href="#chat-messages" class="skip-link">Skip to conversation</a>
 
 <!-- ══════════════════════════════════════════════════
      DEMOGRAPHICS SCREEN
@@ -795,7 +815,7 @@
       <span data-en="DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time." data-es="DAN le ayuda a navegar el sistema de Regional Centers de California -- qué pedir, cómo pedirlo, y qué hacer cuando la primera respuesta es no. Gratis, confidencial, disponible en cualquier momento.">DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time.</span>
     </p>
     <div class="privacy-box">
-      <strong data-en="Before we start:" data-es="Antes de comenzar:">Before we start:</strong> <span data-en="DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes." data-es="DAN es una herramienta informativa -- no asesoría legal. Para su situación específica, debe buscar orientación de un defensor o abogado calificado. Todo lo que comparte permanece en esta conversación -- nada se guarda ni se vincula a usted. Esta es una versión piloto, y sus comentarios ayudan a mejorarla.">DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. This is a pilot version, and your feedback helps shape what it becomes.</span>
+      <strong data-en="Before we start:" data-es="Antes de comenzar:">Before we start:</strong> <span data-en="DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. Your feedback helps shape what DAN becomes." data-es="DAN es una herramienta informativa -- no asesoría legal. Para su situación específica, debe buscar orientación de un defensor o abogado calificado. Todo lo que comparte permanece en esta conversación -- nada se guarda ni se vincula a usted. Sus comentarios ayudan a mejorar a DAN.">DAN is an informational tool -- not legal advice. For your specific situation, you should seek guidance from a qualified advocate or attorney. Everything you share stays in this conversation -- nothing is stored or linked to you. Your feedback helps shape what DAN becomes.</span>
     </div>
     <div style="margin-top:1.5rem; text-align:left; display:flex; flex-direction:column; gap:.625rem;">
       <div style="display:flex; gap:.75rem; align-items:flex-start;">
@@ -881,7 +901,7 @@
     </div>
   </div>
   <div class="roadmap-strip" id="roadmap-strip"></div>
-  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-label="Conversation with DAN"></div>
   <div class="chat-input-area">
     <div class="input-row-wrap" id="input-row-wrap" style="display:none;">
       <div class="input-row">
@@ -938,7 +958,9 @@ SEGUNDA REGLA PRINCIPAL — EL IMPACTO FUNCIONAL DETERMINA EL CAMINO: Cuando una
 
 TERCERA REGLA PRINCIPAL — REDUCCIÓN DE PRESUPUESTO + FECHA LÍMITE = ACCIÓN INMEDIATA: Si en CUALQUIER respuesta una familia describe (a) haber recibido una carta o aviso de que su presupuesto está siendo reducido Y (b) su año de plan termina en menos de 3 meses — detén todo cuestionamiento diagnóstico de inmediato. No preguntes sobre empleo, documentación, impacto en la salud ni nada más. Ya tienes suficiente. Responde con las tres pistas paralelas Y el borrador del correo solicitando el NOA en esa misma respuesta. Al nombrar la Pista 2 (fair hearing), descríbela solo en palabras — NO incluyas el marcador ---FH LINK---, el teléfono 1-800-743-8525, ni ningún detalle sobre el pago mientras el caso está pendiente. Esos detalles vienen en la siguiente respuesta únicamente. Cierra con esta frase exacta, palabra por palabra: Una vez que envíe eso, vuelva y le ayudaré a presentar la solicitud de fair hearing y a reunir su documentación. Este patrón anula el flujo diagnóstico de incertidumbre, el arco de espera y cualquier otra ruta.
 
-Eres DAN — el Disability Access Navigator. Ayudas a las personas a navegar los servicios del Regional Center (RC) de California para personas con discapacidades del desarrollo y sus familias. DAN sirve a personas de todas las edades — niños, jóvenes en transición y adultos. Si alguien navega servicios para un niño, ayúdale; si es para un adulto, ayúdale. DAN no cubre servicios del IEP ni servicios escolares — si alguien pregunta sobre servicios escolares, reconoce la pregunta y explica claramente: "DAN se enfoca en los servicios del Regional Center bajo la Lanterman Act. Para el IEP y los servicios escolares, conviene contactar a un especialista en educación especial. Puedo ayudarle con todo lo relacionado con el Regional Center." No intentes navegar asuntos del IEP o de la escuela.
+Eres DAN — el Disability Access Navigator. Ayudas a las personas a navegar los servicios del Regional Center (RC) de California para personas con discapacidades del desarrollo y sus familias. DAN sirve a clientes del RC de cualquier edad — niños, jóvenes en transición y adultos. Si alguien navega servicios para un niño, ayúdale; si es para un adulto, ayúdale.
+
+LÍMITE DE ALCANCE POR EDAD: Para personas menores de 22 años, DAN no cubre responsabilidades del distrito escolar, FAPE (Educación Pública Apropiada y Gratuita), metas del IEP ni la responsabilidad financiera de los padres. Si alguien pregunta sobre servicios escolares, reconoce la pregunta y explica claramente: "DAN se enfoca en los servicios del Regional Center bajo la Lanterman Act. Para el IEP y los servicios escolares, conviene contactar a un especialista en educación especial. Puedo ayudarle con todo lo relacionado con el Regional Center." No intentes navegar asuntos del IEP o de la escuela. SIN EMBARGO — DAN SÍ puede ayudar a cualquier edad con la escalada ante el RC, el proceso de defensa y la navegación de fair hearings. DAN se abstiene en la pregunta del recurso genérico específico, pero nunca rechaza a nadie en cuestiones de proceso.
 
 CÓDIGOS DE SERVICIO — FUERA DEL ALCANCE: DAN no ayuda a las personas a identificar, seleccionar ni verificar códigos de servicio específicos del RC (por ejemplo, 330, 338, 510, 503). Los códigos de servicio son asignados por los RCs según la vendorización y los términos del contrato — equivocarse en esto puede causar daño real. Si alguien pregunta qué código de servicio usar, DAN debe decir claramente: "El código de servicio correcto es algo que su RC debe responder — depende de cómo esté vendorizado su proveedor y cómo esté configurado su Spending Plan, y equivocarse puede causar problemas de facturación. Le recomiendo llamar a su Service Coordinator o al RC directamente para preguntar qué código aplica a este servicio." No intentes identificar ni recomendar códigos de servicio bajo ninguna circunstancia.
 
@@ -1287,7 +1309,9 @@ const DAN_SYSTEM_PROMPT = [
   '',
   'THIRD HARD RULE -- BUDGET CUT + DEADLINE = IMMEDIATE ACTION: If in ANY response a family describes (a) receiving a letter or notice that their budget is being cut or reduced AND (b) their plan year ends within 3 months -- stop all diagnostic questioning immediately. Do not ask about employment, documentation, health impact, or anything else. You have enough. Respond with the three parallel tracks AND the NOA request email draft in that same response. When naming Track 2 (fair hearing), describe it in words only -- do NOT include ---FH LINK--- marker, phone number 1-800-743-8525, or any aid paid pending detail. Those come in the next response only. Close with this exact sentence word for word: Once you send that, come back and I will help you file the fair hearing request and build your documentation. This pattern overrides the unsure diagnostic flow, the waiting arc, and every other routing path.',
   '',
-  'You are DAN -- the Disability Access Navigator. You help people navigate California Regional Center (RC) services for individuals with developmental disabilities and their families. DAN serves people of all ages -- children, transition-age youth, and adults. If someone is navigating services for a child, help them; if for an adult, help them. DAN does not cover IEP or school-based services -- if someone asks about school services, acknowledge the question and explain clearly: \"DAN focuses on Regional Center services under the Lanterman Act. For IEP and school-based services, you\'ll want to connect with a special education advocate. I can help you with anything on the Regional Center side.\" Do not attempt to navigate school or IEP issues.',
+  'You are DAN -- the Disability Access Navigator. You help people navigate California Regional Center (RC) services for individuals with developmental disabilities and their families. DAN serves RC clients of any age -- children, transition-age youth, and adults. If someone is navigating services for a child, help them; if for an adult, help them.',
+  '',
+  'AGE SCOPE BOUNDARY: For individuals under 22, DAN does not cover school district responsibilities, FAPE (Free Appropriate Public Education), IEP goals, or parental financial responsibility. If someone asks about school-based services, acknowledge the question and explain clearly: \"DAN focuses on Regional Center services under the Lanterman Act. For IEP and school-based services, you\'ll want to connect with a special education advocate. I can help you with anything on the Regional Center side.\" Do not attempt to navigate school or IEP issues. HOWEVER -- DAN CAN still help any age with RC escalation, the advocacy process, and fair hearing navigation. DAN defers on the specific generic resource question but never turns anyone away cold on process.',
   '',
   'SERVICE CODES -- OUT OF SCOPE: DAN does not help people identify, select, or verify specific RC service codes (e.g. 330, 338, 510, 503). Service codes are assigned by RCs based on vendorization and contract terms -- getting this wrong causes real harm. If someone asks which service code to use for a particular service, DAN should say clearly: "Picking the right service code is something your RC needs to answer -- it depends on how your provider is vendored and how your spending plan is set up, and getting it wrong can cause billing problems. I\'d recommend calling your service coordinator or RC directly and asking them which code applies to this service." Do not attempt to identify or recommend service codes under any circumstances.',
   '',
@@ -1599,7 +1623,7 @@ function buildSystemPrompt() {
   var today = new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
   var context = '\n\nADDITIONAL CONTEXT FOR THIS SESSION:\n' +
     'Today\'s date is ' + today + '. Use this to calculate exact days and weeks remaining whenever a family gives you a date -- do not estimate loosely.\n' +
-    'You are speaking with someone navigating the Regional Center system -- either the person with a disability themselves, or someone in their circle of support. This is a pilot -- at the end, they\'ll be asked a few questions about whether DAN was helpful. Your goal is to be genuinely useful to them right now.';
+    'You are speaking with someone navigating the Regional Center system -- either the person with a disability themselves, or someone in their circle of support. Your goal is to be genuinely useful to them right now.';
 
   var known = [];
   if (demoData.rc && demoData.rc !== 'TEST ONLY' && demoData.rc !== 'Prefer not to say') {
@@ -2407,6 +2431,13 @@ function appendDanMessage(text, showFeedback) {
     </div>`;
   container.appendChild(row);
   scrollToMessage(row);
+
+  // Focus management for screen readers: focus the new message bubble
+  const bubble = row.querySelector('.msg-bubble');
+  if (bubble) {
+    bubble.setAttribute('tabindex', '-1');
+    bubble.focus({ preventScroll: true });
+  }
 
   // Strip email markers from displayed text
   const displayText = text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').replace(/---FH LINK---/gi, '').trim();
