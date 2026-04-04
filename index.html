@@ -2663,6 +2663,15 @@ async function sendMessage() {
     return;
   }
 
+  // Long first message guard — pasted conversations cause proxy timeouts
+  const isFirstUserMsg = !messages.some(function(m) { return m.role === 'user'; });
+  if (isFirstUserMsg && text.length > 1500) {
+    appendSystemMessage(currentLang === 'es'
+      ? 'Su mensaje es muy largo — DAN funciona mejor cuando empieza con 2 o 3 oraciones describiendo su situación. DAN le hará preguntas para obtener los detalles que necesita. Por favor acorte su mensaje e intente de nuevo.'
+      : 'Your message is quite long — DAN works best when you start with 2–3 sentences describing your situation. It will ask follow-up questions to get the details it needs. Please shorten your message and try again.');
+    return;
+  }
+
   input.value = '';
   input.style.height = 'auto';
   document.getElementById('send-btn').disabled = true;
