@@ -2140,9 +2140,16 @@ function submitDemographics() {
       chatMessages.innerHTML = '';
       msgCounter = 0;
       // Now inject the prior context as the first user message and send
+      // Truncate very long pastes to avoid timeout (keep last ~8000 chars which is the most recent/relevant part)
+      var trimmedContext = returnContext;
+      var truncNote = '';
+      if (returnContext.length > 10000) {
+        trimmedContext = returnContext.slice(-8000);
+        truncNote = '[Note: conversation was long — showing the most recent portion.]\n\n';
+      }
       document.getElementById('input-row-wrap').style.display = 'flex';
       var input = document.getElementById('user-input');
-      input.value = 'Here is my previous DAN conversation. Please read it and continue helping me from where we left off:\n\n' + returnContext;
+      input.value = 'Here is my previous DAN conversation. Please read it and continue helping me from where we left off:\n\n' + truncNote + trimmedContext;
       sendMessage();
     }, 100);
     return;
@@ -2174,6 +2181,8 @@ function showCardsScreen() {
 }
 
 function goBack() {
+  // Clear saved session
+  localStorage.removeItem(SESSION_STORAGE_KEY);
   // Reset session state
   document.getElementById('chat-shell').style.display = 'none';
   document.getElementById('demo-screen').style.display = 'none';
@@ -2628,6 +2637,7 @@ async function danSendAfterTrim(userText) {
   if (result.ok) {
     messages.push({ role: 'assistant', content: result.reply });
     appendDanMessage(result.reply, true);
+    saveSessionToStorage();
   } else if (result.fatal) {
     appendSystemMessage(result.msg);
     messages.pop();
@@ -2644,6 +2654,14 @@ async function sendMessage() {
   const input = document.getElementById('user-input');
   const text  = input.value.trim();
   if (!text) return;
+
+  // Offline detection
+  if (!navigator.onLine) {
+    appendSystemMessage(currentLang === 'es'
+      ? 'Parece que no tiene conexión a internet. Verifique su conexión e intente de nuevo — su conversación está guardada aquí.'
+      : 'It looks like you\'re offline. Check your connection and try again — your conversation is saved here.');
+    return;
+  }
 
   input.value = '';
   input.style.height = 'auto';
@@ -2676,8 +2694,9 @@ async function sendMessage() {
   // Estimate token weight (rough: 1 token ≈ 4 chars). If the full payload is
   // getting large, pause and offer save + continue rather than letting the API
   // fail mid-session after the user has done all their work.
+  // Token estimate: ~3.5 chars per token for mixed EN/ES with JSON overhead (more accurate than /4)
   const estimatedTokens = Math.round(
-    (systemPrompt.length + messages.reduce((s, m) => s + (typeof m.content === 'string' ? m.content.length : 0), 0)) / 4
+    (systemPrompt.length + messages.reduce((s, m) => s + (typeof m.content === 'string' ? m.content.length : 0), 0)) / 3.5
   );
 
   if (estimatedTokens > 95000) {
@@ -2702,6 +2721,7 @@ async function sendMessage() {
   if (result.ok) {
     messages.push({ role: 'assistant', content: result.reply });
     appendDanMessage(result.reply, true);
+    saveSessionToStorage();
   } else if (result.fatal) {
     // Hard API error -- show message but keep input open so they can try again
     appendSystemMessage(result.msg);
@@ -2831,6 +2851,30 @@ function appendDanMessage(text, showFeedback) {
   if (bubble) {
     bubble.setAttribute('tabindex', '-1');
     bubble.focus({ preventScroll: true });
+  }
+
+  // Progressive text reveal — animate the response appearing for a natural feel
+  // Uses textContent chunks to avoid breaking HTML tags mid-render
+  if (showFeedback && bubble) {
+    const fullHtml = bubble.innerHTML;
+    const textLen = bubble.textContent.length;
+    if (textLen > 20) { // only animate if there's enough text
+      bubble.style.minHeight = '2rem';
+      bubble.style.overflow = 'hidden';
+      bubble.style.maxHeight = '0';
+      // Reveal by expanding maxHeight smoothly
+      requestAnimationFrame(() => {
+        bubble.style.transition = 'max-height 0.8s ease-out';
+        bubble.style.maxHeight = '5000px';
+        setTimeout(() => {
+          bubble.style.maxHeight = '';
+          bubble.style.overflow = '';
+          bubble.style.transition = '';
+          bubble.style.minHeight = '';
+          scrollToMessage(row);
+        }, 900);
+      });
+    }
   }
 
   // Strip email markers from displayed text
@@ -3250,8 +3294,102 @@ function submitContactOptIn() {
     (currentLang === 'es' ? 'Guardado — le avisaremos.' : 'Saved — we\'ll keep you posted.') + '</p>';
 }
 
+// -- SESSION RECOVERY (localStorage) --
+// Auto-save conversation state so users don't lose progress on accidental close/refresh
+const SESSION_STORAGE_KEY = 'dan_session_recovery';
+
+function saveSessionToStorage() {
+  try {
+    const chatHtml = document.getElementById('chat-messages').innerHTML;
+    if (!chatHtml || messages.length < 2) return; // nothing worth saving
+    const state = {
+      messages: messages,
+      currentFlow: currentFlow,
+      sessionTopic: sessionTopic,
+      demoData: demoData,
+      chatHtml: chatHtml,
+      timestamp: Date.now(),
+      lang: currentLang,
+    };
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state));
+  } catch (e) { /* localStorage may be full or blocked */ }
+}
+
+function checkSessionRecovery() {
+  try {
+    const saved = localStorage.getItem(SESSION_STORAGE_KEY);
+    if (!saved) return;
+    const state = JSON.parse(saved);
+    // Only offer recovery if session is less than 2 hours old
+    if (Date.now() - state.timestamp > 2 * 60 * 60 * 1000) {
+      localStorage.removeItem(SESSION_STORAGE_KEY);
+      return;
+    }
+    // Show recovery prompt on the landing page
+    const landing = document.getElementById('landing');
+    if (!landing || landing.style.display === 'none') return;
+    const recoveryDiv = document.createElement('div');
+    recoveryDiv.id = 'session-recovery';
+    recoveryDiv.style.cssText = 'margin-top:1.5rem; border-top:2px solid var(--teal); padding-top:1rem; text-align:center;';
+    const msgCount = state.messages.filter(m => m.role === 'user').length;
+    recoveryDiv.innerHTML = `
+      <p style="font-size:.9375rem; font-weight:600; color:var(--teal); margin-bottom:.5rem;">
+        ${state.lang === 'es' ? 'Tiene una conversación sin guardar' : 'You have an unsaved conversation'}
+      </p>
+      <p style="font-size:.875rem; color:var(--muted); margin-bottom:.75rem;">
+        ${state.lang === 'es'
+          ? msgCount + ' mensajes — se guardó automáticamente hace unos minutos.'
+          : msgCount + ' messages — auto-saved a few minutes ago.'}
+      </p>
+      <button onclick="restoreSession()" style="background:var(--teal); color:white; border:none; border-radius:var(--radius-sm); padding:.625rem 1.25rem; font-size:.875rem; font-weight:600; cursor:pointer; margin-right:.5rem;">
+        ${state.lang === 'es' ? 'Continuar conversación' : 'Continue conversation'}
+      </button>
+      <button onclick="dismissRecovery()" style="background:none; border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:.625rem 1.25rem; font-size:.875rem; cursor:pointer; color:var(--muted);">
+        ${state.lang === 'es' ? 'Empezar de nuevo' : 'Start fresh'}
+      </button>
+    `;
+    const returnSection = document.getElementById('return-section');
+    if (returnSection) returnSection.before(recoveryDiv);
+    else landing.querySelector('.landing-inner').appendChild(recoveryDiv);
+  } catch (e) { /* ignore parse errors */ }
+}
+
+function restoreSession() {
+  try {
+    const state = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY));
+    if (!state) return;
+    // Restore state
+    messages = state.messages;
+    currentFlow = state.currentFlow;
+    sessionTopic = state.sessionTopic;
+    demoData = state.demoData;
+    currentLang = state.lang || 'en';
+    setLang(currentLang);
+    // Show chat shell with saved HTML
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('demo-screen').style.display = 'none';
+    document.getElementById('cards-screen').style.display = 'none';
+    document.getElementById('chat-shell').style.display = 'flex';
+    document.getElementById('chat-messages').innerHTML = state.chatHtml;
+    document.getElementById('input-row-wrap').style.display = 'flex';
+    document.getElementById('send-btn').disabled = false;
+    msgCounter = document.querySelectorAll('.msg-row.dan').length;
+    maybeShowSaveBar();
+    scrollToBottom();
+    localStorage.removeItem(SESSION_STORAGE_KEY);
+  } catch (e) { console.error('Session restore error', e); }
+}
+
+function dismissRecovery() {
+  localStorage.removeItem(SESSION_STORAGE_KEY);
+  const el = document.getElementById('session-recovery');
+  if (el) el.remove();
+}
+
 // -- TEXTAREA AUTO-RESIZE + ENTER TO SEND --
 document.addEventListener('DOMContentLoaded', () => {
+  // Check for recoverable session on load
+  checkSessionRecovery();
   const input = document.getElementById('user-input');
 
   input.addEventListener('input', () => {
