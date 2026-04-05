@@ -2441,7 +2441,7 @@ document.addEventListener('click', function(e) {
 // -- RETRY HELPER --
 async function fetchWithRetry(payload, typingId, maxAttempts) {
   maxAttempts = maxAttempts || 3;
-  var delays = [0, 3000, 7000]; // immediate, 3s, 7s
+  var delays = [0, 3000, 10000]; // immediate, 3s, 10s — longer final delay for timeout recovery
   var retryMsgId = null;
 
   for (var attempt = 0; attempt < maxAttempts; attempt++) {
@@ -2458,11 +2458,15 @@ async function fetchWithRetry(payload, typingId, maxAttempts) {
     }
 
     try {
+      var controller = new AbortController();
+      var clientTimeout = setTimeout(function() { controller.abort(); }, 62000); // 62s — just past the 60s Netlify limit
       var response = await fetch('/.netlify/functions/proxy', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-target': 'anthropic' },
+        headers: { 'Content-Type': 'application/json', 'x-target': 'anthropic', 'x-retry': String(attempt) },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
+      clearTimeout(clientTimeout);
 
       if (!response.ok) {
         var errBody = '';
@@ -2478,8 +2482,8 @@ async function fetchWithRetry(payload, typingId, maxAttempts) {
       } else if (data.error) {
         var errType = data.error.type || '';
         console.error('API error on attempt ' + (attempt + 1) + ':', data.error);
-        // overloaded errors are worth retrying; auth errors are not
-        if (errType === 'overloaded_error' || errType === 'rate_limit_error' || errType === 'api_error') {
+        // overloaded/timeout errors are worth retrying; auth errors are not
+        if (errType === 'overloaded_error' || errType === 'rate_limit_error' || errType === 'api_error' || errType === 'proxy_timeout') {
           continue;
         }
         return { ok: false, fatal: true, msg: 'DAN ran into a problem (' + errType + '). Please try again.' };
@@ -2488,8 +2492,9 @@ async function fetchWithRetry(payload, typingId, maxAttempts) {
         continue;
       }
     } catch (err) {
-      console.error('Fetch error on attempt ' + (attempt + 1) + ':', err);
-      // network error -- worth retrying
+      clearTimeout(clientTimeout);
+      console.error('Fetch error on attempt ' + (attempt + 1) + ':', err.name === 'AbortError' ? 'Client timeout (62s)' : err);
+      // network error or client timeout -- worth retrying
       continue;
     }
   }
@@ -3412,6 +3417,14 @@ function dismissRecovery() {
   const el = document.getElementById('session-recovery');
   if (el) el.remove();
 }
+
+// -- TAB VISIBILITY: save state when user leaves, auto-save on return --
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    // User switched away — save immediately in case browser kills the tab
+    if (messages.length >= 2) saveSessionToStorage();
+  }
+});
 
 // -- TEXTAREA AUTO-RESIZE + ENTER TO SEND --
 document.addEventListener('DOMContentLoaded', () => {
