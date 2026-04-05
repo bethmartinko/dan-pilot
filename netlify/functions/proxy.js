@@ -55,6 +55,9 @@ exports.handler = async function (event) {
 
   if (target === "anthropic") {
     try {
+      // Give retries more time — first attempt 55s, retries 58s
+      const retryNum = parseInt(event.headers["x-retry"] || "0", 10);
+      const timeout = retryNum > 0 ? 58000 : 55000;
       const result = await httpsPost(
         "https://api.anthropic.com/v1/messages",
         {
@@ -63,7 +66,7 @@ exports.handler = async function (event) {
           "anthropic-version": "2023-06-01",
         },
         event.body,
-        55000
+        timeout
       );
       return {
         statusCode: result.status,
