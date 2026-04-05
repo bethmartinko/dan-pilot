@@ -2276,6 +2276,20 @@ async function writeSessionRecord(cardType) {
   }
 }
 
+// Log error type + timestamp to the session record so failures are visible in Airtable
+function logSessionError(errorType) {
+  if (!sessionAirtableId) return;
+  const entry = errorType.slice(0, 80) + ' — ' + new Date().toISOString();
+  fetch('/.netlify/functions/proxy', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-target': 'airtable-patch' },
+    body: JSON.stringify({
+      url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}/${sessionAirtableId}`,
+      fields: { 'Last Error': entry },
+    }),
+  }).catch(function(e) { console.error('Last error patch failed', e); });
+}
+
 // Called once per session the first time DAN delivers an email draft
 let draftDeliveredLogged = false;
 async function patchSessionDraftDelivered() {
@@ -2642,10 +2656,12 @@ async function danSendAfterTrim(userText) {
     appendSystemMessage(result.msg);
     messages.pop();
     document.getElementById('user-input').value = userText;
+    logSessionError(result.msg || 'fatal_error');
   } else {
     appendSystemMessage('DAN couldn\'t reach the server. Your conversation is still here — send your last message again when your connection is back.');
     messages.pop();
     document.getElementById('user-input').value = userText;
+    logSessionError('connection_failed');
   }
 }
 
@@ -2740,6 +2756,7 @@ async function sendMessage() {
     }
     document.getElementById('user-input').value = text; // restore their text
     document.getElementById('input-row-wrap').style.display = 'flex';
+    logSessionError(result.msg || 'fatal_error');
   } else {
     // All retries failed -- connection issue, session preserved
     appendSystemMessage('DAN couldn\'t reach the server after a few tries. Your conversation is still here -- tap the text box below and send your last message again when your connection is back.');
@@ -2749,6 +2766,7 @@ async function sendMessage() {
     }
     document.getElementById('user-input').value = text; // restore their text
     document.getElementById('input-row-wrap').style.display = 'flex';
+    logSessionError('connection_failed');
   }
 
   document.getElementById('send-btn').disabled = false;
