@@ -1,0 +1,10 @@
+[functions]
+  directory = "netlify/functions"
+
+[functions.proxy]
+  timeout = 60
+
+[[redirects]]
+  from = "/*"
+  to = "/500.html"
+  status = 500
