@@ -2552,7 +2552,7 @@ ${(() => { let out = '', budget = 12000; for (let i = toTrim.length - 1; i >= 0 
   try {
     const summaryResult = await fetchWithRetry({
       model: 'claude-sonnet-4-6',
-      max_tokens: 600,
+      max_tokens: 1024,
       system: 'You extract structured session context. Return only valid JSON, no markdown, no backticks.',
       messages: [{ role: 'user', content: summaryPrompt }],
     }, null, 2);
