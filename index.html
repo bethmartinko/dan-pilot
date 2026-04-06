@@ -2546,7 +2546,7 @@ Return ONLY a JSON object with these exact keys (omit any key where you have no 
 }
 
 Messages to summarize:
-${toTrim.map(m => `[${m.role.toUpperCase()}]: ${typeof m.content === 'string' ? m.content.slice(0, 800) : ''}`).join('\n\n')}`;
+${(() => { let out = '', budget = 12000; for (let i = toTrim.length - 1; i >= 0 && budget > 0; i--) { const c = typeof toTrim[i].content === 'string' ? toTrim[i].content.slice(0, 600) : ''; out = '[' + toTrim[i].role.toUpperCase() + ']: ' + c + '\n\n' + out; budget -= c.length; } return out.trim(); })()}`;
 
   let summaryData = null;
   try {
