@@ -2299,6 +2299,20 @@ function logSessionError(errorType) {
   }).catch(function(e) { console.error('Last error patch failed', e); });
 }
 
+// Rounds counter — updates Airtable every 5 user messages
+let userRoundCount = 0;
+function patchSessionRounds() {
+  if (!sessionAirtableId) return;
+  fetch('/.netlify/functions/proxy', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-target': 'airtable-patch' },
+    body: JSON.stringify({
+      url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}/${sessionAirtableId}`,
+      fields: { 'Rounds': userRoundCount, 'Last Active': new Date().toISOString() },
+    }),
+  }).catch(function(e) { console.error('Rounds patch failed', e); });
+}
+
 // Called once per session the first time DAN delivers an email draft
 let draftDeliveredLogged = false;
 async function patchSessionDraftDelivered() {
@@ -2715,6 +2729,8 @@ async function sendMessage() {
 
   appendUserMessage(text);
   messages.push({ role: 'user', content: text });
+  userRoundCount++;
+  if (userRoundCount % 5 === 0) patchSessionRounds();
   pathTrail.push(text.length > 60 ? text.slice(0, 57) + '...' : text);
   updateRoadmap();
 
