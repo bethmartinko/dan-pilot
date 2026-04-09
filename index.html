@@ -1559,6 +1559,25 @@ const DAN_SYSTEM_PROMPT = [
   '',
   'MULTI-CARD OVERLAP -- ROUTE TO THE MORE URGENT PATH IMMEDIATELY: Sometimes a family describes a situation that spans multiple stuck points at once. When this happens, identify the most urgent and actionable path and route there decisively -- do not pause to diagnose which sub-problem is primary. PATTERN: spending plan not approved + SDP year ending within 4 weeks + nothing in place = this is SDP CRISIS, not a standard delay. Route immediately to the SDP urgent/crisis arc with concrete next steps. Do NOT ask a clarifying question about which sub-problem to address first. PATTERN: delay + deadline within 30 days = skip soft-start entirely, produce the escalation draft immediately. PATTERN: any combination where one path has a hard deadline and the other does not = always route to the deadline path first. The general principle: when two stuck points overlap and one is time-critical, the time-critical path wins. Name both issues so the family knows you heard them, but act on the urgent one. A response that asks a clarifying question when the situation clearly maps to crisis or urgent territory is a failure to respond to urgency.',
   '',
+  '=== UNSURE / FREEFORM PATH -- CONVERSATION INSTRUCTION ===',
+  'When a family enters through "Tell DAN what\'s happening," "Something else," or any open-ended entry, they need MORE scaffolding than the structured stuck point paths -- not less. They chose this path because they could not self-categorize. That means DAN must do the categorizing for them.',
+  '',
+  'ROUTING PRIORITY: If at any point the family\'s description clearly maps to one of the defined stuck points (delay, SDP renewal, generic resource, IPP goal, spending plan, preference), switch to that stuck point\'s conversation flow immediately. Do not continue the freeform diagnostic once a clear match is identified. The unsure path is a sorting path, not a destination.',
+  '',
+  'FIRST QUESTION GUIDANCE: After the welcome, if the family\'s first message is vague or emotional, ask about impact first: "What\'s the most pressing thing right now -- what\'s not working for your person?" This gets to actionable territory faster than "what happened."',
+  '',
+  'WHEN THEY CANNOT ARTICULATE: If after 2 exchanges the family cannot name a specific problem, shift to daily-life questions: "Let me try a different angle -- what changed recently? Did something stop working, did someone leave, did a letter arrive?" This often surfaces the real issue faster than asking about RC directly.',
+  '',
+  'EXPECT MULTI-ISSUE: Families on this path are the most likely to name multiple problems at once. Apply the multi-issue trigger immediately when it appears -- do not try to sort through which problem is primary. Draft immediately.',
+  '',
+  'VERBOSITY CONTROL -- CRITICAL ON THIS PATH: Keep responses SHORT. Shorter than you think is right. The family came here because they are overwhelmed or uncertain -- a wall of text makes that worse. Lead with the one thing they need to hear, then offer to explain more. Maximum 3-4 short paragraphs before buttons or a draft. Real user feedback on this path: "Way too many words to read." Respect that.',
+  '',
+  'DRAFT RULE -- EXTRA FORCE ON FREEFORM: Because the family arrived without a clear stuck point, they are MORE likely to need help turning their situation into action -- not less. If you have identified a next step involving communication with anyone (SC, RC, FMS, provider), draft it. Do not close with advice only. A response that ends with "that sounds like a doable next step" without a draft is a failure on this path. The 30% draft rate on this path needs to be much higher.',
+  '',
+  'BUTTON OFFERING: After each question on the freeform path, offer 2-3 button options alongside the open text box. Do not leave the family with only a blank text field. Buttons help them and help DAN route faster. One user complaint on this path: "no button choices this time around just open ended answers."',
+  '',
+  '3-QUESTION DEADLINE: If after 3 questions no single clear issue has emerged, stop asking. Summarize what you have heard and draft a meeting request email to their SC that covers all the topics mentioned. A slightly broad draft after 3 questions is always better than a fourth question.',
+  '',
   '=== BUDGET REDUCTION WITH DEADLINE -- RECOGNIZE THIS IMMEDIATELY ===',
   'PATTERN RECOGNITION: When a family describes receiving a letter or notice that their budget is being cut AND their plan year ends within 3 months -- stop all diagnostic questioning immediately. This is a known high-urgency pattern with a specific response. Do not ask about employment status, documentation, or any other clarifying question. You have enough to act.',
   'IMMEDIATE RESPONSE -- THREE PARALLEL TRACKS: Name all three tracks, then draft the NOA email in that same response.',
@@ -2016,6 +2035,23 @@ const DAN_SYSTEM_PROMPT = [
   '',
   'WHEN TO SURFACE THE ESCALATION PATH: At any point in a conversation where DAN has reached the limit of what navigation guidance can accomplish -- fair hearing filed, supervisor escalated, ombudsperson CC\'d, and still no movement -- name the next level of support clearly: OCRA (1-800-390-7032) can review your case and reach out to the Regional Center directly on your behalf, and DRC -- Disability Rights California (1-800-776-5746) -- provides free legal advocacy when your rights are being violated. ALWAYS mention BOTH organizations together. That is the moment to stop asking families to send more emails and start connecting them to human advocates.',
   '',
+  '=== GRACEFUL EXIT -- WHEN DAN REACHES ITS LIMITS ===',
+  'When a family asks something DAN cannot answer accurately -- because it is outside DAN\'s knowledge, involves policy details DAN is not trained on (like age limits for specific services, rate schedules, or RC-specific local policies), or requires professional judgment DAN cannot provide -- do NOT guess. Do NOT give a partial answer that might be wrong. Families in the RC system are making real decisions based on what DAN tells them. Getting it wrong can cost them services, money, or months of progress.',
+  '',
+  'USE THIS PATTERN: (1) Name what the family is asking about honestly. (2) Say clearly that this specific question is beyond what DAN can help with and WHY -- be specific about the gap, not vague. (3) Point them to the right human or resource -- SC, OCRA, DRC, an IF, or whoever can actually answer it. (4) Offer to draft the question so they can get the answer from the right person. (5) Close with the feedback line.',
+  '',
+  'FEEDBACK CLOSE -- MANDATORY ON EVERY GRACEFUL EXIT: End with a version of this: "Questions like yours help us understand what families need -- and every conversation helps DAN get better for the next family." This is not filler. It is respect for the person\'s time, and it is true. Vary the wording naturally but always include the idea that their question helps DAN improve. Do not use corporate language. Keep it warm and specific to what they asked about.',
+  '',
+  'EXAMPLE -- POLICY DAN DOES NOT KNOW: "You are asking about age limits for tutoring services through RC -- that is a specific eligibility question that varies by Regional Center, and I do not have reliable enough information to answer it accurately. I do not want to point you in the wrong direction on this. Your service coordinator is the right person to confirm. Want me to draft a short email asking that exact question? And questions like yours help us understand what families need -- every conversation helps DAN get better for the next family."',
+  '',
+  'EXAMPLE -- OUT OF SCOPE: "That is really a school district question -- IEP goals and FAPE are outside what DAN covers. DAN focuses on Regional Center services under the Lanterman Act. For IEP support, a special education advocate would be your best resource. If there is anything on the RC side I can help with, I am here. And your feedback helps us learn where families need support -- if school-to-RC transitions are a gap, we want to know."',
+  '',
+  'EXAMPLE -- UNCERTAIN: "I want to be straight with you -- I am not confident enough in the answer here to give you guidance I would stand behind. This is the kind of question where getting it wrong could cause real problems. Your best next step is {specific resource}. What I CAN do is help you put your question in writing so you get a clear answer from them. Questions like this help us understand where DAN needs to grow -- and we take that seriously."',
+  '',
+  'NARROW SCOPE: This exit is for genuine knowledge gaps and out-of-scope topics -- not for difficulty. If the question is within DAN\'s domain (RC services, Lanterman Act rights, escalation process, email drafting, SDP navigation), answer it. Do not use the graceful exit as an escape hatch for hard questions DAN is equipped to handle.',
+  '',
+  'NEVER GUESS: A graceful exit with a redirect to the right human is ALWAYS better than a confident-sounding answer that might be wrong.',
+  '',
   'OCRA PHONE: 1-800-390-7032',
   'DVU (Disability Voices United): dvunited.org -- peer support and SDP expertise',
   'DRC (Disability Rights California): 1-800-776-5746 -- legal advocacy for rights violations',
@@ -2079,7 +2115,7 @@ const STUCK_WELCOMES = {
 
   sdp: `Planning ahead or in the middle of it -- either way, let's figure out where you are so I can point you in the right direction.\n\nWhat's your situation?\n\n[I want to plan ahead -- my renewal is several months away] [Something isn't moving and my year end is coming] [It already ended or I'm past my year end] [I'm not sure when my year ends]`,
 
-  unsure: `No problem -- let's figure it out together.\n\nTell me what's been happening with your Regional Center, and I'll help you identify what you're dealing with and what your options are.`,
+  unsure: `No problem -- let's figure it out together.\n\nTo point you in the right direction, it helps to know what's going on. Pick whichever fits, or just tell me in your own words:\n\n[I've been waiting and not hearing back] [Something was denied or cut] [I need help asking for something new] [I got a letter I don't understand] [It's complicated -- I'll just tell you]`,
 
   proactive: `Great -- it's always easier to navigate the system when you start before things get stuck.\n\nWhat brings you here today?\n\n[I want to request a new service from RC] [I want to understand what services are available] [I'm preparing for an IPP meeting] [Something else]`
 };
@@ -2097,7 +2133,7 @@ const STUCK_WELCOMES_ES = {
 
   sdp: `Planificando con anticipación o en medio del proceso -- de cualquier manera, averigüemos dónde está para poder orientarle mejor.\n\n¿Cuál es su situación?\n\n[Quiero planificar con anticipación -- mi renovación es en varios meses] [Algo no avanza y mi año de SDP está por terminar] [Ya terminó o ya pasé mi fecha de vencimiento] [No estoy seguro/a de cuándo vence mi año]`,
 
-  unsure: `No hay problema -- vamos a resolverlo juntos.\n\nCuénteme qué ha pasado con su Regional Center, y le ayudaré a identificar qué está enfrentando y cuáles son sus opciones.`,
+  unsure: `No hay problema -- vamos a resolverlo juntos.\n\nPara orientarle mejor, me ayuda saber qué está pasando. Escoja lo que mejor describa su situación, o cuéntemelo con sus propias palabras:\n\n[Estoy esperando y no recibo respuesta] [Me negaron o cortaron algo] [Necesito ayuda para solicitar algo nuevo] [Recibí una carta que no entiendo] [Es complicado -- se lo cuento yo]`,
 
   proactive: `Excelente -- siempre es más fácil navegar el sistema cuando empieza antes de que las cosas se compliquen.\n\n¿Qué le trae aquí hoy?\n\n[Quiero solicitar un nuevo servicio al RC] [Quiero entender qué servicios están disponibles] [Me estoy preparando para una reunión de IPP] [Otra cosa]`
 };
@@ -2354,6 +2390,105 @@ document.addEventListener('click', function(e) {
   if (!label) return;
 
   var labelLower = label.toLowerCase();
+
+  // ── UNSURE PATH soft-touch buttons — route to structured arcs ──
+
+  // "I've been waiting and not hearing back" / "Estoy esperando y no recibo respuesta"
+  if (labelLower.indexOf("i've been waiting") === 0 || labelLower.indexOf('estoy esperando') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    sessionTopic = 'delay';
+    var msg = currentLang === 'es'
+      ? 'Entendido -- esperar sin respuesta es muy frustrante. Déjeme hacerle una pregunta para orientarle mejor.\n\n¿Cuánto tiempo lleva esperando?\n\n[Menos de una semana] [Una o dos semanas] [Más de un mes] [Varios meses]'
+      : 'Got it -- waiting without hearing back is really frustrating. Let me ask one thing so I can point you in the right direction.\n\nHow long have you been waiting?\n\n[Less than a week] [A week or two] [More than a month] [Several months]';
+    messages.push({ role: 'assistant', content: msg });
+    appendDanMessage(msg, true);
+    return;
+  }
+
+  // "Something was denied or cut" / "Me negaron o cortaron algo"
+  if (labelLower.indexOf('something was denied') === 0 || labelLower.indexOf('me negaron') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    var msg = currentLang === 'es'
+      ? 'Entendido -- eso es frustrante. Déjeme entender qué pasó.\n\n¿Qué le dijeron exactamente?\n\n[Me dijeron que no es una necesidad, sino una preferencia] [Dijeron que la meta no está en el IPP] [Me redujeron o cortaron el presupuesto] [Dijeron que hay un recurso comunitario para eso] [No estoy seguro/a -- se lo explico]'
+      : 'Got it -- that is frustrating. Let me understand what happened.\n\nWhat exactly did they tell you?\n\n[They said it\'s a preference, not a need] [They said the goal isn\'t in the IPP] [My budget was reduced or cut] [They said there\'s a community resource for that] [I\'m not sure -- I\'ll explain]';
+    messages.push({ role: 'assistant', content: msg });
+    appendDanMessage(msg, true);
+    return;
+  }
+
+  // "I need help asking for something new" / "Necesito ayuda para solicitar algo nuevo"
+  if (labelLower.indexOf('i need help asking') === 0 || labelLower.indexOf('necesito ayuda para solicitar') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    sessionTopic = 'proactive';
+    var msg = currentLang === 'es'
+      ? 'Excelente -- siempre es más fácil cuando empieza antes de que las cosas se compliquen.\n\n¿Qué le trae aquí hoy?\n\n[Quiero solicitar un nuevo servicio al RC] [Quiero entender qué servicios están disponibles] [Me estoy preparando para una reunión de IPP] [Otra cosa]'
+      : 'Great -- it\'s always easier to get ahead of things before they get stuck.\n\nWhat are you looking to do?\n\n[I want to request a new service from RC] [I want to understand what services are available] [I\'m preparing for an IPP meeting] [Something else]';
+    messages.push({ role: 'assistant', content: msg });
+    appendDanMessage(msg, true);
+    return;
+  }
+
+  // "I got a letter I don't understand" / "Recibí una carta que no entiendo"
+  if (labelLower.indexOf('i got a letter') === 0 || labelLower.indexOf('recibí una carta') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    var msg = currentLang === 'es'
+      ? 'Entendido -- las cartas del RC pueden ser confusas. Déjeme ayudarle a entenderla.\n\n¿Sabe qué tipo de carta es?\n\n[Dice algo sobre un cambio en mi presupuesto] [Dice que algo fue denegado] [Es sobre mi reunión de IPP] [No estoy seguro/a qué dice]'
+      : 'Got it -- letters from RC can be confusing. Let me help you figure out what it means.\n\nDo you know what the letter is about?\n\n[It says something about a change to my budget] [It says something was denied] [It\'s about my IPP meeting] [I\'m not sure what it says]';
+    messages.push({ role: 'assistant', content: msg });
+    appendDanMessage(msg, true);
+    return;
+  }
+
+  // "It's complicated -- I'll just tell you" / "Es complicado -- se lo cuento yo"
+  // This one just opens the text box (same as "Tell me more" behavior)
+  if (labelLower.indexOf("it's complicated") === 0 || labelLower.indexOf('es complicado') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    var msg = currentLang === 'es'
+      ? 'No hay problema -- cuénteme qué está pasando con sus propias palabras y lo resolveremos juntos.'
+      : 'No problem -- tell me what\'s going on in your own words and we\'ll figure it out together.';
+    messages.push({ role: 'assistant', content: msg });
+    appendDanMessage(msg, false);
+    document.getElementById('input-row-wrap').style.display = 'flex';
+    document.getElementById('user-input').focus();
+    return;
+  }
+
+  // ── END unsure path routing ──
 
   // Delay sub-choice: "A general response from RC"
   // Route directly with time-elapsed buttons rather than cold API call
