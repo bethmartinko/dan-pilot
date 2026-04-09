@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAN Pilot — Stats Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --navy: #162B4B;
+    --teal: #1D9E75;
+    --teal-light: #e8f7f2;
+    --blue: #2B5EA7;
+    --blue-light: #f0f4f8;
+    --gray: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f9fafb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: #111; }
+
+  /* ── GATE ── */
+  #gate {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: var(--navy);
+  }
+  .gate-box {
+    background: white; border-radius: 12px; padding: 40px 48px; max-width: 400px; width: 90%;
+    text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .gate-box h1 { color: var(--navy); font-size: 22px; margin-bottom: 6px; }
+  .gate-box p { color: var(--gray); font-size: 14px; margin-bottom: 28px; }
+  .gate-box input {
+    width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 8px;
+    font-size: 16px; margin-bottom: 12px; outline: none; transition: border-color .2s;
+  }
+  .gate-box input:focus { border-color: var(--teal); }
+  .gate-box button {
+    width: 100%; padding: 12px; background: var(--teal); color: white; border: none;
+    border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity .2s;
+  }
+  .gate-box button:hover { opacity: .88; }
+  .gate-error { color: #dc2626; font-size: 13px; margin-top: 8px; min-height: 18px; }
+
+  /* ── DASHBOARD ── */
+  #dashboard { display: none; }
+  .topbar {
+    background: var(--navy); color: white; padding: 16px 32px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .topbar-logo span { color: var(--teal); }
+  .topbar-sub { font-size: 13px; opacity: .7; }
+  .topbar-date { font-size: 13px; opacity: .6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  /* ── STAT BOXES ── */
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 680px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+  .stat-box {
+    background: white; border-radius: 10px; padding: 20px 16px; text-align: center;
+    border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  }
+  .stat-n { font-size: 36px; font-weight: 800; color: var(--navy); line-height: 1; }
+  .stat-n.teal { color: var(--teal); }
+  .stat-label { font-size: 12px; color: var(--gray); margin-top: 5px; font-weight: 500; text-transform: uppercase; letter-spacing: .4px; }
+  .stat-sub { font-size: 11px; color: var(--gray); margin-top: 3px; }
+
+  /* ── SECTIONS ── */
+  .section { background: white; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; }
+  .section-header { background: var(--blue-light); padding: 12px 20px; border-bottom: 1px solid var(--border); }
+  .section-header h2 { font-size: 12px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: .6px; }
+  .section-header p { font-size: 12px; color: var(--gray); margin-top: 2px; }
+  .section-body { padding: 16px 20px; }
+
+  /* ── TWO-COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── BAR ROWS ── */
+  .bar-row { margin-bottom: 10px; }
+  .bar-label { font-size: 12px; color: #333; margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .bar-label span { color: var(--gray); }
+  .bar-track { background: var(--border); border-radius: 4px; height: 10px; overflow: hidden; }
+  .bar-fill { background: var(--teal); border-radius: 4px; height: 100%; transition: width .6s ease; }
+  .bar-fill.navy { background: var(--navy); }
+  .bar-fill.blue { background: var(--blue); }
+
+  /* ── ACCOUNTABILITY ── */
+  .acct-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
+  @media (max-width: 560px) { .acct-row { grid-template-columns: repeat(2, 1fr); } }
+  .acct-box { text-align: center; padding: 14px 8px; border-radius: 8px; background: var(--blue-light); border: 1px solid var(--border); }
+  .acct-n { font-size: 28px; font-weight: 800; color: var(--navy); }
+  .acct-n.teal { color: var(--teal); }
+  .acct-label { font-size: 11px; color: var(--gray); margin-top: 4px; }
+  .acct-note { font-size: 12px; color: var(--navy); font-style: italic; line-height: 1.5; background: var(--teal-light); border-left: 3px solid var(--teal); padding: 10px 14px; border-radius: 0 6px 6px 0; margin-top: 12px; }
+
+  /* ── ISSUE LOG ── */
+  .issue-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .issue-table th { background: var(--blue-light); padding: 8px 10px; text-align: left; font-size: 11px; color: var(--navy); font-weight: 700; text-transform: uppercase; letter-spacing: .4px; border-bottom: 2px solid var(--border); }
+  .issue-table td { padding: 8px 10px; vertical-align: top; border-bottom: 1px solid var(--border); }
+  .issue-table tr:last-child td { border-bottom: none; }
+  .badge-fixed { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+  .badge-open { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+
+  /* ── DRAFT RATE TABLE ── */
+  .rate-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .rate-table th { background: var(--blue-light); padding: 8px 10px; text-align: left; font-size: 11px; color: var(--navy); font-weight: 700; border-bottom: 2px solid var(--border); }
+  .rate-table th:not(:first-child) { text-align: center; }
+  .rate-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  .rate-table td:not(:first-child) { text-align: center; }
+  .rate-table tr:last-child td { border-bottom: none; }
+  .rate-high { color: var(--teal); font-weight: 700; }
+  .rate-zero { color: #9ca3af; }
+
+  /* ── QUOTES ── */
+  .quote { border-left: 3px solid var(--teal); padding: 8px 14px; margin-bottom: 10px; font-size: 13px; font-style: italic; color: #374151; }
+  .quote cite { display: block; font-size: 11px; color: var(--gray); font-style: normal; margin-top: 4px; }
+
+  /* ── RC LIST ── */
+  .rc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  @media (max-width: 500px) { .rc-grid { grid-template-columns: repeat(2, 1fr); } }
+  .rc-item { font-size: 12px; display: flex; justify-content: space-between; padding: 5px 8px; border-radius: 6px; background: var(--blue-light); }
+  .rc-item strong { color: var(--navy); }
+
+  /* ── CHART ── */
+  .chart-wrap { position: relative; height: 220px; }
+
+  /* ── INSIDER ── */
+  .insider-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 500px) { .insider-row { grid-template-columns: 1fr; } }
+  .insider-box { text-align: center; padding: 14px; border-radius: 8px; border: 1px solid var(--border); }
+  .insider-n { font-size: 26px; font-weight: 800; color: var(--teal); }
+  .insider-pct { font-size: 13px; color: var(--navy); font-weight: 600; }
+  .insider-label { font-size: 11px; color: var(--gray); margin-top: 3px; }
+
+  /* ── NOTE ── */
+  .note { font-size: 12px; color: var(--gray); font-style: italic; margin-top: 8px; }
+  .footnote { font-size: 11px; color: var(--gray); border-top: 1px solid var(--border); padding-top: 10px; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ── PASSWORD GATE ── -->
+<div id="gate">
+  <div class="gate-box">
+    <h1>DAN Pilot Stats</h1>
+    <p>Disability Access Network · Internal dashboard</p>
+    <input type="password" id="pwd" placeholder="Password" autocomplete="current-password">
+    <button onclick="checkPwd()">View Dashboard</button>
+    <div class="gate-error" id="gate-err"></div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo"><span>DAN</span> Pilot Stats</div>
+      <div class="topbar-sub">Disability Access Network · Internal</div>
+    </div>
+    <div class="topbar-date" id="hdr-date"></div>
+  </div>
+
+  <div class="container">
+
+    <!-- TOP STATS -->
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-n" id="s-signups"></div>
+        <div class="stat-label">unique signups</div>
+        <div class="stat-sub" id="s-days"></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n teal" id="s-sessions"></div>
+        <div class="stat-label">total sessions</div>
+        <div class="stat-sub" id="s-ratio"></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n" id="s-drafts"></div>
+        <div class="stat-label">letters drafted</div>
+        <div class="stat-sub" id="s-drafts-rcs"></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n teal" id="s-helpful"></div>
+        <div class="stat-label">helpful rating</div>
+        <div class="stat-sub" id="s-helpful-frac"></div>
+      </div>
+    </div>
+
+    <!-- ACCOUNTABILITY -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Feedback Accountability</h2>
+        <p>Every Not Helpful rating is reviewed and acted on</p>
+      </div>
+      <div class="section-body">
+        <div class="acct-row">
+          <div class="acct-box">
+            <div class="acct-n" id="a-total"></div>
+            <div class="acct-label">Not Helpful ratings<br>since Mar 13</div>
+          </div>
+          <div class="acct-box">
+            <div class="acct-n teal" id="a-fixed"></div>
+            <div class="acct-label">addressed with<br>fixes deployed</div>
+          </div>
+          <div class="acct-box">
+            <div class="acct-n" id="a-open"></div>
+            <div class="acct-label">in review<br>&nbsp;</div>
+          </div>
+          <div class="acct-box">
+            <div class="acct-n" id="a-rated"></div>
+            <div class="acct-label">messages<br>rated total</div>
+          </div>
+        </div>
+        <div class="acct-note" id="acct-note"></div>
+      </div>
+    </div>
+
+    <!-- GROWTH CHART -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Signups &amp; Sessions Over Time</h2>
+      </div>
+      <div class="section-body">
+        <div class="chart-wrap"><canvas id="growth-chart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- WHO + HOW -->
+    <div class="two-col">
+
+      <!-- WHO -->
+      <div class="section">
+        <div class="section-header"><h2>Who Is Using DAN</h2></div>
+        <div class="section-body">
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Role</div>
+            <div id="who-bars"></div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Ethnicity</div>
+            <div id="eth-bars"></div>
+            <div class="note" id="hispanic-note"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOW -->
+      <div class="section">
+        <div class="section-header"><h2>How They Found DAN</h2></div>
+        <div class="section-body">
+          <div id="src-bars"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- WHY PEOPLE CAME -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Why People Came to DAN</h2>
+        <p id="entry-sub"></p>
+      </div>
+      <div class="section-body">
+        <div class="two-col">
+          <div id="entry-bars"></div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px">Draft Delivery Rate by Entry Path</div>
+            <table class="rate-table">
+              <thead><tr><th>Entry path</th><th>Sessions</th><th>Drafts</th><th>Rate</th></tr></thead>
+              <tbody id="rate-tbody"></tbody>
+            </table>
+            <div class="note" style="margin-top:10px">Proactive = IF-led outreach sessions. "Not sure" sessions at 26% — DAN helps families identify and act on issues they couldn't name themselves.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ISSUE LOG -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Issue &amp; Improvement Log</h2>
+        <p id="issues-sub"></p>
+      </div>
+      <div class="section-body" style="padding:0">
+        <table class="issue-table">
+          <thead><tr><th style="width:70px">Date</th><th>What happened</th><th style="width:90px">Status</th></tr></thead>
+          <tbody id="issue-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RC COVERAGE -->
+    <div class="section">
+      <div class="section-header"><h2>Regional Center Coverage</h2></div>
+      <div class="section-body">
+        <div class="rc-grid" id="rc-grid"></div>
+        <div class="note" id="rc-note"></div>
+      </div>
+    </div>
+
+    <!-- INSIDER -->
+    <div class="section">
+      <div class="section-header">
+        <h2>DAN Insiders Program</h2>
+        <p>Pilot participants who opted in to deeper engagement</p>
+      </div>
+      <div class="section-body">
+        <div class="insider-row" id="insider-row"></div>
+      </div>
+    </div>
+
+    <!-- QUOTES -->
+    <div class="section">
+      <div class="section-header">
+        <h2>What Users Are Saying</h2>
+        <p id="quotes-sub"></p>
+      </div>
+      <div class="section-body" id="quotes-body"></div>
+    </div>
+
+    <div style="text-align:center;font-size:11px;color:var(--gray);margin-top:32px">
+      DAN Pilot Stats · Disability Access Network · Confidential — do not distribute
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /dashboard -->
+
+<script>
+// ── PASSWORD ──────────────────────────────────────────────────────────────────
+// To change password: open browser console, run:
+//   hashPassword('yournewpassword').then(h => console.log(h))
+// Then replace PASSWORD_HASH below with the result.
+const PASSWORD_HASH = 'd3dd244918fcfd8f2ca40c47586c28368df058800e23d3b09c944cb1d0bdd003';
+
+async function hashPassword(pwd) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkPwd() {
+  const pwd = document.getElementById('pwd').value;
+  const hash = await hashPassword(pwd);
+  if (hash === PASSWORD_HASH) {
+    sessionStorage.setItem('dan_stats_auth', '1');
+    showDashboard();
+  } else {
+    document.getElementById('gate-err').textContent = 'Incorrect password. Try again.';
+    document.getElementById('pwd').value = '';
+    document.getElementById('pwd').focus();
+  }
+}
+document.getElementById('pwd').addEventListener('keydown', e => { if (e.key === 'Enter') checkPwd(); });
+
+function showDashboard() {
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  loadDashboard();
+}
+
+if (sessionStorage.getItem('dan_stats_auth') === '1') showDashboard();
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+// Injected by build_stats_html() — do not edit this block manually
+var D = {"day_of_week": "Thursday", "date_str": "April 9, 2026", "day_num": 9, "feedback_end": "Apr 9", "signups": 225, "days_running": 40, "helpful_pct": "81%", "helpful_fraction": "30/37", "sessions": 409, "avg_sessions": 1.8, "ratio": "1.82x", "drafts_delivered": 46, "drafts_rcs": 11, "insiders_n": 19, "insiders_enrolled_pct": "53%", "insiders_wants_info_pct": "21%", "insiders_prefer_not_pct": "11%", "who_data": [["Family / Circle of Support", 172, 76], ["Independent Facilitator", 59, 26], ["Self Advocate", 27, 12], ["Service Provider", 16, 7], ["LVAC Member", 9, 4]], "eth_data": [["Not Hispanic or Latino", 120, 53], ["Hispanic or Latino", 67, 30], ["Prefer not to answer", 31, 14]], "hispanic_pct": 36, "src_data": [["SDP Connect + DVU community", 107, 48], ["Facebook / Instagram", 67, 30], ["Word of mouth / peer referral", 18, 8], ["Direct outreach (email / IF / Beth)", 17, 8], ["Unknown / not specified", 6, 3], ["LVAC / RC meeting / other", 4, 2], ["FMS / vendor referral", 3, 1], ["Abilities Expo", 2, 1], ["LinkedIn", 1, 0]], "issue_rows": [["Mar 12", "Routing bug on ‘specific service not being approved’ path — users hit error.", "FIXED\nMar 13", false], ["Mar 17", "User wanted more actionable SDP renewal guidance. Renewal navigation flow built and deployed.", "FIXED\nMar 18", false], ["Mar 20", "Long session save prompt firing too early — interrupted session before completion. Token threshold expanded from 75k to 90k. Monitoring.", "FIXED\nMar 22\nMonitoring", false], ["Mar 27", "San Diego RC — session family-1774640079335-n1cro. Not Helpful rating, no written comment. Root cause: proxy HTTP timeout (25s) caused long responses to drop mid-session before draft delivered.", "FIXED\nApr 1", false], ["Apr 1", "Proxy timeout: Netlify function (26s) and proxy HTTP (25s) timeouts too short for long conversations. Users lost connection before receiving drafts. Proxy raised to 55s, Netlify to 60s.", "FIXED\nApr 1", false], ["Apr 6", "User wanted a safety training resource (RCOC, proactive card). Session observed live with an Independent Facilitator — identified gap in safety training knowledge. New safety training content added to DAN.", "FIXED\nApr 7", false], ["Apr 9", "Two Not Helpful ratings from RCOC proactive session (family-1775702666471-kgynf). Comments: ‘Tutoring is only available for 17 and under’ + ‘Way too many words to read.’ Tutoring age limit corrected; verbosity addressed in prompt.", "FIXED\nApr 9", false]], "issues_summary": "7 Not Helpful ratings since Mar 13. All 7 addressed with fixes deployed.", "chart_anchors": [["2026-03-11", 82, 62], ["2026-03-12", 92, 80], ["2026-03-13", 102, 112], ["2026-03-14", 114, 138], ["2026-03-15", 124, 163], ["2026-03-16", 134, 188], ["2026-03-17", 143, 213], ["2026-03-18", 153, 236], ["2026-03-19", 161, 256], ["2026-03-20", 169, 273], ["2026-03-21", 176, 288], ["2026-03-22", 183, 299], ["2026-03-23", 189, 306], ["2026-03-24", 195, 310], ["2026-03-25", 199, 313], ["2026-03-26", 202, 315], ["2026-03-27", 203, 323], ["2026-03-28", 205, 328], ["2026-03-29", 206, 332], ["2026-03-30", 208, 338], ["2026-03-31", 210, 350], ["2026-04-01", 210, 353], ["2026-04-02", 211, 367], ["2026-04-03", 213, 374], ["2026-04-04", 216, 377], ["2026-04-05", 216, 379], ["2026-04-06", 217, 388], ["2026-04-07", 221, 400], ["2026-04-08", 223, 405], ["2026-04-09", 225, 409]], "not_helpful_total": 7, "not_helpful_addressed": 7, "not_helpful_open": 0, "insiders_enrolled_n": 10, "insiders_wants_info_n": 4, "insiders_prefer_not_n": 2, "time_data": [["Weekday business hours (9am–5pm)", "152", "37%"], ["Weekday evenings & overnight", "173", "42%"], ["Weekend — any time", "84", "21%"]], "time_outside_n": "257", "time_outside_pct": "63%", "rc_data": [["Inland", 30], ["RC of Orange County", 24], ["Frank D. Lanterman", 16], ["San Diego", 16], ["Golden Gate", 15], ["North LA County", 13], ["RC of the East Bay", 14], ["San Andreas", 13], ["Alta California", 13], ["Westside", 11], ["Central Valley", 10], ["San Gabriel/Pomona", 10], ["Harbor", 9], ["Eastern LA", 8], ["Valley Mountain", 5], ["Tri-Counties", 5], ["SCLARC", 3], ["Far Northern", 3], ["Kern", 3], ["Redwood Coast", 3], ["North Bay", 1]], "return_user_email_tracked": 24, "return_user_multi_n": 4, "return_user_power_n": 2, "entry_card_total": 196, "entry_card_no_card_n": 213, "entry_card_data": [["Not sure / help me figure it out", 99, 51, 26, 26], ["RC delay / service denial", 35, 18, 3, 9], ["Spending Plan problems", 25, 13, 8, 32], ["Other / general question", 13, 7, 2, 15], ["Service type or provider preference", 9, 5, 1, 11], ["SDP questions", 5, 3, 1, 20], ["Goal not in IPP / IPP planning", 5, 3, 0, 0], ["Proactive outreach (IF-led)", 5, 3, 5, 100]]};
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function loadDashboard() {
+
+  // Header
+  document.getElementById('hdr-date').textContent = D.day_of_week + ', ' + D.date_str;
+
+  // Top stats
+  document.getElementById('s-signups').textContent = D.signups;
+  document.getElementById('s-days').textContent = D.days_running + ' days running';
+  document.getElementById('s-sessions').textContent = D.sessions;
+  document.getElementById('s-ratio').textContent = D.ratio + ' sessions per signup';
+  document.getElementById('s-drafts').textContent = D.drafts_delivered;
+  document.getElementById('s-drafts-rcs').textContent = 'across ' + D.drafts_rcs + ' regional centers';
+  document.getElementById('s-helpful').textContent = D.helpful_pct;
+  document.getElementById('s-helpful-frac').textContent = D.helpful_fraction + ' rated sessions';
+
+  // Accountability
+  document.getElementById('a-total').textContent = D.not_helpful_total;
+  document.getElementById('a-fixed').textContent = D.not_helpful_addressed;
+  document.getElementById('a-open').textContent = D.not_helpful_open;
+  const ratedN = parseInt(D.helpful_fraction.split('/')[1]) || 0;
+  document.getElementById('a-rated').textContent = ratedN;
+  const nhRate = D.not_helpful_total + '/' + ratedN;
+  document.getElementById('acct-note').innerHTML =
+    'DAN learns from every session. Every Not Helpful rating is thoroughly reviewed and acted on. ' +
+    'With ' + D.sessions + ' sessions logged and only ' + D.not_helpful_total + ' Not Helpful ratings since Mar 13, ' +
+    'the signal is clear: families are finding real value — and when something falls short, we fix it.';
+
+  // Growth chart
+  const labels = D.chart_anchors.map(r => r[0].slice(5).replace('-', '/'));
+  const signupData = D.chart_anchors.map(r => r[1]);
+  const sessionData = D.chart_anchors.map(r => r[2]);
+  new Chart(document.getElementById('growth-chart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Sessions', data: sessionData, borderColor: '#1D9E75', backgroundColor: 'rgba(29,158,117,.1)', tension: .3, pointRadius: 2, fill: true },
+        { label: 'Signups', data: signupData, borderColor: '#162B4B', backgroundColor: 'rgba(22,43,75,.07)', tension: .3, pointRadius: 2, fill: true },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, usePointStyle: true } } },
+      scales: {
+        x: { ticks: { font: { size: 10 }, maxTicksLimit: 10 } },
+        y: { ticks: { font: { size: 10 } }, beginAtZero: true }
+      }
+    }
+  });
+
+  // Who
+  const whoEl = document.getElementById('who-bars');
+  const whoMax = D.who_data[0][2];
+  D.who_data.forEach(([label, n, pct]) => {
+    whoEl.innerHTML += barRow(label, pct, whoMax, n + ' signups (' + pct + '%)');
+  });
+
+  // Ethnicity
+  const ethEl = document.getElementById('eth-bars');
+  D.eth_data.forEach(([label, n, pct]) => {
+    ethEl.innerHTML += barRow(label, pct, 100, n + ' (' + pct + '%)');
+  });
+  document.getElementById('hispanic-note').textContent =
+    D.hispanic_pct + '% Hispanic/Latino (of those who answered)';
+
+  // Source
+  const srcEl = document.getElementById('src-bars');
+  D.src_data.forEach(([label, n, pct]) => {
+    srcEl.innerHTML += barRow(label, pct, 100, n + ' (' + pct + '%)', label === 'SDP Connect + DVU community');
+  });
+
+  // Entry cards
+  const entryEl = document.getElementById('entry-bars');
+  document.getElementById('entry-sub').textContent =
+    (D.entry_card_total || 0) + ' sessions with entry card recorded · ' +
+    (D.entry_card_no_card_n || 0) + ' earlier sessions predate this tracking field';
+  const entryData = D.entry_card_data || [];
+  const entryMax = entryData.length > 0 ? entryData[0][2] : 100;
+  entryData.forEach(([label, n, pct]) => {
+    entryEl.innerHTML += barRow(label, pct, entryMax, n + ' (' + pct + '%)', label === 'Not sure / help me figure it out', 'blue');
+  });
+
+  // Draft rate table
+  const rateBody = document.getElementById('rate-tbody');
+  const sorted = [...(D.entry_card_data || [])].sort((a,b) => b[4] - a[4]);
+  sorted.forEach(([label, n, pct, drafts, rate]) => {
+    const cls = rate >= 20 ? 'rate-high' : rate === 0 ? 'rate-zero' : '';
+    rateBody.innerHTML += `<tr><td>${label}</td><td>${n}</td><td>${drafts}</td><td class="${cls}">${rate}%</td></tr>`;
+  });
+
+  // Issue log
+  const issueBody = document.getElementById('issue-tbody');
+  document.getElementById('issues-sub').textContent = D.issues_summary;
+  D.issue_rows.forEach(([date, desc, status, isOpen]) => {
+    const badge = isOpen
+      ? '<span class="badge-open">OPEN</span>'
+      : '<span class="badge-fixed">FIXED</span>';
+    issueBody.innerHTML += `<tr><td style="white-space:nowrap;color:var(--gray)">${date}</td><td>${desc}</td><td>${badge}</td></tr>`;
+  });
+
+  // RC coverage
+  const rcGrid = document.getElementById('rc-grid');
+  D.rc_data.forEach(([name, n]) => {
+    rcGrid.innerHTML += `<div class="rc-item"><span>${name}</span><strong>${n}</strong></div>`;
+  });
+  document.getElementById('rc-note').textContent =
+    D.rc_data.length + ' of 21 California Regional Centers represented in ' + D.days_running + ' days';
+
+  // Insider
+  const insiderRow = document.getElementById('insider-row');
+  insiderRow.innerHTML = `
+    <div class="insider-box">
+      <div class="insider-n">${D.insiders_n}</div>
+      <div class="insider-label">DAN Insiders enrolled</div>
+    </div>
+    <div class="insider-box">
+      <div class="insider-n">${D.insiders_enrolled_n}</div>
+      <div class="insider-pct">${D.insiders_enrolled_pct}</div>
+      <div class="insider-label">enrolled in SDP</div>
+    </div>
+    <div class="insider-box">
+      <div class="insider-n">${D.insiders_wants_info_n}</div>
+      <div class="insider-pct">${D.insiders_wants_info_pct}</div>
+      <div class="insider-label">want more SDP info</div>
+    </div>`;
+
+  // Quotes
+  document.getElementById('quotes-sub').textContent =
+    'From rated sessions and pilot participants, Mar 13–' + D.feedback_end + '. Role-only attribution.';
+  const quotes = [
+    ['"This is an amazing product and I am beyond impressed. I\'ll be sure to spread the word."', '— Former DDS Ombudsperson / IF leader'],
+    ['"This has been VERY helpful."', '— Family member, RCOC'],
+    ['"I get the support I needed! Very knowledgeable. Thanks"', '— Family member, East Bay'],
+    ['"Excelente"', '— Spanish-speaking family member'],
+    ['"This seems like a really helpful tool. The point about IPP goals being too general is exactly right — that\'s our issue."', '— Family member, Lanterman'],
+  ];
+  const qBody = document.getElementById('quotes-body');
+  quotes.forEach(([q, attr]) => {
+    qBody.innerHTML += `<div class="quote">${q}<cite>${attr}</cite></div>`;
+  });
+}
+
+// ── HELPER ────────────────────────────────────────────────────────────────────
+function barRow(label, pct, max, suffix, highlight=false, color='') {
+  const fillClass = color === 'blue' ? 'bar-fill blue' : highlight ? 'bar-fill navy' : 'bar-fill';
+  const width = Math.round((pct / max) * 100);
+  return `<div class="bar-row">
+    <div class="bar-label">${label} <span>${suffix}</span></div>
+    <div class="bar-track"><div class="${fillClass}" style="width:${width}%"></div></div>
+  </div>`;
+}
+</script>
+</body>
+</html>
