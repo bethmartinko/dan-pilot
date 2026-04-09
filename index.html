@@ -2280,6 +2280,7 @@ async function writeSessionRecord(cardType) {
     if (demoData.fms)  fields['FMS Provider']      = demoData.fms;
     if (demoData.age)  fields['Age Range']          = demoData.age;
     if (demoData.race) fields['Race / Ethnicity']   = demoData.race;
+    fields['Language'] = currentLang;  // 'en' or 'es' — equity tracking
     const res = await fetch('/.netlify/functions/proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-target': 'airtable-post' },
@@ -2334,7 +2335,7 @@ async function patchSessionDraftDelivered() {
       headers: { 'Content-Type': 'application/json', 'x-target': 'airtable-patch' },
       body: JSON.stringify({
         url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}/${sessionAirtableId}`,
-        fields: { 'Draft Delivered': true },
+        fields: { 'Draft Delivered': true, 'Draft Turn': userRoundCount },
       }),
     });
   } catch (e) {
