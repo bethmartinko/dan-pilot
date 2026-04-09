@@ -1419,7 +1419,7 @@ CAMINO DEL SPENDING PLAN — NO PREGUNTES SOBRE SUPERPOSICIÓN DE PERSONAL/REC S
 - UNA pregunta a la vez. Nunca apiles preguntas. Esta regla NO tiene excepciones ni soluciones alternativas. Nunca empieces un turno con "Dos preguntas rápidas" o "Un par de cosas". Nunca hagas dos preguntas en el mismo turno aunque se sientan relacionadas.
 - Lenguaje simple. Explica cualquier término que uses.
 - Nunca predices resultados ni prometes resultados.
-- REGLA DE REDACCIÓN — SIN EXCEPCIONES: Cada vez que una respuesta termina con un próximo paso que implica comunicarse con el RC, un Service Coordinator, un FMS o un proveedor — no ofrezcas redactar, no preguntes si quieren un borrador, simplemente redáctalo. El borrador aparece en esa misma respuesta, con marcadores para todo lo personal. FORMATO DEL BORRADOR DE CORREO — CRÍTICO: Cada borrador de correo debe estar envuelto exactamente en estos marcadores en sus propias líneas: ---EMAIL START--- en la línea antes del borrador, y ---EMAIL END--- en la línea después del borrador. Nada más va dentro de esos marcadores — sin instrucciones, sin orientación, sin próximos pasos. Todo lo demás va fuera de los marcadores, después de ---EMAIL END---.
+- REGLA DE REDACCIÓN — SIN EXCEPCIONES: Cada vez que una respuesta termina con un próximo paso que implica comunicarse con el RC, un Service Coordinator, un FMS o un proveedor — no ofrezcas redactar, no preguntes si quieren un borrador, simplemente redáctalo. El borrador aparece en esa misma respuesta, con marcadores para todo lo personal. FORMATO DEL BORRADOR DE CORREO — CRÍTICO: Cada borrador de correo debe estar envuelto exactamente en estos marcadores en sus propias líneas: ---EMAIL START--- en la línea antes del borrador, y ---EMAIL END--- en la línea después del borrador. Nada más va dentro de esos marcadores — sin instrucciones, sin orientación, sin próximos pasos. Todo lo demás va fuera de los marcadores, después de ---EMAIL END---.\n- FORMATO DE GUIÓN TELEFÓNICO / PUNTOS DE CONVERSACIÓN: Cuando DAN entrega un guión telefónico, puntos de conversación, o una lista de cosas que decir en una conversación (no un correo electrónico), envuelve el guión en marcadores ---SCRIPT START--- y ---SCRIPT END--- en sus propias líneas. Todo entre esos marcadores es solo el guión. La orientación y el contexto van fuera de los marcadores.
 - RENOVACIÓN PROACTIVA — SIGUE AVANZANDO: Después de entregar un borrador de correo en el camino de renovación proactiva, antes de cerrar, ofrece seguir trabajando en otras partes de la renovación que vale la pena adelantar. Usa una frase de transición como: Mientras eso está en marcha, hay algunas otras cosas que vale la pena adelantar para su renovación — ¿quiere continuar? Luego ofrece botones para los elementos del cronograma proactivo que aún no han abordado, según su cronograma. Para un margen de 2-3 meses esos podrían incluir: [Revisar mis objetivos del IPP] [Hablar sobre mi Spending Plan]. No vuelvas a ofrecer pasos que ya completaron en esta sesión. REGLA DE FECHA PROPORCIONADA A MITAD DEL CAMINO: Si la familia proporciona su fecha de fin de año en respuesta a una pregunta que no era sobre la fecha (por ejemplo, responden "Sé la fecha — es el 15 de julio" después de recibir un borrador de correo), NO cambie a preguntar si enviaron el correo. En cambio: (1) reconozca la fecha y calcule los días y semanas exactos restantes, (2) confirme en qué parte del cronograma proactivo se encuentran según ese margen, (3) entregue la frase de transición y vuelva a presentar los botones de renovación restantes. La fecha es contexto útil — no reemplaza la oferta de seguir avanzando.
 - El RC como socio, no adversario: el objetivo siempre es satisfacer las necesidades del individuo. Cuando el RC dice no, DAN orienta a la familia para hacer dos preguntas: (1) ¿Por qué no — cuál es específicamente la barrera? (2) ¿Qué podríamos hacer de manera diferente para satisfacer esta necesidad?
 - Nunca pidas información personal para redactar un correo o carta. Usa marcadores en llaves como {NOMBRE DE LA PERSONA}, {FECHA}, {NOMBRE DEL REGIONAL CENTER}. IMPORTANTE: Nunca uses corchetes [ ] para marcadores en NINGUNA PARTE de tus respuestas — no en borradores de correo, no en prosa. Los corchetes SOLO aparecen cuando presentas opciones de botones clicables. Cualquier marcador de relleno en cualquier contexto debe usar llaves { }.
@@ -2027,6 +2027,7 @@ const DAN_SYSTEM_PROMPT = [
   '',
   '- Never ask for personal information to draft an email or letter. Use placeholders in curly braces like {PERSONS NAME}, {DATE}, {REGIONAL CENTER NAME}. Tell them: I will use placeholders you can fill in before you send. Then produce the draft immediately without waiting for another reply. IMPORTANT: Never use square brackets [ ] for placeholders ANYWHERE in your responses -- not in email drafts, not in prose, not in scripts, not in example questions to ask. Square brackets ONLY appear when presenting clickable button choices. Any fill-in placeholder in any context must use curly braces { } instead. Example: ask "Is {PROVIDER NAME} already in your system?" not "Is [provider name] already in your system?" -- the latter creates a stray button in the UI.',
   '- EMAIL DRAFT FORMAT -- CRITICAL: Every email draft must be wrapped in exactly these markers on their own lines: ---EMAIL START--- on the line before the draft, and ---EMAIL END--- on the line after the draft. Nothing else goes inside those markers -- no instructions, no coaching, no next steps, no "send this to..." guidance. The email draft is the email only. All coaching, context, and next-step guidance goes outside the markers, after [EMAIL END]. This is what allows the Copy button to extract only the email text.',
+  '- PHONE SCRIPT / TALKING POINTS FORMAT: When DAN delivers a phone script, talking points, or a list of things to say in a conversation (not an email), wrap the script in ---SCRIPT START--- and ---SCRIPT END--- markers on their own lines. Everything between those markers is the script only. Coaching and context go outside the markers. This applies any time DAN writes out what someone should say on a phone call, in a meeting, or in person.',
   '',
   '=== WHAT DAN IS AND IS NOT — SCOPE AND HONESTY ===',
   'DAN is a navigation program built on California law and Regional Center policy. It is designed to help families, self-advocates, and circles of support understand their rights under the Lanterman Act and identify clear next steps. It is not a lawyer. It is not a licensed advocate. It does not give legal advice. IF ASKED WHETHER DAN IS AI: Lead with identity, then acknowledge the technology. First sentence must establish what DAN is: "DAN is a navigation program built and maintained by SDTA, a California nonprofit." Then acknowledge the technology honestly: "It uses a large language model, but the information base is specific and reviewed -- the Lanterman Act, DDS directives, Title 17, and official RC policy. Not the open internet." Then name the limits. Do NOT lead with "yes, DAN uses a large language model" -- the navigation program identity comes first, the technology acknowledgment comes second.',
@@ -2381,6 +2382,38 @@ async function patchSessionDraftDelivered() {
   }
 }
 
+// Outcome tracking — records which type of actionable outcome DAN delivered
+// Only fires once per session; first detected outcome wins (priority order)
+let outcomeLogged = false;
+async function patchSessionOutcome(outcomeType) {
+  if (!sessionAirtableId || outcomeLogged) return;
+  outcomeLogged = true;
+  try {
+    await fetch('/.netlify/functions/proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-target': 'airtable-patch' },
+      body: JSON.stringify({
+        url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}/${sessionAirtableId}`,
+        fields: { 'Outcome Type': outcomeType, 'Outcome Detected': true },
+      }),
+    });
+  } catch (e) {
+    console.error('Airtable outcome patch error', e);
+  }
+}
+
+// Detect outcome type from a DAN response — called from appendDanMessage()
+// Priority: draft > FH link > script > resource referral > graceful exit > natural close
+function detectOutcome(text, hasEmail, hasFhLink) {
+  if (hasEmail) return 'Draft delivered';
+  if (hasFhLink) return 'Fair hearing link';
+  if (/---SCRIPT START---/i.test(text)) return 'Phone script';
+  if (/1-800-390-7032|1-800-776-5746/.test(text)) return 'Resource referral';
+  if (/help(s)? (us (understand|learn) (what|where) families need|DAN (get better|needs to grow))/i.test(text)) return 'Graceful exit';
+  if (/ayuda(n)? a (DAN|entender|comprender) .*(mejorar|necesitan|familias)/i.test(text)) return 'Graceful exit';
+  if (/come back and|vuelva (cuando|y)/i.test(text)) return 'Natural close';
+  return null;
+}
 
 
 // -- OPTION BUTTON CLICK (event delegation - no inline onclick) --
@@ -3043,7 +3076,7 @@ function appendDanMessage(text, showFeedback) {
   row.innerHTML = `
     <div class="msg-avatar">D</div>
     <div class="msg-content">
-      <div class="msg-bubble" id="bubble-${msgId}">${formatDanText(text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').replace(/---FH LINK---/gi, '').trim())}</div>
+      <div class="msg-bubble" id="bubble-${msgId}">${formatDanText(text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').replace(/---FH LINK---/gi, '').replace(/---SCRIPT START---/gi, '').replace(/---SCRIPT END---/gi, '').trim())}</div>
       ${fhLinkHtml}
       ${copyEmailHtml}
       ${fbHtml}
@@ -3083,13 +3116,17 @@ function appendDanMessage(text, showFeedback) {
   }
 
   // Strip email markers from displayed text
-  const displayText = text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').replace(/---FH LINK---/gi, '').trim();
+  const displayText = text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').replace(/---FH LINK---/gi, '').replace(/---SCRIPT START---/gi, '').replace(/---SCRIPT END---/gi, '').trim();
   row.dataset.text    = displayText;
   row.dataset.msgId   = msgId;
   if (emailTexts.length > 0) row.dataset.emailTexts = JSON.stringify(emailTexts);
 
   // If this message contains a draft, patch the session record once
   if (emailTexts.length > 0) patchSessionDraftDelivered();
+
+  // Outcome detection — track the first actionable outcome in this session
+  const outcomeType = detectOutcome(text, emailTexts.length > 0, !!fhLinkMatch);
+  if (outcomeType) patchSessionOutcome(outcomeType);
 
   // Hide text box when DAN gives buttons; always show when open-ended or email draft
   const hasButtons = /\[[^\]]+\]/.test(text);

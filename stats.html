@@ -184,9 +184,9 @@
         <div class="stat-sub" id="s-drafts-rcs"></div>
       </div>
       <div class="stat-box">
-        <div class="stat-n teal" id="s-helpful"></div>
-        <div class="stat-label">helpful rating</div>
-        <div class="stat-sub" id="s-helpful-frac"></div>
+        <div class="stat-n teal" id="s-outcome"></div>
+        <div class="stat-label">outcome rate</div>
+        <div class="stat-sub" id="s-outcome-sub"></div>
       </div>
     </div>
 
@@ -380,8 +380,11 @@ function loadDashboard() {
   document.getElementById('s-ratio').textContent = D.ratio + ' sessions per signup';
   document.getElementById('s-drafts').textContent = D.drafts_delivered;
   document.getElementById('s-drafts-rcs').textContent = 'across ' + D.drafts_rcs + ' regional centers';
-  document.getElementById('s-helpful').textContent = D.helpful_pct;
-  document.getElementById('s-helpful-frac').textContent = D.helpful_fraction + ' rated sessions';
+  // Outcome rate — uses new field if available, falls back to draft-only data
+  var outPct = D.outcome_pct || (Math.round((D.drafts_delivered / D.sessions) * 100) + '%');
+  var outFrac = D.outcome_fraction || (D.drafts_delivered + '/' + D.sessions);
+  document.getElementById('s-outcome').textContent = outPct;
+  document.getElementById('s-outcome-sub').textContent = outFrac + ' sessions reaching a next step';
 
   // Accountability
   document.getElementById('a-total').textContent = D.not_helpful_total;
