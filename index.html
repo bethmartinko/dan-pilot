@@ -2320,6 +2320,7 @@ async function writeSessionRecord(cardType) {
     if (demoData.age)  fields['Age Range']          = demoData.age;
     if (demoData.race) fields['Race / Ethnicity']   = demoData.race;
     fields['Language'] = currentLang;  // 'en' or 'es' — equity tracking
+    fields['Outcome Tracking'] = true;  // marks session as having outcome detection active
     const res = await fetch('/.netlify/functions/proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-target': 'airtable-post' },

@@ -380,11 +380,17 @@ function loadDashboard() {
   document.getElementById('s-ratio').textContent = D.ratio + ' sessions per signup';
   document.getElementById('s-drafts').textContent = D.drafts_delivered;
   document.getElementById('s-drafts-rcs').textContent = 'across ' + D.drafts_rcs + ' regional centers';
-  // Outcome rate — uses new field if available, falls back to draft-only data
-  var outPct = D.outcome_pct || (Math.round((D.drafts_delivered / D.sessions) * 100) + '%');
-  var outFrac = D.outcome_fraction || (D.drafts_delivered + '/' + D.sessions);
-  document.getElementById('s-outcome').textContent = outPct;
-  document.getElementById('s-outcome-sub').textContent = outFrac + ' sessions reaching a next step';
+  // Outcome rate — uses tracked-session denominator when available
+  // D.outcome_pct / D.outcome_fraction come from build_stats once tracking data accumulates
+  // D.outcome_tracked_sessions = count of sessions with Outcome Tracking = true
+  if (D.outcome_pct) {
+    document.getElementById('s-outcome').textContent = D.outcome_pct;
+    document.getElementById('s-outcome-sub').textContent = (D.outcome_fraction || '') + ' sessions reaching a next step';
+  } else {
+    // Before tracking data exists, show draft count as the starting metric
+    document.getElementById('s-outcome').textContent = D.drafts_delivered;
+    document.getElementById('s-outcome-sub').textContent = 'drafts delivered · outcome tracking started';
+  }
 
   // Accountability
   document.getElementById('a-total').textContent = D.not_helpful_total;
