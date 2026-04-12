@@ -1574,12 +1574,12 @@ const KB_BY_CARD = {
   ipp:        [KB_GOAL_NOT_IN_IPP],
   spending:   [KB_SDP_SPENDING, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING],
   preference: [KB_PREFERENCE],
-  proactive:  [],
+  proactive:  [KB_GENERIC_RESOURCE, KB_GOAL_NOT_IN_IPP],
   unsure:     [],
   // Topic names (from free-text detector in sendMessage)
   'SDP':             [KB_SDP_RENEWAL, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING],
   'Appeals':         [KB_WAITING],
-  'Getting Services': [KB_GOAL_NOT_IN_IPP, KB_PREFERENCE],
+  'Getting Services': [KB_GOAL_NOT_IN_IPP, KB_PREFERENCE, KB_GENERIC_RESOURCE],
   'Legal Status':    [KB_LEGAL_STATUS],
   'Other':           [],
 };
@@ -1591,11 +1591,11 @@ const KB_BY_CARD_ES = {
   ipp:        [KB_GOAL_NOT_IN_IPP_ES],
   spending:   [KB_SDP_SPENDING_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES],
   preference: [KB_PREFERENCE_ES],
-  proactive:  [],
+  proactive:  [KB_GENERIC_RESOURCE_ES, KB_GOAL_NOT_IN_IPP_ES],
   unsure:     [],
   'SDP':             [KB_SDP_RENEWAL_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES],
   'Appeals':         [KB_WAITING_ES],
-  'Getting Services': [KB_GOAL_NOT_IN_IPP_ES, KB_PREFERENCE_ES],
+  'Getting Services': [KB_GOAL_NOT_IN_IPP_ES, KB_PREFERENCE_ES, KB_GENERIC_RESOURCE_ES],
   'Legal Status':    [KB_LEGAL_STATUS_ES],
   'Other':           [],
 };
