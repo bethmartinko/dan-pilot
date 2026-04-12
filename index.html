@@ -2689,6 +2689,32 @@ document.addEventListener('click', function(e) {
     return;
   }
 
+  // ── UNSURE "denied or cut" sub-buttons — reroute sessionTopic so correct KB loads ──
+  // These buttons appear after "Something was denied or cut" on the unsure path.
+  // Without this, sessionTopic stays 'unsure' and zero KB modules load.
+  if (sessionTopic === 'unsure') {
+    if (labelLower.indexOf("they said it's a preference") === 0 || labelLower.indexOf('dijeron que es una preferencia') === 0 || labelLower.indexOf('me dijeron que es una preferencia') === 0) {
+      sessionTopic = 'preference';
+    } else if (labelLower.indexOf('they said the goal') === 0 || labelLower.indexOf('dijeron que la meta') === 0) {
+      sessionTopic = 'ipp';
+    } else if (labelLower.indexOf('my budget was reduced') === 0 || labelLower.indexOf('me redujeron') === 0) {
+      sessionTopic = 'spending';
+    } else if (labelLower.indexOf('they said there') === 0 && labelLower.indexOf('community resource') !== -1 || labelLower.indexOf('dijeron que hay un recurso') === 0) {
+      sessionTopic = 'generic';
+    }
+    // "I got a letter" sub-buttons
+    else if (labelLower.indexOf('it says something about a change') === 0 || labelLower.indexOf('dice algo sobre un cambio') === 0) {
+      sessionTopic = 'spending';
+    } else if (labelLower.indexOf('it says something was denied') === 0 || labelLower.indexOf('dice que algo fue denegado') === 0) {
+      // Denial could be preference, generic, or IPP — let API diagnose with Getting Services KB
+      sessionTopic = 'Getting Services';
+    } else if (labelLower.indexOf("it's about my ipp") === 0 || labelLower.indexOf('es sobre mi reuni') === 0) {
+      sessionTopic = 'ipp';
+    }
+    // Note: "I'm not sure what it says" / "I'm not sure -- I'll explain" stay unsure —
+    // free-text detector will catch them on next typed message (see fix below).
+  }
+
   // ── END unsure path routing ──
 
   // Delay sub-choice: "A general response from RC"
@@ -3081,12 +3107,22 @@ async function sendMessage() {
   pathTrail.push(text.length > 60 ? text.slice(0, 57) + '...' : text);
   updateRoadmap();
 
-  if (!sessionTopic) {
+  // Free-text topic detector: fires when sessionTopic is unset OR still on a
+  // generic entry path (unsure/Other) that hasn't been routed by sub-buttons.
+  // This lets "It's complicated -- I'll just tell you" users get KB modules
+  // loaded once they describe their situation in free text.
+  if (!sessionTopic || sessionTopic === 'unsure' || sessionTopic === 'Other') {
     const t = text.toLowerCase();
     if      (t.match(/sdp|self.?deter|spending plan|facilitator|fms|enroll/)) sessionTopic = 'SDP';
     else if (t.match(/appeal|hearing|noa|ocra|deny|denial|denied/))           sessionTopic = 'Appeals';
     else if (t.match(/conservator|sdm|supported decision|authorized rep|ds.?1819/)) sessionTopic = 'Legal Status';
     else if (t.match(/service|ipp|iep|request|dental|therapy|respite|ihss/))  sessionTopic = 'Getting Services';
+    else if (t.match(/school|tutor|iep|504|education|classroom/))             sessionTopic = 'Getting Services';
+    else if (t.match(/wait|delay|no response|haven.t heard|not hearing/))     sessionTopic = 'delay';
+    else if (t.match(/preference|not a need|recreation/))                      sessionTopic = 'preference';
+    else if (t.match(/generic|insurance|community resource|free program/))     sessionTopic = 'generic';
+    else if (sessionTopic === 'unsure' || sessionTopic === 'Other')            sessionTopic = 'Other';
+    // If sessionTopic was null and nothing matched, set Other
     else                                                                        sessionTopic = 'Other';
   }
 
