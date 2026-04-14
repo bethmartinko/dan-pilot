@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Free bilingual navigator helping California families understand Regional Center services, Self-Determination Program, and disability rights under the Lanterman Act.">
 <title>DAN -- Disability Access Navigator</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
 <style>
   :root {
     --navy:      #1F3864;
@@ -697,6 +700,7 @@
 
 <a href="#chat-messages" class="skip-link">Skip to conversation</a>
 
+<main>
 <!-- ══════════════════════════════════════════════════
      DEMOGRAPHICS SCREEN
      ══════════════════════════════════════════════════ -->
@@ -810,8 +814,8 @@
         <button class="lang-btn" id="landing-btn-es" onclick="setLang('es')">ES</button>
       </div>
     </div>
-    <div class="dan-wordmark">DAN</div>
-    <div class="dan-tagline" data-en="Disability Access Navigator" data-es="Navegador de Acceso para Personas con Discapacidad">Disability Access Navigator</div>
+    <h1 class="dan-wordmark">DAN</h1>
+    <p class="dan-tagline" data-en="Disability Access Navigator" data-es="Navegador de Acceso para Personas con Discapacidad">Disability Access Navigator</p>
     <p class="landing-intro">
       <span data-en="DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time." data-es="DAN le ayuda a navegar el sistema de Regional Centers de California -- qué pedir, cómo pedirlo, y qué hacer cuando la primera respuesta es no. Gratis, confidencial, disponible en cualquier momento.">DAN helps you navigate California's Regional Center system -- what to ask for, how to ask for it, and what to do when the first answer is no. Free, confidential, available any time.</span>
     </p>
@@ -3878,5 +3882,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+</main>
 </body>
 </html>
