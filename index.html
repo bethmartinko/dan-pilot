@@ -2455,8 +2455,11 @@ function goBack() {
   sessionId = null;
   msgCounter = 0;
   pendingStuckType = null;
+  if (sessionAirtableId && userRoundCount > 0) patchSessionRounds();
   sessionAirtableId = null;
   draftDeliveredLogged = false;
+  outcomeLogged = false;
+  userRoundCount = 0;
 }
 
 function startStuck(type) {
@@ -3128,8 +3131,6 @@ async function sendMessage() {
 
   appendUserMessage(text);
   messages.push({ role: 'user', content: text });
-  userRoundCount++;
-  if (userRoundCount % 5 === 0) patchSessionRounds();
   pathTrail.push(text.length > 60 ? text.slice(0, 57) + '...' : text);
   updateRoadmap();
 
@@ -3248,6 +3249,8 @@ function escHtml(str) {
 
 // -- DOM HELPERS --
 function appendUserMessage(text) {
+  userRoundCount++;
+  if (userRoundCount % 5 === 0) patchSessionRounds();
   const container = document.getElementById('chat-messages');
   const initials   = 'YOU';
   const row = document.createElement('div');
