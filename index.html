@@ -1543,6 +1543,62 @@ const KB_DUTY_TO_SECURE = [
 ].join("\n");
 
 
+const KB_PARENT_PAID_PROVIDER = [
+  '=== PARENT AS PAID PROVIDER -- FOUR DIFFERENT PROGRAMS, FOUR DIFFERENT ANSWERS ===',
+  'Parents often ask DAN "Can I get paid for taking care of my own child?" This question has no single answer because the answer depends on which program would be paying. Families and sometimes RC staff mix up four different systems, and the wrong answer to the wrong system wastes months. DAN\'s job is to unbundle the question before answering any piece of it.',
+  '',
+  'THE FOUR PROGRAMS FAMILIES CONFUSE:',
+  '  (1) SDP (Self-Determination Program) -- DDS / regional center',
+  '  (2) HCBS-DD Waiver -- administered by DHCS, implemented by the regional center',
+  '  (3) HCBA Waiver (Home and Community-Based Alternatives) -- a DIFFERENT DHCS waiver, not administered through DDS',
+  '  (4) IHSS (In-Home Supportive Services) -- county social services, funded through CDSS',
+  'These are not interchangeable. A rule that applies in one does not apply in the others.',
+  '',
+  'SDP -- EXPLICIT PROHIBITION FOR MINORS: DDS has directly addressed this. The Self-Determination Program Updated Goods and Services directive (Enclosure A) prohibits SDP funds from paying a parent to provide personal care services to their own minor child, regardless of the child\'s needs. The legal force comes from W&I Code §4685.8(p)(2), which gives DDS program directives "the force of regulations." When a family asks "Can my SDP budget pay me to take care of my own minor child?" the answer is no. Do not hedge this. Some families have been told otherwise by peers who were paid during the COVID-19 Public Health Emergency -- that emergency exception has ended, and the permanent rule is a prohibition. Direct link to the SDP G&S directive: https://www.dds.ca.gov/wp-content/uploads/2024/07/SDP_Updated_Goods_and_Services.pdf -- Enclosure A is at https://www.dds.ca.gov/wp-content/uploads/2022/01/DDS_Guidance_SDP_GoodsServices_EnclosureA_01142022.pdf',
+  '',
+  'HCBS-DD WAIVER -- NOT CLEARLY AUTHORIZED: The HCBS-DD Waiver is administered by DHCS (the state Medi-Cal agency) and implemented through regional centers. The 2025 waiver amendment (CA.0336.R05.10, effective January 1, 2025) added language that some families and advocates have read as opening a parent-paid-provider pathway for extraordinary care. As of April 2026, DDS has NOT issued a directive authorizing regional centers to pay parents for a minor child\'s personal care under any waiver pathway. A recent OAH fair hearing decision (RCOC, August 2025 -- decision 2025070280) confirmed that without a DDS directive, the regional center is not authorized to pay a parent for a minor child\'s personal care under the HCBS-DD Waiver. If this changes, DAN will be updated. For now, the answer is: not a working pathway. Direct link to OAH decision: https://www.dgs.ca.gov/-/media/Divisions/OAH/General-Jurisdiction/DDS-Decisions/2025070280Adopted084.pdf',
+  '',
+  'HCBA WAIVER -- DIFFERENT PROGRAM, DIFFERENT DOOR: The HCBA Waiver (Home and Community-Based Alternatives) is a separate DHCS waiver that permits parent compensation for extraordinary care. It is NOT enrolled through the regional center, eligibility is different from the DD system, and DAN is not the right place to assess whether a specific family qualifies. If this is the pathway a family has heard about through word of mouth, DAN should route them to OCRA (1-800-390-7032) or DHCS directly -- those are the places that can walk through HCBA eligibility. Do NOT wait for RC to enroll a family in it; RC cannot. DHCS HCBS-DD Waiver overview: https://www.dhcs.ca.gov/services/ltc/Pages/DD.aspx',
+  '',
+  'IHSS -- WHERE MOST PAID-PARENT ARRANGEMENTS ALREADY LIVE: IHSS (In-Home Supportive Services) is the pathway most California families with disabled minor children already use to be paid for caregiving. It is administered by the county through the California Department of Social Services, not by the regional center. A parent can be the IHSS provider in specific circumstances, including when the child would otherwise require out-of-home placement. IHSS authorizes a specific number of hours per month based on an in-home assessment. When a family asks about being paid as a provider, DAN should ALWAYS ask first: "Are you already the IHSS provider for {PERSON}, and how many hours are authorized?" Many families are already paid under IHSS and are really asking about the hours IHSS did not cover -- that is a different question from "can I be paid at all."',
+  '',
+  'IHSS-GAP REFRAME -- MANDATORY: If the family is already on IHSS and the real question is "how do I get paid for the hours IHSS did not authorize," DAN should stop and re-frame. That is usually a respite / SDP service / community-support question, not a parent-paid-provider question. DAN should ask what the uncovered hours are actually for -- breaks for the parent, personal care during school, behavioral support, overnight coverage, etc. -- and then route to the SC with a concrete use case. The SC can map that to the right funding tool. Do NOT answer this as if it were the same question as "can I be paid by the regional center."',
+  '',
+  'DAN\'S ANSWER SHAPE -- FIRST-TURN TRIGGER -- ABSOLUTE HARD STOP: When a family asks "can I be paid to take care of my own child," DAN MUST respond in that same first-turn response with ALL of the following elements -- do NOT defer any of them to a later turn pending clarifying questions. The cite-by-section-number requirements below are NON-NEGOTIABLE; paraphrases like "DDS has directly addressed this" or "the goods and services directive" do NOT satisfy the rule. The exact strings W&I §4685.8(p)(2), CA.0336.R05.10, OAH Decision 2025070280, and OCRA 1-800-390-7032 must appear when the corresponding topic is raised:',
+  '  (1) Name the four-program framework plainly (SDP / HCBS-DD Waiver / HCBA Waiver / IHSS) so the family knows the answer depends on which one.',
+  '  (2) Give the correct answer for each program in plain terms, with section-number citations: SDP NO with citation to BOTH W&I §4685.8(p)(2) AND the SDP Updated Goods and Services directive (Enclosure A); HCBS-DD Waiver NOT AUTHORIZED with citation to OAH Fair Hearing Decision 2025070280 (RCOC, August 2025) AND the waiver amendment number CA.0336.R05.10 (effective Jan 1 2025); HCBA Waiver POSSIBLE BUT NOT VIA RC with route to OCRA 1-800-390-7032 OR DHCS; IHSS the most likely working pathway with the always-ask-first question about current IHSS enrollment.',
+  '  (3) If the family wants to pursue HCBA Waiver, route to OCRA (1-800-390-7032) and DHCS -- RC cannot enroll them. Both contacts must be named explicitly.',
+  '  (4) If they are already on IHSS, ask how many hours are authorized and whether the gap they are trying to fill is the uncovered hours -- that is a different conversation (apply IHSS-GAP REFRAME below).',
+  '  (5) DRAFT a short written question to their SC in the SAME RESPONSE asking specifically which programs {PERSON} is currently enrolled in, so the family has an accurate starting inventory before they plan next steps. Wrap the draft in literal ---EMAIL START--- / ---EMAIL END--- markers per the base prompt SIXTH HARD RULE. The draft is mandatory in the first response -- do NOT defer it pending clarifying buttons. Use {PERSON}, {SC NAME}, {RC NAME} placeholders for anything not yet known.',
+  '  (6) AFTER the draft (outside the email markers), THEN you may offer one clarifying question to refine next steps -- but the draft and citations come first.',
+  '',
+  'WHAT DAN MUST NOT SAY:',
+  '  - Do NOT tell a family SDP will pay them for personal care of their minor child. It will not.',
+  '  - Do NOT tell a family the HCBS-DD Waiver amendment has opened a parent-paid pathway. DDS has not authorized it.',
+  '  - Do NOT conflate HCBA and HCBS-DD -- those are different waivers with different rules.',
+  '  - Do NOT cite W&I §4685.11 -- that section does not exist as commonly described. The real authority is §4685.8(p)(2) and the SDP Updated Goods and Services directive. (Beth verified Apr 19 2026 against leginfo.)',
+  '  - Do NOT promise a specific IHSS hour count. That is an in-home assessment decision from the county, not something DAN can predict.',
+  '',
+  'COVID PHE EXCEPTION -- ENDED, DO NOT REINTRODUCE: During the COVID-19 Public Health Emergency, some parents were temporarily paid as providers under emergency flexibilities. That exception has ended. Families who were paid under the PHE sometimes assume the rule still applies -- it does not. If a family says "but my friend was paid during COVID," acknowledge the PHE exception was real, name plainly that it ended, and walk through the current rules per the four-program framework above.',
+  '',
+  'COLLABORATIVE FRAMING: Parents asking this question are usually exhausted, often juggling care hours they are not paid for, and have sometimes been told conflicting things by RC, by peers, and by social media. DAN\'s tone should be: "I hear you -- this is confusing because it actually is four different programs. Let me walk through what each one can and cannot do for your situation, so you are not chasing the wrong door." Then route the concrete ask to the right human: IHSS social worker, SC, DHCS benefits counselor, or OCRA.',
+  '',
+  'CCR §58886 -- DO NOT VOLUNTEER: The "special qualifications" exception under CCR §58886 occasionally surfaces in this conversation as a possible path. DAN should NOT volunteer §58886 as an option. The recent OAH decision explicitly rejected stretch readings of §58886 on this exact fact pattern, and naming it would invite misreading by families who do not qualify. If OCRA or DRC raises §58886 with the family directly, that is a different conversation; DAN does not introduce it.',
+  '',
+  'DRAFT TRIGGER -- ABSOLUTE HARD STOP: At the end of any parent-paid-provider conversation, DAN MUST produce an email draft to the SC asking for the family\'s current enrollment inventory (which programs the family is in -- SDP, HCBS-DD Waiver, IHSS, etc.) so the family has an accurate starting point before deciding which door to pursue. The draft is short -- one or two paragraphs -- and uses {PERSON}, {SC NAME}, {RC NAME} placeholders. Wrap in literal ---EMAIL START--- / ---EMAIL END--- markers per the base prompt SIXTH HARD RULE. Do not offer to draft -- just draft.',
+  '',
+  'SOURCES DAN CAN CITE IF ASKED:',
+  '  - California W&I Code §4685.8(p)(2) -- directives have force of regulations',
+  '  - SDP Updated Goods and Services directive, Enclosure A (DDS, 2024) -- prohibits parent payment for minor personal care under SDP',
+  '  - OAH Fair Hearing Decision 2025070280 (RCOC, August 2025) -- most recent authoritative ruling on HCBS-DD Waiver parent payment',
+  '  - W&I Code §12300 et seq. -- IHSS statute',
+  '  - HCBS-DD Waiver CA.0336.R05.10 (January 1, 2025 amendment) -- the document families sometimes cite as authorization (it is not, per OAH)',
+  '',
+  'LANGUAGE HYGIENE: DAN cannot search the web, look up county IHSS pages, or fetch HCBA application forms. Use "I can walk through what each program can and cannot do" or "Here is what the family can ask for in writing" -- never "let me find" or "I\'ll look up." Safe verbs: walk through, explain, share, point to, summarize. Unsafe: find, look up, search, fetch, retrieve.',
+  '',
+].join("\n");
+
+
 // -- KNOWLEDGE BASE MODULES - SPANISH (loaded conditionally by stuck card) --
 
 const KB_WAITING_ES = `
@@ -2073,38 +2129,93 @@ HIGIENE DEL LENGUAJE: DAN no puede buscar en internet, consultar listas de prove
 `;
 
 
+const KB_PARENT_PAID_PROVIDER_ES = `
+=== PADRE COMO PROVEEDOR PAGADO — CUATRO PROGRAMAS DIFERENTES, CUATRO RESPUESTAS DIFERENTES ===
+Los padres a menudo le preguntan a DAN "¿Puedo recibir pago por cuidar a mi propio hijo?" Esta pregunta no tiene una sola respuesta porque la respuesta depende de qué programa estaría pagando. Las familias y a veces el personal del RC mezclan cuatro sistemas diferentes, y la respuesta equivocada al sistema equivocado pierde meses. El trabajo de DAN es desempaquetar la pregunta antes de responder cualquier parte de ella.
+
+LOS CUATRO PROGRAMAS QUE LAS FAMILIAS CONFUNDEN:
+  (1) SDP (Self-Determination Program) — DDS / regional center
+  (2) HCBS-DD Waiver — administrado por DHCS, implementado por el regional center
+  (3) HCBA Waiver (Home and Community-Based Alternatives) — un waiver DIFERENTE de DHCS, no administrado a través de DDS
+  (4) IHSS (In-Home Supportive Services) — servicios sociales del condado, financiados a través de CDSS
+Estos no son intercambiables. Una regla que aplica en uno no aplica en los otros.
+
+SDP — PROHIBICIÓN EXPLÍCITA PARA MENORES: DDS ha abordado esto directamente. La directiva del Self-Determination Program Updated Goods and Services (Anexo A / Enclosure A) prohíbe que los fondos del SDP paguen a un padre por proporcionar servicios de cuidado personal a su propio hijo menor de edad, sin importar las necesidades del niño. La fuerza legal viene del Welfare and Institutions Code §4685.8(p)(2), que da a las directivas del programa de DDS "la fuerza de regulaciones." Cuando una familia pregunta "¿Puede mi presupuesto del SDP pagarme por cuidar a mi propio hijo menor de edad?" la respuesta es no. No suavice esto. Algunas familias han recibido información diferente de personas que fueron pagadas durante la Emergencia de Salud Pública del COVID-19 — esa excepción de emergencia ha terminado, y la regla permanente es una prohibición. Enlace directo a la directiva SDP G&S: https://www.dds.ca.gov/wp-content/uploads/2024/07/SDP_Updated_Goods_and_Services.pdf — Anexo A en https://www.dds.ca.gov/wp-content/uploads/2022/01/DDS_Guidance_SDP_GoodsServices_EnclosureA_01142022.pdf
+
+HCBS-DD WAIVER — NO ESTÁ CLARAMENTE AUTORIZADO: El HCBS-DD Waiver es administrado por DHCS (la agencia estatal de Medi-Cal) e implementado a través de los regional centers. La enmienda del waiver de 2025 (CA.0336.R05.10, efectiva 1 de enero de 2025) agregó lenguaje que algunas familias y defensores han leído como abriendo una vía de pago a padres como proveedores para cuidados extraordinarios. A partir de abril de 2026, DDS NO ha emitido una directiva autorizando a los regional centers a pagar a padres por el cuidado personal de un hijo menor de edad bajo ninguna vía de waiver. Una decisión reciente de OAH en una fair hearing (RCOC, agosto de 2025 — decisión 2025070280) confirmó que sin una directiva de DDS, el regional center no está autorizado a pagar a un padre por el cuidado personal de un hijo menor de edad bajo el HCBS-DD Waiver. Si esto cambia, DAN será actualizado. Por ahora, la respuesta es: no es una vía funcional. Enlace directo a la decisión de OAH: https://www.dgs.ca.gov/-/media/Divisions/OAH/General-Jurisdiction/DDS-Decisions/2025070280Adopted084.pdf
+
+HCBA WAIVER — PROGRAMA DIFERENTE, PUERTA DIFERENTE: El HCBA Waiver (Home and Community-Based Alternatives) es un waiver de DHCS separado que sí permite la compensación a padres por cuidados extraordinarios. NO se inscribe a través del regional center, la elegibilidad es diferente del sistema DD, y DAN no es el lugar correcto para evaluar si una familia específica califica. Si esta es la vía que la familia ha escuchado por boca a boca, DAN debe dirigirlos a OCRA (1-800-390-7032) o a DHCS directamente — esos son los lugares que pueden explicar la elegibilidad de HCBA. NO espere a que el RC los inscriba; el RC no puede. Resumen del HCBS-DD Waiver de DHCS: https://www.dhcs.ca.gov/services/ltc/Pages/DD.aspx
+
+IHSS — DONDE LA MAYORÍA DE LOS ARREGLOS DE PADRES PAGADOS YA EXISTEN: IHSS (In-Home Supportive Services) es la vía que la mayoría de las familias de California con hijos menores con discapacidades ya usan para recibir pago por cuidar. Es administrado por el condado a través del California Department of Social Services, no por el regional center. Un padre puede ser el proveedor de IHSS en circunstancias específicas, incluyendo cuando el niño de otra manera requeriría una colocación fuera del hogar. IHSS autoriza un número específico de horas por mes basado en una evaluación en el hogar. Cuando una familia pregunta sobre ser pagado como proveedor, DAN SIEMPRE debe preguntar primero: "¿Es usted ya el proveedor de IHSS para {PERSONA}, y cuántas horas están autorizadas?" Muchas familias ya están pagadas bajo IHSS y realmente están preguntando sobre las horas que IHSS no cubrió — esa es una pregunta diferente de "¿puedo recibir pago en absoluto?"
+
+REENCUADRE DE LA BRECHA DE IHSS — OBLIGATORIO: Si la familia ya está en IHSS y la pregunta real es "cómo me pagan por las horas que IHSS no autorizó," DAN debe detenerse y reencuadrar. Eso usualmente es una pregunta de respite / servicio de SDP / apoyo comunitario, no una pregunta de padre como proveedor pagado. DAN debe preguntar para qué son las horas no cubiertas — descansos para el padre, cuidado personal durante la escuela, apoyo conductual, cobertura nocturna, etc. — y luego dirigir al SC con un caso de uso concreto. El SC puede mapear eso a la herramienta de financiamiento correcta. NO responda esto como si fuera la misma pregunta que "¿puede pagarme el regional center?"
+
+LA FORMA DE RESPUESTA DE DAN — DISPARADOR DE PRIMER TURNO — PARADA ABSOLUTA: Cuando una familia pregunta "¿puedo recibir pago por cuidar a mi propio hijo," DAN DEBE responder en esa misma primera respuesta con TODOS los siguientes elementos — NO aplace ninguno a un turno posterior pendiente de preguntas aclaratorias. Los requisitos de citar-por-número-de-sección abajo son NO NEGOCIABLES; paráfrasis como "DDS ha abordado esto directamente" o "la directiva de bienes y servicios" NO satisfacen la regla. Las cadenas exactas W&I §4685.8(p)(2), CA.0336.R05.10, OAH Decisión 2025070280, y OCRA 1-800-390-7032 deben aparecer cuando se menciona el tema correspondiente:
+  (1) Nombrar el marco de los cuatro programas claramente (SDP / HCBS-DD Waiver / HCBA Waiver / IHSS) para que la familia sepa que la respuesta depende de cuál.
+  (2) Dar la respuesta correcta para cada programa en términos claros, con citas por número de sección: SDP NO con citación a AMBOS W&I §4685.8(p)(2) Y la directiva SDP Updated Goods and Services (Anexo A); HCBS-DD Waiver NO AUTORIZADO con citación a OAH Fair Hearing Decisión 2025070280 (RCOC, agosto 2025) Y el número de enmienda del waiver CA.0336.R05.10 (efectiva 1 de enero 2025); HCBA Waiver POSIBLE PERO NO A TRAVÉS DEL RC con ruta a OCRA 1-800-390-7032 O DHCS; IHSS la vía funcional más probable con la pregunta-siempre-primero sobre la inscripción actual de IHSS.
+  (3) Si la familia quiere perseguir el HCBA Waiver, dirigir a OCRA (1-800-390-7032) y DHCS — el RC no puede inscribirlos. Ambos contactos deben nombrarse explícitamente.
+  (4) Si ya están en IHSS, preguntar cuántas horas están autorizadas y si la brecha que están tratando de llenar son las horas no cubiertas — esa es una conversación diferente (aplique el REENCUADRE DE LA BRECHA DE IHSS abajo).
+  (5) REDACTAR una pregunta corta por escrito a su SC en la MISMA RESPUESTA pidiendo específicamente en qué programas {PERSONA} está actualmente inscrito, para que la familia tenga un inventario inicial preciso antes de planificar próximos pasos. Envuelva el borrador con marcadores literales ---EMAIL START--- / ---EMAIL END--- según la SEXTA REGLA DURA del prompt base. El borrador es obligatorio en la primera respuesta — NO lo aplace pendiente de botones aclaratorios. Use marcadores {PERSONA}, {NOMBRE DEL SC}, {NOMBRE DEL RC} para cualquier cosa que aún no se sepa.
+  (6) DESPUÉS del borrador (fuera de los marcadores de correo), ENTONCES puede ofrecer una pregunta aclaratoria para refinar próximos pasos — pero el borrador y las citas vienen primero.
+
+LO QUE DAN NO DEBE DECIR:
+  - NO le diga a una familia que el SDP les pagará por el cuidado personal de su hijo menor de edad. No lo hará.
+  - NO le diga a una familia que la enmienda del HCBS-DD Waiver ha abierto una vía de pago a padres. DDS no lo ha autorizado.
+  - NO confunda HCBA y HCBS-DD — son waivers diferentes con reglas diferentes.
+  - NO cite W&I §4685.11 — esa sección no existe como comúnmente se describe. La autoridad real es §4685.8(p)(2) y la directiva del SDP Updated Goods and Services. (Beth verificó el 19 de abril de 2026 contra leginfo.)
+  - NO prometa un número específico de horas de IHSS. Esa es una decisión de evaluación en el hogar del condado, no algo que DAN puede predecir.
+
+EXCEPCIÓN DE COVID PHE — TERMINADA, NO REINTRODUCIR: Durante la Emergencia de Salud Pública de COVID-19, algunos padres fueron pagados temporalmente como proveedores bajo flexibilidades de emergencia. Esa excepción ha terminado. Las familias que fueron pagadas bajo la PHE a veces asumen que la regla todavía aplica — no lo hace. Si una familia dice "pero a mi amigo le pagaron durante COVID," reconozca que la excepción de PHE fue real, nombre claramente que ha terminado, y recorra las reglas actuales según el marco de cuatro programas arriba.
+
+MARCO COLABORATIVO: Los padres que hacen esta pregunta usualmente están exhaustos, a menudo manejando horas de cuidado por las que no son pagados, y a veces les han dicho cosas contradictorias por el RC, por compañeros, y por redes sociales. El tono de DAN debe ser: "Le escucho — esto es confuso porque en realidad son cuatro programas diferentes. Déjeme recorrer lo que cada uno puede y no puede hacer para su situación, para que no esté persiguiendo la puerta equivocada." Luego dirija el pedido concreto al humano correcto: trabajador social de IHSS, SC, consejero de beneficios de DHCS, u OCRA.
+
+CCR §58886 — NO OFRECER VOLUNTARIAMENTE: La excepción de "calificaciones especiales" bajo CCR §58886 ocasionalmente surge en esta conversación como una posible vía. DAN NO debe ofrecer §58886 como una opción voluntariamente. La decisión reciente de OAH explícitamente rechazó lecturas extendidas de §58886 sobre este patrón de hechos exacto, y nombrarla invitaría a malinterpretación por familias que no califican. Si OCRA o DRC plantea §58886 con la familia directamente, esa es una conversación diferente; DAN no la introduce.
+
+DISPARADOR DE BORRADOR — PARADA ABSOLUTA: Al final de cualquier conversación de padre como proveedor pagado, DAN DEBE producir un borrador de correo al SC pidiendo el inventario actual de inscripción de la familia (en qué programas está la familia — SDP, HCBS-DD Waiver, IHSS, etc.) para que la familia tenga un punto de partida preciso antes de decidir qué puerta perseguir. El borrador es corto — uno o dos párrafos — y usa marcadores {PERSONA}, {NOMBRE DEL SC}, {NOMBRE DEL RC}. Envuelva con marcadores literales ---EMAIL START--- / ---EMAIL END--- según la SEXTA REGLA DURA del prompt base. No ofrezca redactar — simplemente redacte.
+
+FUENTES QUE DAN PUEDE CITAR SI SE LE PIDE:
+  - California W&I Code §4685.8(p)(2) — las directivas tienen fuerza de regulaciones
+  - Directiva SDP Updated Goods and Services, Anexo A (DDS, 2024) — prohíbe el pago a padres por cuidado personal de menores bajo SDP
+  - Decisión de OAH en Fair Hearing 2025070280 (RCOC, agosto 2025) — la decisión autoritativa más reciente sobre pago a padres bajo el HCBS-DD Waiver
+  - W&I Code §12300 y siguientes — estatuto de IHSS
+  - HCBS-DD Waiver CA.0336.R05.10 (enmienda del 1 de enero de 2025) — el documento que las familias a veces citan como autorización (no lo es, según OAH)
+
+HIGIENE DEL LENGUAJE: DAN no puede buscar en internet, consultar páginas de IHSS del condado, ni obtener formularios de aplicación de HCBA. Use "Puedo explicar lo que cada programa puede y no puede hacer" o "Esto es lo que la familia puede pedir por escrito" — nunca "déjeme buscar" ni "voy a consultar." Verbos seguros: explicar, recorrer, compartir, señalar, resumir. Verbos inseguros: buscar, consultar, encontrar, obtener, navegar a.
+`;
+
+
 // -- KNOWLEDGE LOADING MAP --
 // Maps stuck card types and free-text topic detections to relevant KB modules
 const KB_BY_CARD = {
   // Card names (from startStuck)
   delay:      [KB_WAITING, KB_ADVOCACY_ROUTING, KB_DUTY_TO_SECURE],
-  sdp:        [KB_SDP_RENEWAL, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING],
+  sdp:        [KB_SDP_RENEWAL, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING, KB_PARENT_PAID_PROVIDER],
   generic:    [KB_GENERIC_RESOURCE, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION],
   ipp:        [KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING, KB_CLINICAL_ASSESSMENT, KB_INFO_NAVIGATION, KB_DUTY_TO_SECURE],
-  spending:   [KB_SDP_SPENDING, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING],
+  spending:   [KB_SDP_SPENDING, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING, KB_PARENT_PAID_PROVIDER],
   preference: [KB_PREFERENCE, KB_CLINICAL_ASSESSMENT, KB_DUTY_TO_SECURE],
-  proactive:  [KB_GENERIC_RESOURCE, KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION, KB_DUTY_TO_SECURE],
+  proactive:  [KB_GENERIC_RESOURCE, KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION, KB_DUTY_TO_SECURE, KB_PARENT_PAID_PROVIDER],
   unsure:     [],
   // Topic names (from free-text detector in sendMessage)
-  'SDP':             [KB_SDP_RENEWAL, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING],
+  'SDP':             [KB_SDP_RENEWAL, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING, KB_PARENT_PAID_PROVIDER],
   'Appeals':         [KB_WAITING, KB_CLINICAL_ASSESSMENT, KB_ADVOCACY_ROUTING],
-  'Getting Services': [KB_GOAL_NOT_IN_IPP, KB_PREFERENCE, KB_GENERIC_RESOURCE, KB_IPP_MEETING, KB_CLINICAL_ASSESSMENT, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION, KB_DUTY_TO_SECURE],
+  'Getting Services': [KB_GOAL_NOT_IN_IPP, KB_PREFERENCE, KB_GENERIC_RESOURCE, KB_IPP_MEETING, KB_CLINICAL_ASSESSMENT, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION, KB_DUTY_TO_SECURE, KB_PARENT_PAID_PROVIDER],
   'Legal Status':    [KB_LEGAL_STATUS],
   'Other':           [],
 };
 
 const KB_BY_CARD_ES = {
   delay:      [KB_WAITING_ES, KB_ADVOCACY_ROUTING_ES, KB_DUTY_TO_SECURE_ES],
-  sdp:        [KB_SDP_RENEWAL_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES],
+  sdp:        [KB_SDP_RENEWAL_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES, KB_PARENT_PAID_PROVIDER_ES],
   generic:    [KB_GENERIC_RESOURCE_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES],
   ipp:        [KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_INFO_NAVIGATION_ES, KB_DUTY_TO_SECURE_ES],
-  spending:   [KB_SDP_SPENDING_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES],
+  spending:   [KB_SDP_SPENDING_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES, KB_PARENT_PAID_PROVIDER_ES],
   preference: [KB_PREFERENCE_ES, KB_CLINICAL_ASSESSMENT_ES, KB_DUTY_TO_SECURE_ES],
-  proactive:  [KB_GENERIC_RESOURCE_ES, KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES, KB_DUTY_TO_SECURE_ES],
+  proactive:  [KB_GENERIC_RESOURCE_ES, KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES, KB_DUTY_TO_SECURE_ES, KB_PARENT_PAID_PROVIDER_ES],
   unsure:     [],
-  'SDP':             [KB_SDP_RENEWAL_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES],
+  'SDP':             [KB_SDP_RENEWAL_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES, KB_PARENT_PAID_PROVIDER_ES],
   'Appeals':         [KB_WAITING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_ADVOCACY_ROUTING_ES],
-  'Getting Services': [KB_GOAL_NOT_IN_IPP_ES, KB_PREFERENCE_ES, KB_GENERIC_RESOURCE_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES, KB_DUTY_TO_SECURE_ES],
+  'Getting Services': [KB_GOAL_NOT_IN_IPP_ES, KB_PREFERENCE_ES, KB_GENERIC_RESOURCE_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES, KB_DUTY_TO_SECURE_ES, KB_PARENT_PAID_PROVIDER_ES],
   'Legal Status':    [KB_LEGAL_STATUS_ES],
   'Other':           [],
 };
