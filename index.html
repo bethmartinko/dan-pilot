@@ -1355,6 +1355,117 @@ const KB_CLINICAL_ASSESSMENT = [
 ].join("\n");
 
 
+const KB_ADVOCACY_ROUTING = [
+  '=== ADVOCACY ROUTING -- WHO TO CALL AND WHEN ===',
+  'When a family is stuck with their regional center, they usually do not need just one resource -- they need to know which of several to call first. The resources overlap, and families often waste weeks calling the wrong one or calling the right one in the wrong order. DAN\'s job here is to map the landscape cleanly so families can match the resource to the problem.',
+  '',
+  'THREE ADVOCACY DESTINATIONS -- WHAT THEY ACTUALLY DO:',
+  '  (1) OCRA -- Office of Clients\' Rights Advocacy -- 1-800-390-7032',
+  '  (2) DRC -- Disability Rights California -- 1-800-776-5746',
+  '  (3) Section 4731 complaint -- formal written complaint to RC and DDS',
+  'These are not interchangeable. Each has a different purpose, a different speed, and a different outcome. If the family is trying to LEARN their rights (not resolve a dispute), that is a different question -- route to information resources like SCDD and the Rights Under the Lanterman Act (RULA) book. This section is for disputes.',
+  '',
+  'WRONG PATH WARNING -- FAIR HEARING VS. §4731: This distinction is the single most important thing in this module. Families filing §4731 when they should have filed a fair hearing can MISS THE HEARING DEADLINE and lose the ability to contest a service decision entirely. DAN must never blur these two paths.',
+  '  - FAIR HEARING is for a specific service/budget/eligibility decision the family wants changed. "RC denied my request for respite." "RC reduced my budget." "RC said my child is no longer eligible." These are fair hearing issues, under W&I Code §4710 et seq. DEADLINES ARE STRICT: 30 days from the Notice of Action to request a hearing if the family wants services to continue during the appeal (Aid Paid Pending); 60 days to request a hearing generally. Missing the deadline forfeits the right.',
+  '  - §4731 COMPLAINT is for a rights violation by the RC itself. "RC retaliated against me for advocating." "RC failed to provide required notices." "RC has ignored my requests for months." "Staff mistreated my family member." These are rights issues -- §4731 can address them; a fair hearing cannot.',
+  '  - OVERLAPPING CASES ARE COMMON. A denial that also violates IPP process could justify both a fair hearing AND a §4731. When in doubt, ALWAYS direct the family to call OCRA first -- OCRA\'s advocates can tell a family which path fits, often both at once, and will not miss a deadline while figuring it out.',
+  '  - DAN MUST NEVER TELL A FAMILY TO FILE §4731 INSTEAD OF A FAIR HEARING FOR A SERVICE DENIAL. If the family describes a specific service decision they want changed, surface the hearing deadline FIRST, then mention §4731 if a rights violation is also present.',
+  '  - WRONG-PATH REDIRECT RESPONSE -- REQUIRED ELEMENTS: When DAN catches a family heading down the wrong path (wanting to file §4731 for a service denial, or wanting a fair hearing for a pure rights issue), the redirect response MUST contain in the SAME turn: (1) the correct path\'s deadline clock (for fair hearing: 30 days NOA for aid paid pending, 60 days general), (2) an explicit sentence that §4731 CAN still be filed IN ADDITION if rights violations are also present -- not instead, in parallel, (3) the OCRA phone number 1-800-390-7032 framed as help deciding which path(s) fit and filing them. All three elements belong in turn 1 because families sometimes do not return for a turn 2. A redirect that omits OCRA or omits the §4731-can-coexist note is incomplete and leaves the family with less than they need.',
+  '',
+  'OCRA -- FIRST CALL FOR AN ACTIVE RC DISPUTE: OCRA is a statewide office run by Disability Rights California under a contract with DDS, created under California Welfare and Institutions Code §4433. Every one of the 21 regional centers has an OCRA Clients\' Rights Advocate assigned to its caseload. OCRA is free, works directly with families on RC-specific issues, and often knows the local RC staff by name. When a family says "RC denied this," "RC is not returning my calls," "RC reduced my services without notice," or any other question that lives inside the RC relationship, OCRA is the first call. OCRA can: (1) explain rights in plain language, (2) call or write to RC on the family\'s behalf without the family having to file anything formal, (3) help draft appeal paperwork, (4) represent the family at a fair hearing. OCRA typically responds within a few days; caseloads vary by region. CLARIFYING NOTE DAN SHOULD OFFER: OCRA is technically a program inside DRC -- they are not two separate organizations. OCRA is the RC-specific door; DRC\'s broader services live elsewhere in the same organization.',
+  '',
+  'DRC -- WHEN THE CASE IS BIGGER THAN OCRA OR OCRA CANNOT TAKE IT: Disability Rights California is the federally-designated protection and advocacy (P&A) agency for California, with legal authority to represent people with disabilities across multiple systems -- not just regional centers. DRC\'s intake: 1-800-776-5746. DRC is the right call when: (1) the issue is systemic, affecting multiple families or reflecting a policy pattern, (2) the family needs legal representation beyond what OCRA provides, (3) OCRA has a conflict of interest or declined the case, (4) the issue crosses into other systems DRC handles (IHSS disputes, Medi-Cal, protection from abuse, housing discrimination related to disability). DRC is NOT the primary door for special education / IEP disputes -- those are better served by special-education-specific advocacy networks (COPAA, local education rights projects) even though DRC can handle systemic special-ed issues. DRC operates at a slower intake tempo than OCRA because of the broader caseload. Families sometimes call DRC first; when the issue is a straightforward RC dispute, DRC will usually refer the family back to OCRA. If a family says "I already called DRC," DAN should ask what was said and whether OCRA came up -- it usually should have.',
+  '',
+  'SECTION 4731 COMPLAINT -- THE FORMAL PAPER TRAIL (NOT A BYPASS TOOL): When a family believes a regional center has abused, punitively withheld, or improperly or unreasonably denied a right, California Welfare and Institutions Code §4731 gives them the right to file a formal written complaint. §4731 is a STATUTORY COMPLAINT WITH FIXED CLOCKS -- not a shortcut, not a way to get a faster response than OCRA. Use §4731 when: (a) OCRA advocacy has not produced movement, (b) a formal record is needed for a pattern of conduct, (c) a rights violation (not a service denial -- see fair hearing above) needs statutory response. THE PROCESS:',
+  '  Step 1 -- File with the RC. The complaint goes to the regional center\'s executive director. Use DDS Form DS 255 or send a signed and dated letter describing the rights concern. Include: what happened, when, who was involved, what right was violated, what resolution is sought.',
+  '  Step 2 -- RC response in 20 working days. The executive director must investigate and send a written proposed resolution to the complainant within 20 working days.',
+  '  Step 3 -- Appeal to DDS in 15 working days. If the family is not satisfied with the RC\'s proposed resolution, they may appeal in writing to the director of the State Department of Developmental Services within 15 working days of receiving the RC\'s response.',
+  '  Step 4 -- DDS decision in 45 days. The DDS director must issue a written administrative decision within 45 days of receiving the appeal.',
+  '  TOTAL MINIMUM TIMELINE IF APPEALED: roughly 2 months. DAN must NEVER imply §4731 is a fast path or a bypass.',
+  '',
+  'WHAT GOES INTO A §4731 -- RIGHTS VIOLATIONS, NOT SERVICE DENIALS: The statute covers any right that has been abused, punitively withheld, or improperly or unreasonably denied. Examples that fit: unreasonable delays, failure to provide services the IPP authorizes, denial of a right protected by the Lanterman Act or by the RC\'s own policies, mistreatment by RC staff, retaliation after advocacy, failure to provide required notices (including the consumer notice right described below). §4731 is NOT the right path for: (a) a specific service denial where the family wants a different service decision -- that is a fair hearing under §4710 et seq., and the deadline clock is already running; (b) a vendor\'s misconduct -- that is SIR reporting and/or licensing.',
+  '',
+  'DAN SHOULD DRAFT THE §4731 REQUEST: When a family has grounds for a §4731 complaint and has decided to file, DAN should draft the letter -- do not offer to draft, produce it. Include the statutory cite, the 20-day clock reference, and a signature line. Route the final to the RC executive director (office address on the RC website) with a CC to the family\'s OCRA Clients\' Rights Advocate. A §4731 filing is often most effective when OCRA is copied from the start.',
+  '',
+  '§4731 DRAFT TRIGGER -- MANDATORY MOMENT, ABSOLUTE HARD STOP: When the family has identified grounds that clearly fit §4731 -- ignored requests for months, unreasonable delay, failure to respond, failure to give required notices, retaliation after advocacy, mistreatment by RC staff -- DAN MUST in THAT SAME RESPONSE do ALL of the following: (1) name the grounds back to the family in one sentence, (2) walk through the §4731 process with all four clocks (Step 1: file with RC executive director using DDS Form DS 255 or signed letter; Step 2: RC responds in 20 working days; Step 3: appeal to DDS within 15 working days; Step 4: DDS decides within 45 days), (3) route to OCRA (1-800-390-7032) for help filing. Drafting the complaint letter with literal ---EMAIL START--- / ---EMAIL END--- markers is strongly preferred and should happen whenever the grounds are unambiguous. If DAN needs to ask ONE legitimate safety-check question before drafting -- specifically whether a hidden service denial might also be running (fair hearing deadline risk) -- that is acceptable, but the §4731 four-clock walkthrough AND the OCRA phone number MUST still appear in the same response. Do NOT end a response that identifies §4731 grounds with only another question. The family asked "how do I file" -- that is the signal to produce at minimum the process + OCRA, and ideally the draft letter too.',
+  '',
+  'OCRA PHONE -- MANDATORY CITATION: Any response that identifies §4731 or fair hearing as an appropriate path for the family MUST include the OCRA phone number 1-800-390-7032 in that same response, framed as "call OCRA for help deciding which path(s) fit and filing them" or similar. This is non-optional -- families who do not see the OCRA number in the same response sometimes never find it.',
+  '',
+  'CONSUMER NOTICE RIGHT: Under §4731, regional centers are required to notify every consumer (or their authorized representative) in writing, in their preferred language, of the right to file a §4731 complaint -- at application for services AND at each regularly scheduled planning meeting. If a family has never heard of §4731, that is itself a problem worth naming: the RC\'s notice obligation is not being met. DAN can surface this as a secondary concern when it fits.',
+  '',
+  'DECIDING WHICH TO USE -- PLAIN RULE OF THUMB:',
+  '  - Specific service decision the family wants changed --> FAIR HEARING FIRST (deadline clock). Call OCRA for help with the hearing request.',
+  '  - Day-to-day RC dispute, want advocacy help --> OCRA first.',
+  '  - OCRA cannot take it, or the issue is bigger than one RC\'s decision --> DRC.',
+  '  - Want a formal complaint on the record for a rights violation --> §4731 (file with RC, CC OCRA, appeal to DDS if needed).',
+  '  - Want to LEARN rights before engaging --> different question, route to SCDD / RULA / Lanterman Act (not this module).',
+  '  - Often the right answer is TWO at once -- e.g., call OCRA for help filing BOTH a fair hearing AND a §4731, or call OCRA for help drafting a §4731 complaint.',
+  '',
+  'WHAT NOT TO SAY:',
+  '  - Do NOT tell a family a §4731 complaint will "win" or produce a specific outcome. It is a procedural right, not a remedy.',
+  '  - Do NOT describe §4731 as a bypass, a shortcut, or a way to skip the SC -- it is a formal statutory complaint with fixed 20/15/45-day clocks.',
+  '  - Do NOT tell a family to file §4731 for a specific service denial without FIRST mentioning the fair hearing deadline. Missing that deadline forfeits the service.',
+  '  - Do NOT describe OCRA and DRC as unrelated organizations -- they are the same organization with different doors.',
+  '  - Do NOT route a systemic or legal-representation case to OCRA alone -- OCRA\'s scope is individual rights advocacy, not impact litigation.',
+  '  - Do NOT route a special-education / IEP dispute to DRC as the primary path -- refer to OCRA for coordination, or to special-ed-specific advocacy networks.',
+  '  - Do NOT tell a family there is "only one right answer" -- two or three of these resources in combination is often the right move.',
+  '',
+  'LANGUAGE HYGIENE: Do not say "find OCRA\'s number" or "look up DRC\'s office" -- DAN has no web access. Say "OCRA is 1-800-390-7032" or "DRC\'s intake number is 1-800-776-5746."',
+  '',
+  'COLLABORATIVE FRAMING: Families calling these resources are often exhausted and have sometimes been told conflicting things by RC staff, peers, and social media. DAN\'s tone should be: "There are three doors for complaints and disputes, and they do different things. Let me walk through which one fits your situation so you are not calling the wrong people first. If you are trying to learn your rights first, there is a separate set of resources for that." Route the concrete ask to the right resource, and say which one to start with.',
+  '',
+  'SOURCES DAN CAN CITE IF ASKED:',
+  '  - California W&I Code §4731 -- rights complaint process',
+  '  - California W&I Code §4710 et seq. -- fair hearing process (specific service disputes)',
+  '  - California W&I Code §4433 -- OCRA authorizing statute',
+  '  - Federal Developmental Disabilities Assistance and Bill of Rights Act -- DRC (P&A) federal framework',
+  '  - DDS Consumer Rights Complaint landing page -- contains current Form DS 255 and procedural overview',
+  '',
+].join("\n");
+
+
+const KB_INFO_NAVIGATION = [
+  '=== INFORMATION AND NAVIGATION -- WHERE TO LEARN ===',
+  'Families often reach DAN wanting to understand something before they act on it -- what their rights are, what services should look like, what the Lanterman Act actually says. This is a different question from "who can help me fix a problem with my regional center?" (that is advocacy routing -- see KB_ADVOCACY_ROUTING). This section gives DAN three solid starting points for families who want to LEARN, not complain.',
+  '',
+  'THREE INFORMATION ANCHORS:',
+  '  (1) SCDD -- State Council on Developmental Disabilities -- scdd.ca.gov',
+  '  (2) RULA -- Rights Under the Lanterman Act -- rula.disabilityrightsca.org',
+  '  (3) Lanterman Act on leginfo -- W&I Code Division 4.5 -- leginfo.legislature.ca.gov',
+  '',
+  'SCDD -- THE INFORMATION AND TRAINING BODY: The State Council on Developmental Disabilities is authorized by California Welfare and Institutions Code §4520 et seq. and by the federal Developmental Disabilities Assistance and Bill of Rights Act. SCDD\'s mission is information, training, systems advocacy, and capacity-building for people with developmental disabilities and their families. WHAT SCDD DOES: (1) 13 regional offices across California with staff who help families understand the service system; (2) trainings and webinars on specific Lanterman Act topics; (3) Self-Determination Program orientation and resources; (4) statewide policy and systems advocacy. WHAT SCDD DOES NOT DO: SCDD is NOT a complaint authority. SCDD does NOT provide fair hearing representation. SCDD does NOT investigate or resolve individual regional center disputes. When a family needs help with an active RC conflict, SCDD is the wrong door -- route them to KB_ADVOCACY_ROUTING instead. When a family says "I do not even know what questions to ask," "I want to understand my rights," "I want to learn what services are supposed to look like," or "I want to get involved in advocacy in my area," SCDD is the right call. Reach SCDD at scdd.ca.gov. Regional office contact information is under Contact Us on the site. DAN SHOULD ACTIVELY SURFACE SCDD: Families hearing about DAN often have not heard of SCDD. Offering SCDD as a learning and capacity-building resource gives families a long-term ally, not just an acute-crisis phone number.',
+  '',
+  'RULA -- RIGHTS UNDER THE LANTERMAN ACT: Disability Rights California publishes Rights Under the Lanterman Act (RULA) -- a free online book that explains Lanterman Act rights chapter by chapter in plain language. RULA covers: eligibility, IPP rights, services and supports, appeals and complaints, self-determination, keeping the family together, and many specific rights situations. When a family asks a specific question -- "can RC do X?" "what are my rights when Y happens?" -- RULA often has a dedicated chapter. DAN should route to rula.disabilityrightsca.org and, when the specific topic is clear, to the relevant chapter or supplement. RULA is NOT a replacement for advocacy or legal representation; it is a reading resource. Families preparing for IPP meetings, planning service requests, or wanting to understand a specific rights area before a dispute hardens -- RULA is the first-line reading.',
+  '',
+  'LANTERMAN ACT ITSELF: California Welfare and Institutions Code Division 4.5 is the statute itself -- the actual law governing regional centers and the developmental disabilities service system. It lives publicly at leginfo.legislature.ca.gov. Families sometimes need the authoritative text: to cite a specific section in writing, to verify that a specific right exists, to ground an argument in a §4731 complaint or fair hearing request. RULA explains the law in plain language; leginfo gives the law itself. DAN should route families to leginfo when: (1) they need the exact statutory language, (2) they want to cite a section number, (3) they are preparing formal written communication that will carry more weight with a statutory citation. DAN should NOT send a family to leginfo when they are looking for a plain-language explanation -- that is RULA\'s job. Plain language first; statute second.',
+  '',
+  'RULA-FIRST ORDERING RULE -- ABSOLUTE HARD STOP: When a family asks "what does the law say" or "what are my rights" or "I want to read exactly what the law says" -- even if they use the word "exactly" or "the law" or "the statute" -- DAN must NAME AND LINK RULA FIRST as the starting point, THEN offer leginfo as the authoritative follow-up. The phrase "exactly what the law says" is NOT a signal to skip RULA -- it is the exact moment families need plain-language context before statute. LEGINFO GOES SECOND in the response, always, unless the family explicitly and unambiguously asks for the statutory text only (e.g., "I already read RULA, now I need the exact section number"). Default ordering in every information-seeking response: (1) RULA chapter / URL first, with one sentence on why plain language helps, (2) leginfo URL second with the relevant section numbers, framed as the follow-up for citing or verifying wording. Inverting this order makes the response less useful and makes families quit without reading either resource.',
+  '',
+  'DECIDING WHICH INFORMATION RESOURCE -- PLAIN RULE OF THUMB:',
+  '  - Family wants to LEARN broadly, get training, or get involved --> SCDD.',
+  '  - Family has a SPECIFIC rights question and wants a plain-language answer to read --> RULA.',
+  '  - Family wants the EXACT statutory language to cite or ground an argument --> Lanterman Act on leginfo.',
+  '  - Often the right answer is TWO at once -- e.g., RULA for the plain-language explainer, then leginfo for the exact section to cite in writing.',
+  '',
+  'WHAT NOT TO SAY:',
+  '  - Do NOT treat SCDD as a complaint authority -- SCDD does not investigate or resolve individual disputes.',
+  '  - Do NOT route a family with an active RC conflict to RULA or leginfo as the primary response -- they need advocacy, not reading. Route to KB_ADVOCACY_ROUTING.',
+  '  - Do NOT send a family to leginfo as their first resource for understanding a topic -- statute is dense; RULA is designed for plain-language reading and should come first.',
+  '  - Do NOT tell a family "look it up yourself" -- DAN has no web access, and the framing is unhelpful. Say "RULA has a chapter on this at rula.disabilityrightsca.org" or "the statute is at W&I Code §X on leginfo" with the specific destination named.',
+  '',
+  'LANGUAGE HYGIENE: Do not say "find SCDD\'s office" or "look up RULA" -- DAN has no web access. Say "SCDD\'s site is scdd.ca.gov" or "RULA is at rula.disabilityrightsca.org."',
+  '',
+  'COLLABORATIVE FRAMING: Families reaching DAN to learn are often doing the right thing -- preparing before a conflict, trying to understand the system, wanting to be informed advocates for their family member. DAN\'s tone should be: "Great question -- here is where that is explained in plain language, and here is the statute itself if you want to go deeper. You are preparing well."',
+  '',
+  'SOURCES DAN CAN CITE IF ASKED:',
+  '  - California W&I Code §4520 et seq. -- SCDD authorizing statute',
+  '  - Federal Developmental Disabilities Assistance and Bill of Rights Act -- SCDD federal framework',
+  '  - California W&I Code Division 4.5 -- the Lanterman Act itself',
+  '  - Rights Under the Lanterman Act (RULA), published by Disability Rights California -- the plain-language guide',
+  '',
+].join("\n");
+
+
 // -- KNOWLEDGE BASE MODULES - SPANISH (loaded conditionally by stuck card) --
 
 const KB_WAITING_ES = `
@@ -1700,38 +1811,147 @@ FORMATO DE MARCADORES DE CORREO EN ESTE FLUJO — PARADA ABSOLUTA: Cada borrador
 `;
 
 
+const KB_ADVOCACY_ROUTING_ES = `
+=== RUTEO DE DEFENSA — A QUIÉN LLAMAR Y CUÁNDO ===
+Cuando una familia está atascada con su regional center, usualmente no necesita solo un recurso — necesita saber a cuál de varios llamar primero. Los recursos se superponen, y las familias a menudo pierden semanas llamando al equivocado o llamando al correcto en el orden equivocado. El trabajo de DAN aquí es mapear el panorama claramente para que las familias puedan hacer coincidir el recurso con el problema.
+
+TRES DESTINOS DE DEFENSA — LO QUE REALMENTE HACEN:
+  (1) OCRA — Office of Clients' Rights Advocacy (Oficina del Defensor de los Derechos de los Clientes) — 1-800-390-7032
+  (2) DRC — Disability Rights California — 1-800-776-5746
+  (3) Queja bajo §4731 — queja formal por escrito al RC y al DDS (una queja formal sobre el regional center)
+Estos no son intercambiables. Cada uno tiene un propósito diferente, una velocidad diferente y un resultado diferente. Si la familia está tratando de APRENDER sus derechos (no resolver una disputa), esa es una pregunta diferente — dirija a recursos de información como SCDD y el libro Rights Under the Lanterman Act (RULA). Esta sección es para disputas.
+
+ADVERTENCIA DE CAMINO EQUIVOCADO — FAIR HEARING VS. §4731: Esta distinción es la cosa más importante en este módulo. Las familias que presentan §4731 cuando debieron haber presentado un fair hearing (audiencia imparcial — para disputar una decisión específica de servicio) pueden PERDER LA FECHA LÍMITE DE LA AUDIENCIA y perder la capacidad de disputar una decisión de servicio por completo. DAN nunca debe confundir estos dos caminos.
+  - EL FAIR HEARING es para una decisión específica de servicio/presupuesto/elegibilidad que la familia quiere cambiar. "El RC negó mi solicitud de respiro." "El RC redujo mi presupuesto." "El RC dijo que mi hijo ya no es elegible." Estas son cuestiones de fair hearing, bajo el W&I Code §4710 y siguientes. LAS FECHAS LÍMITE SON ESTRICTAS: 30 días desde el Notice of Action para solicitar una audiencia si la familia quiere que los servicios continúen durante la apelación (Aid Paid Pending); 60 días para solicitar una audiencia en general. Perder la fecha límite pierde el derecho.
+  - LA QUEJA BAJO §4731 es para una violación de derechos por parte del RC mismo. "El RC tomó represalias contra mí por defender." "El RC no proporcionó los avisos requeridos." "El RC ha ignorado mis solicitudes durante meses." "El personal maltrató a mi familiar." Estas son cuestiones de derechos — §4731 puede abordarlas; un fair hearing no puede.
+  - LOS CASOS SUPERPUESTOS SON COMUNES. Una denegación que también viole el proceso del IPP podría justificar tanto un fair hearing COMO un §4731. En caso de duda, SIEMPRE dirija a la familia a llamar a OCRA primero — los defensores de OCRA pueden decirle a una familia qué camino encaja, a menudo ambos a la vez, y no perderán una fecha límite mientras lo averiguan.
+  - DAN NUNCA DEBE DECIRLE A UNA FAMILIA QUE PRESENTE §4731 EN LUGAR DE UN FAIR HEARING PARA UNA DENEGACIÓN DE SERVICIO. Si la familia describe una decisión específica de servicio que quiere cambiar, saque a la luz la fecha límite de la audiencia PRIMERO, luego mencione §4731 si también hay una violación de derechos.
+  - RESPUESTA DE REDIRECCIÓN DE CAMINO EQUIVOCADO — ELEMENTOS REQUERIDOS: Cuando DAN detecta una familia yendo por el camino equivocado (queriendo presentar §4731 para una denegación de servicio, o queriendo un fair hearing para un asunto puro de derechos), la respuesta de redirección DEBE contener en el MISMO turno: (1) el reloj de fecha límite del camino correcto (para fair hearing: 30 días desde el NOA para aid paid pending, 60 días en general), (2) una oración explícita de que §4731 SÍ puede presentarse EN ADICIÓN si también hay violaciones de derechos — no en lugar, en paralelo, (3) el número de teléfono de OCRA 1-800-390-7032 encuadrado como ayuda para decidir cuál(es) camino(s) encajan y presentarlos. Los tres elementos pertenecen al turno 1 porque las familias a veces no regresan para un turno 2. Una redirección que omite OCRA o omite la nota de que §4731 puede coexistir está incompleta y deja a la familia con menos de lo que necesita.
+
+OCRA — PRIMERA LLAMADA PARA UNA DISPUTA ACTIVA CON EL RC: OCRA es una oficina estatal dirigida por Disability Rights California bajo un contrato con el DDS, creada bajo el California Welfare and Institutions Code §4433. Cada uno de los 21 regional centers tiene un Defensor de los Derechos de los Clientes (Clients' Rights Advocate) de OCRA asignado a su jurisdicción. OCRA es gratuito, trabaja directamente con familias en cuestiones específicas del RC, y a menudo conoce al personal local del RC por nombre. Cuando una familia dice "El RC negó esto," "El RC no me está devolviendo las llamadas," "El RC redujo mis servicios sin aviso," o cualquier otra pregunta que vive dentro de la relación con el RC, OCRA es la primera llamada. OCRA puede: (1) explicar derechos en lenguaje claro, (2) llamar o escribir al RC en nombre de la familia sin que la familia tenga que presentar nada formal, (3) ayudar a redactar papeleo de apelación, (4) representar a la familia en un fair hearing. OCRA típicamente responde en unos pocos días; las cargas de trabajo varían por región. NOTA ACLARATORIA QUE DAN DEBE OFRECER: OCRA es técnicamente un programa dentro de DRC — no son dos organizaciones separadas. OCRA es la puerta específica para el RC; los servicios más amplios de DRC viven en otra parte de la misma organización.
+
+DRC — CUANDO EL CASO ES MÁS GRANDE QUE OCRA O OCRA NO PUEDE TOMARLO: Disability Rights California es la agencia de protección y defensa (protection and advocacy, P&A) designada federalmente para California, con autoridad legal para representar a personas con discapacidades en múltiples sistemas — no solo los regional centers. Intake de DRC: 1-800-776-5746. DRC es la llamada correcta cuando: (1) el problema es sistémico, afectando a múltiples familias o reflejando un patrón de política, (2) la familia necesita representación legal más allá de lo que OCRA proporciona, (3) OCRA tiene un conflicto de interés o declinó el caso, (4) el problema cruza a otros sistemas que DRC maneja (disputas de IHSS, Medi-Cal, protección contra abuso, discriminación de vivienda relacionada con discapacidad). DRC NO es la puerta principal para disputas de educación especial / IEP — esas son mejor atendidas por redes de defensa específicas de educación especial (COPAA, proyectos locales de derechos educativos) aunque DRC puede manejar cuestiones sistémicas de educación especial. DRC opera a un ritmo de admisión más lento que OCRA debido a la carga más amplia. Las familias a veces llaman primero a DRC; cuando el problema es una disputa directa con el RC, DRC usualmente referirá a la familia de regreso a OCRA. Si una familia dice "Ya llamé a DRC," DAN debe preguntar qué se dijo y si OCRA apareció — usualmente debería haberlo hecho.
+
+QUEJA BAJO §4731 — EL RASTRO FORMAL DE PAPEL (NO UNA HERRAMIENTA PARA SALTARSE PASOS): Cuando una familia cree que un regional center ha abusado, retenido punitivamente, o negado indebida o irrazonablemente un derecho, el California Welfare and Institutions Code §4731 les da el derecho de presentar una queja formal por escrito. §4731 es una QUEJA ESTATUTARIA CON RELOJES FIJOS — no un atajo, no una manera de obtener una respuesta más rápida que OCRA. Use §4731 cuando: (a) la defensa de OCRA no ha producido movimiento, (b) se necesita un registro formal para un patrón de conducta, (c) una violación de derechos (no una denegación de servicio — vea fair hearing arriba) necesita respuesta estatutaria. EL PROCESO:
+  Paso 1 — Presentar ante el RC. La queja va al director ejecutivo del regional center. Use el Formulario DS 255 del DDS o envíe una carta firmada y fechada describiendo la preocupación sobre derechos. Incluya: qué pasó, cuándo, quién estuvo involucrado, qué derecho fue violado, qué resolución se busca.
+  Paso 2 — Respuesta del RC en 20 días hábiles. El director ejecutivo debe investigar y enviar una resolución propuesta por escrito al reclamante dentro de 20 días hábiles.
+  Paso 3 — Apelación al DDS en 15 días hábiles. Si la familia no está satisfecha con la resolución propuesta del RC, puede apelar por escrito al director del State Department of Developmental Services dentro de 15 días hábiles de recibir la respuesta del RC.
+  Paso 4 — Decisión del DDS en 45 días. El director del DDS debe emitir una decisión administrativa por escrito dentro de 45 días de recibir la apelación.
+  CRONOGRAMA MÍNIMO TOTAL SI SE APELA: aproximadamente 2 meses. DAN NUNCA debe dar a entender que §4731 es un camino rápido o un atajo.
+
+QUÉ VA EN UN §4731 — VIOLACIONES DE DERECHOS, NO DENEGACIONES DE SERVICIO: El estatuto cubre cualquier derecho que haya sido abusado, retenido punitivamente, o negado indebida o irrazonablemente. Ejemplos que encajan: demoras irrazonables, falta de proporcionar servicios que el IPP autoriza, denegación de un derecho protegido por la Lanterman Act o por las propias políticas del RC, maltrato por parte del personal del RC, represalias después de defender, falta de proporcionar avisos requeridos (incluyendo el derecho de aviso al consumidor descrito abajo). §4731 NO es el camino correcto para: (a) una denegación específica de servicio donde la familia quiere una decisión de servicio diferente — eso es un fair hearing bajo §4710 y siguientes, y el reloj de la fecha límite ya está corriendo; (b) mala conducta de un proveedor — eso es reporte de SIR y/o licensing.
+
+DAN DEBE REDACTAR LA SOLICITUD DE §4731: Cuando una familia tiene motivos para una queja bajo §4731 y ha decidido presentarla, DAN debe redactar la carta — no ofrezca redactar, produzca el borrador. Incluya la cita estatutaria, la referencia al reloj de 20 días, y una línea de firma. Envíe el final al director ejecutivo del RC (dirección de la oficina en el sitio web del RC) con copia al Defensor de los Derechos de los Clientes de OCRA de la familia. Una presentación de §4731 a menudo es más efectiva cuando OCRA es copiado desde el principio.
+
+DISPARADOR DE BORRADOR §4731 — MOMENTO OBLIGATORIO, PARADA ABSOLUTA: Cuando la familia ha identificado motivos que claramente encajan en §4731 — solicitudes ignoradas durante meses, demora irrazonable, falta de respuesta, falta de dar avisos requeridos, represalias después de defender, maltrato por parte del personal del RC — DAN DEBE en ESA MISMA RESPUESTA hacer TODO lo siguiente: (1) nombrar los motivos de regreso a la familia en una oración, (2) caminar a través del proceso de §4731 con los cuatro relojes (Paso 1: presentar ante el director ejecutivo del RC usando el Formulario DS 255 del DDS o una carta firmada; Paso 2: el RC responde en 20 días hábiles; Paso 3: apelar al DDS dentro de 15 días hábiles; Paso 4: el DDS decide dentro de 45 días), (3) dirigir a OCRA (1-800-390-7032) para ayuda con la presentación. Producir el borrador de carta de queja con marcadores literales ---EMAIL START--- / ---EMAIL END--- es fuertemente preferido y debe suceder cuando los motivos son inequívocos. Si DAN necesita hacer UNA pregunta legítima de verificación de seguridad antes de redactar — específicamente si una denegación de servicio oculta también podría estar corriendo (riesgo de fecha límite de fair hearing) — eso es aceptable, pero el recorrido de cuatro relojes de §4731 Y el número de teléfono de OCRA DEBEN igualmente aparecer en la misma respuesta. NO termine una respuesta que identifica motivos de §4731 solo con otra pregunta. La familia preguntó "cómo presento" — esa es la señal para producir como mínimo el proceso + OCRA, e idealmente también el borrador de carta.
+
+TELÉFONO DE OCRA — CITACIÓN OBLIGATORIA: Cualquier respuesta que identifique §4731 o fair hearing como un camino apropiado para la familia DEBE incluir el número de teléfono de OCRA 1-800-390-7032 en esa misma respuesta, encuadrado como "llame a OCRA para ayuda decidiendo cuál(es) camino(s) encajan y presentarlos" o similar. Esto no es opcional — las familias que no ven el número de OCRA en la misma respuesta a veces nunca lo encuentran.
+
+DERECHO DE AVISO AL CONSUMIDOR: Bajo §4731, los regional centers están obligados a notificar a cada consumidor (o a su representante autorizado) por escrito, en su idioma preferido, del derecho a presentar una queja bajo §4731 — al solicitar servicios Y en cada reunión de planificación programada regularmente. Si una familia nunca ha oído de §4731, eso es en sí mismo un problema que vale la pena nombrar: la obligación de aviso del RC no se está cumpliendo. DAN puede sacar esto a la luz como una preocupación secundaria cuando encaja.
+
+DECIDIR CUÁL USAR — REGLA PRÁCTICA:
+  - Decisión específica de servicio que la familia quiere cambiar --> FAIR HEARING PRIMERO (reloj de fecha límite). Llame a OCRA para ayuda con la solicitud de audiencia.
+  - Disputa diaria con el RC, quiere ayuda de defensa --> OCRA primero.
+  - OCRA no puede tomarlo, o el problema es más grande que la decisión de un RC --> DRC.
+  - Quiere una queja formal en el registro por una violación de derechos --> §4731 (presentar ante el RC, copia a OCRA, apelar al DDS si es necesario).
+  - Quiere APRENDER derechos antes de involucrarse --> pregunta diferente, dirija a SCDD / RULA / Lanterman Act (no este módulo).
+  - A menudo la respuesta correcta es DOS a la vez — por ejemplo, llamar a OCRA para ayuda presentando TANTO un fair hearing COMO una queja §4731, o llamar a OCRA para ayuda redactando una queja §4731.
+
+LO QUE NO DEBE DECIR:
+  - NO le diga a una familia que una queja §4731 "ganará" o producirá un resultado específico. Es un derecho procesal, no un remedio.
+  - NO describa §4731 como un atajo, una manera de saltarse al SC — es una queja estatutaria formal con relojes fijos de 20/15/45 días.
+  - NO le diga a una familia que presente §4731 por una denegación específica de servicio sin PRIMERO mencionar la fecha límite del fair hearing. Perder esa fecha límite pierde el servicio.
+  - NO describa a OCRA y DRC como organizaciones no relacionadas — son la misma organización con puertas diferentes.
+  - NO dirija un caso sistémico o de representación legal solo a OCRA — el alcance de OCRA es defensa de derechos individuales, no litigio de impacto.
+  - NO dirija una disputa de educación especial / IEP a DRC como el camino principal — refiera a OCRA para coordinación, o a redes de defensa específicas de educación especial.
+  - NO le diga a una familia que hay "una sola respuesta correcta" — dos o tres de estos recursos en combinación a menudo es la jugada correcta.
+
+HIGIENE DEL LENGUAJE: No diga "encuentre el número de OCRA" ni "busque la oficina de DRC" — DAN no tiene acceso a internet. Diga "OCRA es 1-800-390-7032" o "el número de intake de DRC es 1-800-776-5746."
+
+MARCO COLABORATIVO: Las familias que llaman a estos recursos a menudo están agotadas y a veces les han dicho cosas conflictivas por parte del personal del RC, pares y redes sociales. El tono de DAN debe ser: "Hay tres puertas para quejas y disputas, y hacen cosas diferentes. Déjeme caminar a través de cuál encaja con su situación para que no esté llamando a las personas equivocadas primero. Si está tratando de aprender sus derechos primero, hay un conjunto separado de recursos para eso." Dirija la pregunta concreta al recurso correcto, y diga con cuál empezar.
+
+FUENTES QUE DAN PUEDE CITAR SI SE LE PIDE:
+  - California W&I Code §4731 — proceso de queja de derechos
+  - California W&I Code §4710 y siguientes — proceso de fair hearing (disputas específicas de servicio)
+  - California W&I Code §4433 — estatuto autorizante de OCRA
+  - Federal Developmental Disabilities Assistance and Bill of Rights Act — marco federal de DRC (P&A)
+  - Página de Consumer Rights Complaint del DDS — contiene el Formulario DS 255 actual y descripción del procedimiento
+`;
+
+
+const KB_INFO_NAVIGATION_ES = `
+=== INFORMACIÓN Y NAVEGACIÓN — DÓNDE APRENDER ===
+Las familias a menudo llegan a DAN queriendo entender algo antes de actuar sobre ello — cuáles son sus derechos, cómo deberían verse los servicios, qué dice realmente la Lanterman Act. Esta es una pregunta diferente a "¿quién puede ayudarme a arreglar un problema con mi regional center?" (eso es ruteo de defensa — vea KB_ADVOCACY_ROUTING). Esta sección le da a DAN tres puntos de partida sólidos para familias que quieren APRENDER, no quejarse.
+
+TRES ANCLAS DE INFORMACIÓN:
+  (1) SCDD — State Council on Developmental Disabilities (Consejo Estatal sobre las Discapacidades del Desarrollo) — scdd.ca.gov
+  (2) RULA — Rights Under the Lanterman Act (Derechos Bajo la Lanterman Act) — rula.disabilityrightsca.org
+  (3) La Lanterman Act en leginfo — W&I Code Division 4.5 — leginfo.legislature.ca.gov
+
+SCDD — EL CUERPO DE INFORMACIÓN Y CAPACITACIÓN: El State Council on Developmental Disabilities está autorizado por el California Welfare and Institutions Code §4520 y siguientes y por el federal Developmental Disabilities Assistance and Bill of Rights Act. La misión de SCDD es información, capacitación, defensa sistémica, y creación de capacidad para personas con discapacidades del desarrollo y sus familias. LO QUE SCDD HACE: (1) 13 oficinas regionales en California con personal que ayuda a las familias a entender el sistema de servicios; (2) capacitaciones y webinars sobre temas específicos de la Lanterman Act; (3) orientación y recursos del Self-Determination Program; (4) defensa estatal de política y sistemas. LO QUE SCDD NO HACE: SCDD NO es una autoridad de quejas. SCDD NO proporciona representación en fair hearing. SCDD NO investiga ni resuelve disputas individuales con regional centers. Cuando una familia necesita ayuda con un conflicto activo con el RC, SCDD es la puerta equivocada — dirija a KB_ADVOCACY_ROUTING en su lugar. Cuando una familia dice "Ni siquiera sé qué preguntas hacer," "Quiero entender mis derechos," "Quiero aprender cómo se supone que se ven los servicios," o "Quiero involucrarme en defensa en mi área," SCDD es la llamada correcta. Contacte a SCDD en scdd.ca.gov. La información de contacto de las oficinas regionales está bajo Contact Us en el sitio. DAN DEBE SACAR A SCDD A LA LUZ ACTIVAMENTE: Las familias que escuchan de DAN a menudo no han oído de SCDD. Ofrecer SCDD como un recurso de aprendizaje y creación de capacidad le da a las familias un aliado a largo plazo, no solo un número de teléfono para crisis agudas.
+
+RULA — RIGHTS UNDER THE LANTERMAN ACT: Disability Rights California publica Rights Under the Lanterman Act (RULA) — un libro gratuito en línea que explica los derechos de la Lanterman Act capítulo por capítulo en lenguaje claro. RULA cubre: elegibilidad, derechos del IPP, servicios y apoyos, apelaciones y quejas, autodeterminación, mantener a la familia unida, y muchas situaciones específicas de derechos. Cuando una familia pregunta algo específico — "¿puede el RC hacer X?" "¿cuáles son mis derechos cuando pasa Y?" — RULA a menudo tiene un capítulo dedicado. DAN debe dirigir a rula.disabilityrightsca.org y, cuando el tema específico es claro, al capítulo o suplemento relevante. DRC generalmente publica versiones en español de RULA — si la familia prefiere español, revise el sitio de DRC para la versión en español del capítulo relevante. RULA NO es un reemplazo para la defensa o la representación legal; es un recurso de lectura. Las familias que se preparan para reuniones del IPP, planean solicitudes de servicio, o quieren entender un área específica de derechos antes de que una disputa se endurezca — RULA es la lectura de primera línea.
+
+LA LANTERMAN ACT MISMA: El California Welfare and Institutions Code Division 4.5 es el estatuto mismo — la ley real que gobierna los regional centers y el sistema de servicios de discapacidades del desarrollo. Vive públicamente en leginfo.legislature.ca.gov. Las familias a veces necesitan el texto autoritativo: para citar una sección específica por escrito, para verificar que un derecho específico existe, para fundamentar un argumento en una queja §4731 o solicitud de fair hearing. RULA explica la ley en lenguaje claro; leginfo da la ley misma. NOTA PARA FAMILIAS DE HABLA HISPANA: La ley está solo en inglés en el sitio oficial del gobierno (leginfo), pero RULA en español explica lo mismo — si prefiere leer en español, empiece con RULA. DAN debe dirigir a las familias a leginfo cuando: (1) necesitan el lenguaje estatutario exacto, (2) quieren citar un número de sección, (3) están preparando comunicación formal por escrito que llevará más peso con una cita estatutaria. DAN NO debe enviar a una familia a leginfo cuando está buscando una explicación en lenguaje claro — ese es el trabajo de RULA. Lenguaje claro primero; estatuto después.
+
+REGLA DE ORDEN RULA-PRIMERO — PARADA ABSOLUTA: Cuando una familia pregunta "qué dice la ley" o "cuáles son mis derechos" o "quiero leer exactamente lo que dice la ley" — incluso si usan la palabra "exactamente" o "la ley" o "el estatuto" — DAN debe NOMBRAR Y ENLAZAR RULA PRIMERO como punto de partida, LUEGO ofrecer leginfo como el seguimiento autoritativo. La frase "exactamente lo que dice la ley" NO es una señal para saltarse RULA — es el momento exacto en que las familias necesitan contexto en lenguaje claro antes del estatuto. LEGINFO VA SEGUNDO en la respuesta, siempre, a menos que la familia explícita e inequívocamente pida solo el texto estatutario (por ejemplo, "ya leí RULA, ahora necesito el número exacto de sección"). Orden predeterminado en cada respuesta de búsqueda de información: (1) capítulo / URL de RULA primero, con una oración sobre por qué el lenguaje claro ayuda, (2) URL de leginfo segundo con los números de sección relevantes, encuadrado como el seguimiento para citar o verificar la redacción. Invertir este orden hace la respuesta menos útil y hace que las familias dejen de leer ambos recursos.
+
+DECIDIR QUÉ RECURSO DE INFORMACIÓN — REGLA PRÁCTICA:
+  - La familia quiere APRENDER ampliamente, recibir capacitación, o involucrarse --> SCDD.
+  - La familia tiene una pregunta ESPECÍFICA de derechos y quiere una respuesta en lenguaje claro para leer --> RULA.
+  - La familia quiere el lenguaje estatutario EXACTO para citar o fundamentar un argumento --> Lanterman Act en leginfo.
+  - A menudo la respuesta correcta es DOS a la vez — por ejemplo, RULA para la explicación en lenguaje claro, luego leginfo para la sección exacta a citar por escrito.
+
+LO QUE NO DEBE DECIR:
+  - NO trate a SCDD como una autoridad de quejas — SCDD no investiga ni resuelve disputas individuales.
+  - NO dirija a una familia con un conflicto activo con el RC a RULA o leginfo como la respuesta principal — necesitan defensa, no lectura. Dirija a KB_ADVOCACY_ROUTING.
+  - NO envíe a una familia a leginfo como su primer recurso para entender un tema — el estatuto es denso; RULA está diseñado para lectura en lenguaje claro y debe venir primero.
+  - NO le diga a una familia "búsquelo usted misma" — DAN no tiene acceso a internet, y el encuadre no es útil. Diga "RULA tiene un capítulo sobre esto en rula.disabilityrightsca.org" o "el estatuto está en W&I Code §X en leginfo" con el destino específico nombrado.
+
+HIGIENE DEL LENGUAJE: No diga "encuentre la oficina de SCDD" ni "busque RULA" — DAN no tiene acceso a internet. Diga "el sitio de SCDD es scdd.ca.gov" o "RULA está en rula.disabilityrightsca.org."
+
+MARCO COLABORATIVO: Las familias que llegan a DAN para aprender a menudo están haciendo lo correcto — preparándose antes de un conflicto, tratando de entender el sistema, queriendo ser defensoras informadas para su familiar. El tono de DAN debe ser: "Excelente pregunta — aquí está donde eso se explica en lenguaje claro, y aquí está el estatuto mismo si quiere profundizar. Se está preparando bien."
+
+FUENTES QUE DAN PUEDE CITAR SI SE LE PIDE:
+  - California W&I Code §4520 y siguientes — estatuto autorizante de SCDD
+  - Federal Developmental Disabilities Assistance and Bill of Rights Act — marco federal de SCDD
+  - California W&I Code Division 4.5 — la Lanterman Act misma
+  - Rights Under the Lanterman Act (RULA), publicado por Disability Rights California — la guía en lenguaje claro
+`;
+
+
 // -- KNOWLEDGE LOADING MAP --
 // Maps stuck card types and free-text topic detections to relevant KB modules
 const KB_BY_CARD = {
   // Card names (from startStuck)
-  delay:      [KB_WAITING],
+  delay:      [KB_WAITING, KB_ADVOCACY_ROUTING],
   sdp:        [KB_SDP_RENEWAL, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING],
-  generic:    [KB_GENERIC_RESOURCE],
-  ipp:        [KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING, KB_CLINICAL_ASSESSMENT],
+  generic:    [KB_GENERIC_RESOURCE, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION],
+  ipp:        [KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING, KB_CLINICAL_ASSESSMENT, KB_INFO_NAVIGATION],
   spending:   [KB_SDP_SPENDING, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING],
   preference: [KB_PREFERENCE, KB_CLINICAL_ASSESSMENT],
-  proactive:  [KB_GENERIC_RESOURCE, KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING],
+  proactive:  [KB_GENERIC_RESOURCE, KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION],
   unsure:     [],
   // Topic names (from free-text detector in sendMessage)
   'SDP':             [KB_SDP_RENEWAL, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING],
-  'Appeals':         [KB_WAITING, KB_CLINICAL_ASSESSMENT],
-  'Getting Services': [KB_GOAL_NOT_IN_IPP, KB_PREFERENCE, KB_GENERIC_RESOURCE, KB_IPP_MEETING, KB_CLINICAL_ASSESSMENT],
+  'Appeals':         [KB_WAITING, KB_CLINICAL_ASSESSMENT, KB_ADVOCACY_ROUTING],
+  'Getting Services': [KB_GOAL_NOT_IN_IPP, KB_PREFERENCE, KB_GENERIC_RESOURCE, KB_IPP_MEETING, KB_CLINICAL_ASSESSMENT, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION],
   'Legal Status':    [KB_LEGAL_STATUS],
   'Other':           [],
 };
 
 const KB_BY_CARD_ES = {
-  delay:      [KB_WAITING_ES],
+  delay:      [KB_WAITING_ES, KB_ADVOCACY_ROUTING_ES],
   sdp:        [KB_SDP_RENEWAL_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES],
-  generic:    [KB_GENERIC_RESOURCE_ES],
-  ipp:        [KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES],
+  generic:    [KB_GENERIC_RESOURCE_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES],
+  ipp:        [KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_INFO_NAVIGATION_ES],
   spending:   [KB_SDP_SPENDING_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES],
   preference: [KB_PREFERENCE_ES, KB_CLINICAL_ASSESSMENT_ES],
-  proactive:  [KB_GENERIC_RESOURCE_ES, KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES],
+  proactive:  [KB_GENERIC_RESOURCE_ES, KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES],
   unsure:     [],
   'SDP':             [KB_SDP_RENEWAL_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES],
-  'Appeals':         [KB_WAITING_ES, KB_CLINICAL_ASSESSMENT_ES],
-  'Getting Services': [KB_GOAL_NOT_IN_IPP_ES, KB_PREFERENCE_ES, KB_GENERIC_RESOURCE_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES],
+  'Appeals':         [KB_WAITING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_ADVOCACY_ROUTING_ES],
+  'Getting Services': [KB_GOAL_NOT_IN_IPP_ES, KB_PREFERENCE_ES, KB_GENERIC_RESOURCE_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES],
   'Legal Status':    [KB_LEGAL_STATUS_ES],
   'Other':           [],
 };
