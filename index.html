@@ -740,10 +740,7 @@
         <option value="TEST ONLY">⚙ TEST ONLY (internal use)</option>
         <option value="evaluating" data-en="Reviewing / Evaluating DAN" data-es="Revisando / Evaluando DAN">Reviewing / Evaluating DAN</option>
         <option>Alta California Regional Center</option>
-        <option>Bay Area Regional Center</option>
         <option>Central Valley Regional Center</option>
-        <option>Coastal Regional Center</option>
-        <option>Desert/Mountain Children's Center</option>
         <option>Eastern Los Angeles Regional Center</option>
         <option>Far Northern Regional Center</option>
         <option>Frank D. Lanterman Regional Center</option>
@@ -754,12 +751,15 @@
         <option>North Bay Regional Center</option>
         <option>North Los Angeles County Regional Center</option>
         <option>Redwood Coast Regional Center</option>
-        <option>Regional Center of the East Bay</option>
         <option>Regional Center of Orange County (RCOC)</option>
+        <option>Regional Center of the East Bay</option>
         <option>San Andreas Regional Center</option>
         <option>San Diego Regional Center</option>
         <option>San Gabriel/Pomona Regional Center</option>
+        <option>South Central Los Angeles Regional Center</option>
         <option>Tri-Counties Regional Center</option>
+        <option>Valley Mountain Regional Center</option>
+        <option>Westside Regional Center</option>
         <option>Prefer not to say</option>
       </select>
     </div>
@@ -2458,6 +2458,170 @@ const KB_BY_CARD_ES = {
   'Other':           [],
 };
 
+
+// -- RC-SPECIFIC OVERLAYS (R.04 — Apr 20 2026) --
+// Structure: keys match the exact option values in the #demo-rc dropdown.
+// Each entry is an object with optional fields. formatRCOverlay() renders only
+// non-empty fields into the prompt. Tier 1 fields (phone, mainOffice, website)
+// are embed-safe for stable public contact info. Deep URLs are avoided per the
+// RC URL rot rule — describe what the family should look for at the RC website
+// rather than linking into specific pages that may rot.
+//
+// Covers all 21 California regional centers per the DDS official list
+// (dds.ca.gov/rc/listings). Dropdown was cleaned up Apr 20 2026 to remove
+// three non-standard entries and add three missing real RCs.
+const RC_OVERLAYS = {
+  // Main phones + websites sourced from DDS official listing at dds.ca.gov/rc/listings/
+  // After-hours lines verified from each RC's own contact page where published.
+  // When no after-hours is published, afterHoursLine is blank and the base-prompt
+  // AFTER-HOURS FALLBACK rule covers the gap ("call main number, ask for on-call").
+  'Regional Center of Orange County (RCOC)': {
+    mainPhone: '714-796-5100',
+    mainOffice: '1525 N Tustin Ave, Santa Ana, CA 92705',
+    website: 'rcocdd.com',
+    afterHoursLine: '714-796-5100 (same as main line -- routes to on-call staff after hours, weekends, and holidays for urgent non-medical assistance)'
+  },
+  'Alta California Regional Center': {
+    mainPhone: '916-978-6400',
+    website: 'altaregional.org',
+    afterHoursLine: '916-978-6400 (same as main line -- follow automated instructions to reach the Manager on Call after hours)'
+  },
+  'Central Valley Regional Center': {
+    mainPhone: '559-276-4300',
+    website: 'cvrc.org',
+    afterHoursLine: '559-276-4300 (Fresno) / 559-738-2200 (Visalia) / 209-723-4245 (Merced) -- after-hours calls from CVRC families route to On-Call Manager; follow recorded instructions'
+  },
+  'Eastern Los Angeles Regional Center': {
+    mainPhone: '626-299-4700',
+    website: 'elarc.org',
+    // Per Gemini search Apr 20 2026: main line answering service handles after-hours. Aligned with Lanterman 24-hour access expectation.
+    afterHoursLine: '626-299-4700 (same as main line -- call and follow automated prompts to reach the after-hours answering service)'
+  },
+  'Far Northern Regional Center': {
+    mainPhone: '530-222-4791',
+    website: 'farnorthernrc.org',
+    afterHoursLine: '530-222-4791 (same as main line -- published as the non-911 after-hours emergency line on Far Northern\'s contact page)'
+  },
+  'Frank D. Lanterman Regional Center': {
+    mainPhone: '213-383-1300',
+    website: 'lanterman.org',
+    afterHoursLine: '213-383-1300 (same as main line -- after-hours, weekend, and holiday emergencies route through recorded instructions)'
+  },
+  'Golden Gate Regional Center': {
+    mainPhone: '415-546-9222',
+    website: 'ggrc.org',
+    // Primary: 415-517-4503 per Gemini search Apr 20 2026 ("verified for all three county offices"); pending direct RC confirmation via outreach email. Fallback: main line answering service per Lanterman 24-hour access norm.
+    afterHoursLine: '415-517-4503 (dedicated after-hours emergency response number covering all three GGRC county offices -- Marin, San Francisco, San Mateo); if no answer, fall back to the main line 415-546-9222 and follow prompts to reach the on-call pathway'
+  },
+  'Harbor Regional Center': {
+    mainPhone: '310-540-1711',
+    website: 'harborrc.org',
+    // Both numbers verified by Beth via live call Apr 20 2026 -- both route to automated after-hours menus (slightly different routing, both functional).
+    afterHoursLine: '310-540-1711 or 310-543-0100 -- both Harbor numbers route to an automated after-hours menu for urgent assistance (verified by live test)'
+  },
+  'Inland Regional Center': {
+    mainPhone: '909-890-3000',
+    website: 'inlandrc.org',
+    // Per Gemini search Apr 20 2026: call main line and press "0" to reach the answering service.
+    afterHoursLine: '909-890-3000 (same as main line -- after hours, press "0" to reach the answering service)'
+  },
+  'Kern Regional Center': {
+    mainPhone: '661-327-8531',
+    website: 'kernrc.org',
+    // Primary: 661-328-6749 per Gemini search Apr 20 2026 ("dedicated 24-hour emergency contact line"); pending RC confirmation via outreach email. Fallback: main line.
+    afterHoursLine: '661-328-6749 (Kern\'s dedicated 24-hour emergency contact line per publicly available info); if no answer, fall back to the main line 661-327-8531'
+  },
+  'North Bay Regional Center': {
+    mainPhone: '707-256-1100',
+    website: 'nbrc.net',
+    afterHoursLine: '800-884-1594 (dedicated after-hours emergency line for evenings, weekends, and holidays -- different from the main daytime line)'
+  },
+  'North Los Angeles County Regional Center': {
+    mainPhone: '818-778-1900',
+    website: 'nlacrc.org',
+    afterHoursLine: '818-778-1900 (San Fernando Valley) / 661-945-6761 (Antelope Valley) / 661-775-8450 (Santa Clarita Valley) -- weekend, holiday, and after-hours calls requiring urgent call back route to a live answering service'
+  },
+  'Redwood Coast Regional Center': {
+    mainPhone: '707-445-0893',
+    website: 'redwoodcoastrc.org',
+    // Primary: 707-995-8103 + toll-free 800-414-4614 per Gemini search Apr 20 2026; pending RC confirmation via outreach email. Fallback: main line.
+    afterHoursLine: '707-995-8103 (after-hours emergency response), or toll-free 800-414-4614 per publicly available info; if neither answers, fall back to the main line 707-445-0893'
+  },
+  'Regional Center of the East Bay': {
+    mainPhone: '510-618-6100',
+    website: 'rceb.org',
+    afterHoursLine: '510-618-6100 (Alameda County) / 925-691-2300 or 925-798-3001 (Contra Costa County) -- for weekends, holidays, or before 8:30 AM / after 5 PM weekdays, call and follow prompts for after-hours support'
+  },
+  'San Andreas Regional Center': {
+    mainPhone: '408-374-9960',
+    website: 'sanandreasregional.org',
+    // Per Gemini search Apr 20 2026: main line answering service handles after-hours (standard Lanterman 24-hour pattern).
+    afterHoursLine: '408-374-9960 (same as main line -- after-hours calls route to the main line answering service; Santa Cruz office 831-900-3737 and Monterey office 831-900-3636 may also be tried)'
+  },
+  'San Diego Regional Center': {
+    mainPhone: '858-576-2996',
+    website: 'sdrc.org',
+    // Per Gemini search Apr 20 2026: main line answering service handles after-hours (standard Lanterman 24-hour pattern).
+    afterHoursLine: '858-576-2996 (same as main line -- after-hours calls route to the main line answering service; North Inland office 858-924-8700 and South Inland office 619-489-3200 may also be tried)'
+  },
+  'San Gabriel/Pomona Regional Center': {
+    mainPhone: '909-620-7722',
+    website: 'sgprc.org',
+    afterHoursLine: '909-620-7722 (same as main line -- SGPRC\'s contact page describes this number as available 24 hours, 7 days a week, though office hours are Mon-Fri 8am-5pm; confirm with the recorded options if calling after hours)'
+  },
+  'Tri-Counties Regional Center': {
+    mainPhone: '805-962-7881',
+    website: 'tri-counties.org',
+    // Per Gemini search Apr 20 2026: main line answering service handles after-hours (standard Lanterman 24-hour pattern).
+    afterHoursLine: '805-962-7881 (Santa Barbara -- same as main line, after-hours calls route to the main line answering service). For Santa Maria families, 805-922-4640 is also a main office line.'
+  },
+  // Real California RCs missing from the #demo-rc dropdown as of Apr 20 2026.
+  // Overlay entries are ready here so they'll fire automatically once the
+  // dropdown is fixed. See spawn task for the dropdown cleanup.
+  'South Central Los Angeles Regional Center': {
+    mainPhone: '213-744-7000',
+    website: 'sclarc.org',
+    // Per Gemini search Apr 20 2026: main line, follow prompts for emergency on-call.
+    afterHoursLine: '213-744-7000 (same as main line -- call and follow the recorded prompts for the emergency on-call pathway)'
+  },
+  'Valley Mountain Regional Center': {
+    mainPhone: '209-473-0951',
+    website: 'vmrc.net',
+    afterHoursLine: '(209) 955-3255 -- VMRC\'s After Hours Response Team; you can text or leave a voicemail and messages are returned within 60 minutes'
+  },
+  'Westside Regional Center': {
+    mainPhone: '310-258-4000',
+    website: 'westsiderc.org',
+    // Per Gemini search Apr 20 2026: main line answering service handles after-hours (standard Lanterman 24-hour pattern).
+    afterHoursLine: '310-258-4000 (same as main line -- after-hours calls route to the main line answering service)'
+  }
+};
+
+// Render a non-empty overlay as a plain-text prompt block. Returns '' when the
+// overlay is empty so no spurious section header appears in the prompt.
+function formatRCOverlay(rcName) {
+  var o = RC_OVERLAYS[rcName];
+  if (!o) return '';
+  var lines = [];
+  if (o.mainPhone)                    lines.push('Main phone: ' + o.mainPhone);
+  if (o.mainOffice)                   lines.push('Main office: ' + o.mainOffice);
+  if (o.website)                      lines.push('Website: ' + o.website);
+  if (o.afterHoursLine)               lines.push('After-hours line: ' + o.afterHoursLine);
+  if (o.scSupervisorPath)             lines.push('SC supervisor escalation: ' + o.scSupervisorPath);
+  if (o.posPolicyDescription)         lines.push('POS policy: ' + o.posPolicyDescription);
+  if (o.complaintContactDescription)  lines.push('§4731 / complaint contact: ' + o.complaintContactDescription);
+  if (o.languageAccessCoordinator)    lines.push('Language access coordinator: ' + o.languageAccessCoordinator);
+  if (o.sdpCoordinator)               lines.push('SDP coordinator: ' + o.sdpCoordinator);
+  if (o.knownPrograms && o.knownPrograms.length) {
+    lines.push('Known ' + rcName + ' programs worth naming by name: ' + o.knownPrograms.join(', '));
+  }
+  if (o.notes)                        lines.push('Additional notes: ' + o.notes);
+  if (!lines.length) return '';
+  return '\n\n=== YOUR REGIONAL CENTER: ' + rcName + ' ===\n' +
+    'The family selected this RC at intake. Use these facts when RC-specific contact or operational information would help -- prefer the family\'s own RC\'s numbers over generic guidance. All phones / addresses / websites below are public info. DAN does not look these up live; this is what is known at session start.\n' +
+    lines.join('\n');
+}
+
 const systemPromptES = `Eres DAN (Disability Access Navigator), una herramienta de navegación para familias hispanas que participan en el sistema de Regional Centers de California.
 
 SIEMPRE responde en español. Usa un lenguaje cálido, sencillo y accesible que un familiar (no un profesional) pueda entender fácilmente. Usa "usted" para dirigirte a la persona. Mantén los siguientes términos técnicos en inglés porque las familias los reconocen así: Regional Center, RC, IPP, SDP, Spending Plan, Lanterman Act, Fair Hearing, FMS, NOA, Service Coordinator (o SC), Notice of Action, OCRA, DRC, ILS, SLS, HCBS, PCP, DDS, LiveScan.
@@ -2569,6 +2733,7 @@ ABUSO O NEGLIGENCIA DE UNA PERSONA CON DISCAPACIDAD:
 EMERGENCIA DE SERVICIOS DEL RC (servicios detenidos, proveedor abandonó, proveedor renunció, sin cobertura, nadie para dar cuidado):
 REGLA DE ACTIVACIÓN — SE ACTIVA INMEDIATAMENTE EN CUALQUIER RUTA: Cuando una familia dice que su proveedor renunció, se fue, dejó de presentarse, o que no tienen a nadie para dar cuidado — esto es una EMERGENCIA DE SERVICIO DEL RC. NO inicie una secuencia de diagnóstico. NO haga preguntas aclaratorias. Comience con estos tres recursos PRIMERO, en este orden:
 1. Contacte a su RC inmediatamente — llame al número principal durante horario de oficina o a la línea de emergencia fuera de horario. Dígales que su proveedor ya no está y necesita cobertura de emergencia desde [fecha]. Todos los RCs tienen líneas de emergencia fuera de horario.
+LÍNEA FUERA DE HORARIO — GUÍA DE RESPALDO CUANDO LA INFO ESPECÍFICA DEL RC NO ESTÁ DISPONIBLE: Si la línea específica fuera de horario del RC de la familia NO aparece en la sección RC OVERLAY abajo, dígale a la familia claramente: "Cada regional center en California tiene una línea de emergencia fuera de horario para situaciones urgentes. Llame al número principal de su RC fuera del horario de oficina — muchos RCs usan la misma línea principal fuera de horario y la enrutan a personal de guardia; otros publican un número separado fuera de horario. Pídale a quien conteste (o a las instrucciones del buzón) la línea de guardia si no comunica con alguien de inmediato." Si un número específico fuera de horario del RC SÍ aparece en el RC OVERLAY abajo, cítelo por el número exacto en lugar de este respaldo. OCRA (1-800-390-7032) permanece como la palanca de escalamiento entre RCs cuando la respuesta fuera de horario del RC es demasiado lenta.
 2. Llame a OCRA al 1-800-390-7032 — pueden intervenir directamente con el RC en brechas urgentes de servicio.
 3. Documente todo por escrito a medida que ocurre — fechas, horas, a quién contactó, qué se dijo.
 DESPUÉS de proporcionar estos tres recursos, puede ofrecer ayudar a redactar una solicitud escrita al RC documentando la emergencia.
@@ -2902,6 +3067,7 @@ const DAN_SYSTEM_PROMPT = [
   'RC SERVICE EMERGENCY (services stopped, provider abandoned, provider quit, no coverage, no one to provide care):',
   'TRIGGER -- FIRES IMMEDIATELY ON ANY PATH: When a family says their provider quit, left, stopped showing up, or that they have no one to provide care -- this is an RC SERVICE EMERGENCY. Do NOT start a diagnostic sequence. Do NOT ask clarifying questions about what kind of services, how long, or what RC said. Lead with these three resources FIRST, in this order:',
   '1. Contact your RC immediately -- call the main number during business hours or the after-hours on-call emergency line. Tell them your provider is gone and you need emergency coverage starting [date]. All RCs have after-hours emergency lines.',
+  'AFTER-HOURS LINE -- FALLBACK GUIDANCE WHEN RC-SPECIFIC INFO IS NOT AVAILABLE: If the family\'s specific RC after-hours line is not in the RC OVERLAY section below, tell the family plainly: "Every regional center in California has an after-hours emergency line for urgent situations. Call your RC\'s main number outside business hours -- many RCs use the same main line after hours and route to on-call staff; others publish a separate after-hours number. Ask the person who answers (or the voicemail instructions) for the on-call line if you do not reach someone immediately." If an RC-specific after-hours number IS in the RC OVERLAY below, cite it by the exact number instead of this fallback. OCRA (1-800-390-7032) remains the cross-RC escalation lever when RC after-hours response is too slow.',
   '2. Call OCRA at 1-800-390-7032 -- they can intervene directly with RC on urgent service gaps.',
   '3. Document everything in writing as it happens -- dates, times, who was contacted, what was said.',
   'AFTER providing these three resources, you may offer to help draft a written request to RC documenting the emergency and requesting immediate replacement services. But the resources come first -- always.',
@@ -3068,6 +3234,11 @@ function buildSystemPrompt() {
     prompt += '\n\n' + knowledgeSections[i];
   }
 
+  // R.04 -- RC-specific overlay from demoData.rc (empty string when no overlay content exists)
+  if (demoData.rc && demoData.rc !== 'TEST ONLY' && demoData.rc !== 'Prefer not to say' && demoData.rc !== 'evaluating') {
+    prompt += formatRCOverlay(demoData.rc);
+  }
+
   var context = '\n\nADDITIONAL CONTEXT FOR THIS SESSION:\n' +
     'Today\'s date is ' + today + '. Use this to calculate exact days and weeks remaining whenever a family gives you a date -- do not estimate loosely.\n' +
     'You are speaking with someone navigating the Regional Center system -- either the person with a disability themselves, or someone in their circle of support. Your goal is to be genuinely useful to them right now.';
@@ -3103,6 +3274,11 @@ function buildSystemPromptES() {
   var knowledgeSections = KB_BY_CARD_ES[sessionTopic] || [];
   for (var i = 0; i < knowledgeSections.length; i++) {
     prompt += '\n\n' + knowledgeSections[i];
+  }
+
+  // R.04 -- RC-specific overlay from demoData.rc (same RC_OVERLAYS data for EN/ES; section header + intro are English statutory facts that DAN translates in-turn as needed)
+  if (demoData.rc && demoData.rc !== 'TEST ONLY' && demoData.rc !== 'Prefer not to say' && demoData.rc !== 'evaluating') {
+    prompt += formatRCOverlay(demoData.rc);
   }
 
   var context = '\n\nCONTEXTO ADICIONAL PARA ESTA SESIÓN:\n' +
