@@ -4565,13 +4565,12 @@ function appendDanMessage(text, showFeedback) {
   const emailMatches = [...text.matchAll(/---EMAIL START---([\s\S]+?)---EMAIL END---/gi)];
   const emailTexts = emailMatches.map(m => m[1].trim());
 
+  // DIAGNOSTIC 2026-04-20 evening: FH LINK rendering section commented out to isolate
+  // whether the inline-placeholder-swap logic added earlier tonight is causing the hang.
+  // Temporarily reverted to the prior "separate element below the bubble" pattern.
   const fhLinkMatch = text.match(/---FH LINK---/i);
-  // Placeholder token — survives HTML-escape pass in formatDanText; swapped for button HTML
-  // AFTER formatting so the button renders inline at the marker position inside the bubble,
-  // instead of appearing as a disconnected element below the message.
-  const FH_PLACEHOLDER = 'XFHLINKBUTTONX';
-  const fhLinkInlineHtml = fhLinkMatch ? `
-    <div style="padding: 0 .125rem; margin: .75rem 0;">
+  const fhLinkHtml = fhLinkMatch ? `
+    <div style="padding: 0 .125rem;">
       <a class="btn-fh-link" href="https://bit.ly/DDSAppealForm" target="_blank" rel="noopener">
         ⚖️ File Fair Hearing Request →
       </a>
@@ -4599,23 +4598,11 @@ function appendDanMessage(text, showFeedback) {
       <button class="btn-send-fb" onclick="sendFbComment('${msgId}')">Send</button>
     </div>` : '';
 
-  // Process text: swap FH LINK marker for placeholder (inlined into bubble after formatting),
-  // strip other rendering markers, format, then replace placeholder with button HTML so the
-  // orange Fair Hearing button appears at the exact position the module placed the marker
-  // rather than floating in empty space below.
-  const processedText = text
-    .replace(/---FH LINK---/gi, FH_PLACEHOLDER)
-    .replace(/---EMAIL START---/gi, '')
-    .replace(/---EMAIL END---/gi, '')
-    .replace(/---SCRIPT START---/gi, '')
-    .replace(/---SCRIPT END---/gi, '')
-    .trim();
-  const bubbleHtml = formatDanText(processedText).replace(new RegExp(FH_PLACEHOLDER, 'g'), fhLinkInlineHtml);
-
   row.innerHTML = `
     <div class="msg-avatar">D</div>
     <div class="msg-content">
-      <div class="msg-bubble" id="bubble-${msgId}">${bubbleHtml}</div>
+      <div class="msg-bubble" id="bubble-${msgId}">${formatDanText(text.replace(/---EMAIL START---/gi, '').replace(/---EMAIL END---/gi, '').replace(/---FH LINK---/gi, '').replace(/---SCRIPT START---/gi, '').replace(/---SCRIPT END---/gi, '').trim())}</div>
+      ${fhLinkHtml}
       ${copyEmailHtml}
       ${fbHtml}
     </div>`;
