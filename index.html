@@ -78,6 +78,16 @@
     outline: 3px solid var(--navy);
     outline-offset: 2px;
   }
+  /* Form controls get a halo backing so the focus ring reads on any background (WCAG 2.4.7) */
+  select:focus-visible, textarea:focus-visible, input:focus-visible {
+    box-shadow: 0 0 0 6px rgba(31, 56, 100, 0.18);
+  }
+  /* Higher-specificity override: .survey-field select/textarea rule sets outline:none,
+     which ties specificity with select:focus-visible and wins by source order. Restore it here. */
+  .survey-field select:focus-visible, .survey-field textarea:focus-visible {
+    outline: 3px solid var(--navy);
+    outline-offset: 2px;
+  }
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--sand);
