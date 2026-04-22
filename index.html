@@ -44,6 +44,25 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: 20px; -webkit-font-smoothing: antialiased; }
 
+  /* -- WCAG 2.3.3 / 2.2.2: respect user's reduced-motion preference -- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* -- visually-hidden utility for AT-only labels (WCAG 3.3.2 / 4.1.2) -- */
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0);
+    white-space: nowrap; border: 0;
+  }
+
   /* -- SKIP LINK (accessibility) -- */
   .skip-link {
     position: absolute; top: -100%; left: 1rem;
@@ -711,7 +730,7 @@
 </head>
 <body>
 
-<a href="#chat-messages" class="skip-link">Skip to conversation</a>
+<a href="#chat-messages" class="skip-link" id="skip-link" tabindex="-1" aria-hidden="true">Skip to conversation</a>
 
 <main>
 <!-- ══════════════════════════════════════════════════
@@ -722,20 +741,20 @@
     <h2 data-en="A couple of quick questions" data-es="Un par de preguntas rápidas">A couple of quick questions</h2>
     <p class="survey-sub" data-en="Your answers are anonymous — DAN does not collect your name, email, or any identifying information. Your Regional Center selection helps DAN give you accurate guidance. Age and race/ethnicity are optional and help us understand who DAN is reaching and make the case for continued funding." data-es="Sus respuestas son anónimas — DAN no recopila su nombre, correo electrónico ni ninguna información que lo identifique. Su selección de Regional Center ayuda a DAN a darle orientación precisa. La edad y la raza/etnia son opcionales y nos ayudan a entender a quién está llegando DAN y a justificar el financiamiento continuo.">Your answers are anonymous — DAN does not collect your name, email, or any identifying information. Your Regional Center selection helps DAN give you accurate guidance. Age and race/ethnicity are optional and help us understand who DAN is reaching and make the case for continued funding.</p>
 
-    <div class="survey-field">
-      <label data-en="Age of the person with the disability (optional)" data-es="Edad de la persona con discapacidad (opcional)">Age of the person with the disability <span style="font-weight:400; color:var(--muted);">(optional)</span></label>
+    <div class="survey-field" role="group" aria-labelledby="age-group-label">
+      <label id="age-group-label" data-en="Age of the person with the disability (optional)" data-es="Edad de la persona con discapacidad (opcional)">Age of the person with the disability <span style="font-weight:400; color:var(--muted);">(optional)</span></label>
       <div class="yn-row" style="flex-wrap:wrap; gap:.5rem;">
-        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="0–3" data-es="0–3">0–3</button>
-        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="4–21" data-es="4–21">4–21</button>
-        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="22–56" data-es="22–56">22–56</button>
-        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="57+" data-es="57+">57+</button>
-        <button class="yn-btn" onclick="setDemoField('age', this)" data-en="Prefer not to say" data-es="Prefiero no decir">Prefer not to say</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('age', this)" data-en="0–3" data-es="0–3">0–3</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('age', this)" data-en="4–21" data-es="4–21">4–21</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('age', this)" data-en="22–56" data-es="22–56">22–56</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('age', this)" data-en="57+" data-es="57+">57+</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('age', this)" data-en="Prefer not to say" data-es="Prefiero no decir">Prefer not to say</button>
       </div>
     </div>
 
     <div class="survey-field" style="border:2px solid var(--teal); border-radius:var(--radius); padding:1rem 1.25rem; background:var(--white);">
-      <label data-en="Your Regional Center (required)" data-es="Su Regional Center (requerido)">Your Regional Center <span style="font-weight:600; color:var(--teal);">*</span></label>
-      <select id="demo-rc" style="width:100%; padding:.5rem .75rem; border:1.5px solid var(--slate-lt); border-radius:6px; font-family:inherit; font-size:.9375rem; color:var(--ink); background:white;">
+      <label for="demo-rc" data-en="Your Regional Center (required)" data-es="Su Regional Center (requerido)">Your Regional Center <span style="font-weight:600; color:var(--teal);" aria-hidden="true">*</span></label>
+      <select id="demo-rc" required aria-required="true" aria-describedby="rc-required-note" style="width:100%; padding:.5rem .75rem; border:1.5px solid var(--slate-lt); border-radius:6px; font-family:inherit; font-size:.9375rem; color:var(--ink); background:white;">
         <option value="" data-en="— Select your Regional Center —" data-es="— Seleccione su Regional Center —">— Select your Regional Center —</option>
         <option value="TEST ONLY">⚙ TEST ONLY (internal use)</option>
         <option value="evaluating" data-en="Reviewing / Evaluating DAN" data-es="Revisando / Evaluando DAN">Reviewing / Evaluating DAN</option>
@@ -765,7 +784,7 @@
     </div>
 
     <div class="survey-field">
-      <label data-en="Your Financial Management Service (FMS) — if enrolled in SDP (optional)" data-es="Su Servicio de Gestión Financiera (FMS) — si está inscrito en SDP (opcional)">Your FMS provider <span style="font-weight:400; color:var(--muted);">(optional — SDP participants only)</span></label>
+      <label for="demo-fms" data-en="Your Financial Management Service (FMS) — if enrolled in SDP (optional)" data-es="Su Servicio de Gestión Financiera (FMS) — si está inscrito en SDP (opcional)">Your FMS provider <span style="font-weight:400; color:var(--muted);">(optional — SDP participants only)</span></label>
       <select id="demo-fms" onchange="demoData.fms = this.value" style="width:100%; padding:.5rem .75rem; border:1.5px solid var(--slate-lt); border-radius:6px; font-family:inherit; font-size:.9375rem; color:var(--ink); background:white;">
         <option value="">— Select your FMS (if applicable) —</option>
         <option value="Not enrolled in SDP">Not enrolled in SDP</option>
@@ -798,17 +817,17 @@
       </select>
     </div>
 
-    <div class="survey-field">
-      <label data-en="Race / ethnicity (optional)" data-es="Raza / etnia (opcional)">Race / ethnicity <span style="font-weight:400; color:var(--muted);">(optional)</span></label>
+    <div class="survey-field" role="group" aria-labelledby="race-group-label">
+      <label id="race-group-label" data-en="Race / ethnicity (optional)" data-es="Raza / etnia (opcional)">Race / ethnicity <span style="font-weight:400; color:var(--muted);">(optional)</span></label>
       <div class="yn-row" style="flex-wrap:wrap; gap:.5rem;">
-        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="White" data-es="Blanco/a">White</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Black / African American" data-es="Negro/a / Afroamericano/a">Black / African American</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Hispanic / Latino" data-es="Hispano/a / Latino/a">Hispanic / Latino</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Asian" data-es="Asiático/a">Asian</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Native American / Alaska Native" data-es="Nativo/a Americano/a / Nativo/a de Alaska">Native American / Alaska Native</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Pacific Islander" data-es="Isleño/a del Pacífico">Pacific Islander</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Multiracial" data-es="Multirracial">Multiracial</button>
-        <button class="yn-btn" onclick="setDemoField('race', this)" data-en="Prefer not to say" data-es="Prefiero no decir">Prefer not to say</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('race', this)" data-en="White" data-es="Blanco/a">White</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('race', this)" data-en="Black / African American" data-es="Negro/a / Afroamericano/a">Black / African American</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('race', this)" data-en="Hispanic / Latino" data-es="Hispano/a / Latino/a">Hispanic / Latino</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('race', this)" data-en="Asian" data-es="Asiático/a">Asian</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('race', this)" data-en="Native American / Alaska Native" data-es="Nativo/a Americano/a / Nativo/a de Alaska">Native American / Alaska Native</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('race', this)" data-en="Pacific Islander" data-es="Isleño/a del Pacífico">Pacific Islander</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('race', this)" data-en="Multiracial" data-es="Multirracial">Multiracial</button>
+        <button class="yn-btn" aria-pressed="false" onclick="setDemoField('race', this)" data-en="Prefer not to say" data-es="Prefiero no decir">Prefer not to say</button>
       </div>
     </div>
 
@@ -4450,8 +4469,12 @@ let pendingStuckType = null;
 function setDemoField(field, btn) {
   demoData[field] = btn.textContent.trim();
   var group = btn.closest('.yn-row');
-  group.querySelectorAll('.yn-btn').forEach(function(b) { b.classList.remove('active'); });
+  group.querySelectorAll('.yn-btn').forEach(function(b) {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
   btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
 }
 
 // Enable Continue button only when RC is selected
@@ -4543,6 +4566,9 @@ function showCardsScreen() {
 function goBack() {
   // Clear saved session
   localStorage.removeItem(SESSION_STORAGE_KEY);
+  // WCAG 2.4.1: remove skip link from tab order when leaving chat
+  var skip = document.getElementById('skip-link');
+  if (skip) { skip.setAttribute('tabindex', '-1'); skip.setAttribute('aria-hidden', 'true'); }
   // Reset session state
   document.getElementById('chat-shell').style.display = 'none';
   document.getElementById('demo-screen').style.display = 'none';
@@ -4589,6 +4615,10 @@ function startStuck(type) {
 
 function openChat(type) {
   document.getElementById('chat-shell').style.display = 'flex';
+
+  // WCAG 2.4.1: enable skip-to-conversation link only when chat is actually mounted
+  var skip = document.getElementById('skip-link');
+  if (skip) { skip.removeAttribute('tabindex'); skip.removeAttribute('aria-hidden'); }
 
   var badge = document.getElementById('flow-badge');
   badge.textContent = 'Navigator';
@@ -5996,6 +6026,9 @@ function restoreSession() {
     document.getElementById('demo-screen').style.display = 'none';
     document.getElementById('cards-screen').style.display = 'none';
     document.getElementById('chat-shell').style.display = 'flex';
+    // WCAG 2.4.1: enable skip-to-conversation link now that chat is live
+    var skipR = document.getElementById('skip-link');
+    if (skipR) { skipR.removeAttribute('tabindex'); skipR.removeAttribute('aria-hidden'); }
     document.getElementById('chat-messages').innerHTML = state.chatHtml;
     document.getElementById('input-row-wrap').style.display = 'flex';
     document.getElementById('send-btn').disabled = false;

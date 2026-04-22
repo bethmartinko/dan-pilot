@@ -158,7 +158,8 @@
   <div class="gate-box">
     <h1>DAN Test Dashboard</h1>
     <p>Lanterman Coverage Daily Tests</p>
-    <input type="password" id="pwd" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPwd()">
+    <label for="pwd" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Dashboard password</label>
+    <input type="password" id="pwd" autocomplete="current-password" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPwd()">
     <button onclick="checkPwd()">View Results</button>
     <div class="gate-error" id="gate-err"></div>
   </div>
