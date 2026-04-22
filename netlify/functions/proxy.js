@@ -1,5 +1,38 @@
 const https = require("https");
 
+// -- ADVERSARIAL-COST MITIGATION (Risk Mitigation Framework #12) --
+// Netlify Functions are stateless across cold starts, but warm containers
+// reuse module-level memory for minutes to hours. That's enough to blunt
+// burst botting while GCP migration lands, where persistent state is easy.
+//
+// Post-GCP: replace with Redis / Firestore-backed limiter for hard cost cap.
+const RATE_LIMIT = {
+  windowMs: 10 * 60 * 1000,  // 10-minute rolling window
+  maxAnthropic: 30,          // legitimate family: 3-5 sessions; 30 is abuse signal
+  maxPayloadBytes: 128 * 1024, // 128KB — well above any legit session payload
+};
+const ipHits = new Map();    // ip -> [timestamp, timestamp, ...]
+
+function rateCheck(ip) {
+  if (!ip) return { allowed: true };  // unknown IP (dev/test) — don't block
+  const now = Date.now();
+  const windowStart = now - RATE_LIMIT.windowMs;
+  const hits = (ipHits.get(ip) || []).filter(t => t > windowStart);
+  if (hits.length >= RATE_LIMIT.maxAnthropic) {
+    return { allowed: false, count: hits.length };
+  }
+  hits.push(now);
+  ipHits.set(ip, hits);
+  // Opportunistic cleanup: if the map gets large, drop stale entries
+  if (ipHits.size > 500) {
+    for (const [k, v] of ipHits) {
+      const kept = v.filter(t => t > windowStart);
+      if (kept.length === 0) ipHits.delete(k); else ipHits.set(k, kept);
+    }
+  }
+  return { allowed: true, count: hits.length };
+}
+
 exports.handler = async function (event) {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
@@ -54,6 +87,32 @@ exports.handler = async function (event) {
   }
 
   if (target === "anthropic") {
+    // Payload size cap — reject anything that blows past legit session sizes
+    if (event.body && Buffer.byteLength(event.body) > RATE_LIMIT.maxPayloadBytes) {
+      return {
+        statusCode: 413,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: { type: "payload_too_large", message: "Message too large. Please shorten your input and try again." } }),
+      };
+    }
+    // IP rate limit — reject burst patterns that indicate botting
+    const clientIp = event.headers["x-forwarded-for"]
+      ? event.headers["x-forwarded-for"].split(",")[0].trim()
+      : event.headers["client-ip"] || null;
+    const rc = rateCheck(clientIp);
+    if (!rc.allowed) {
+      console.warn(`Rate limit hit: ip=${clientIp} count=${rc.count}`);
+      return {
+        statusCode: 429,
+        headers: { "Content-Type": "application/json", "Retry-After": "600" },
+        body: JSON.stringify({
+          error: {
+            type: "rate_limited",
+            message: "DAN has reached a usage limit for this session. Please try again in a few minutes, or call OCRA at 1-800-390-7032 for free immediate help."
+          }
+        }),
+      };
+    }
     try {
       // Give retries more time — first attempt 55s, retries 58s
       const retryNum = parseInt(event.headers["x-retry"] || "0", 10);
