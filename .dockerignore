@@ -1,0 +1,19 @@
+# Allowlist approach: ignore everything by default, then un-ignore only
+# the files the live DAN chat app needs. New files added to the repo are
+# automatically excluded from the container unless added here.
+**
+# --- Runtime essentials ---
+!server.js
+!package.json
+!package-lock.json
+# --- The DAN app ---
+!index.html
+!500.html
+!og-image.png
+!robots.txt
+# --- Netlify-style handlers that server.js wraps ---
+# Must un-ignore parent directories before child files.
+!netlify
+!netlify/functions
+!netlify/functions/proxy.js
+!netlify/functions/health.js
