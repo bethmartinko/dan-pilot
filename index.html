@@ -5071,7 +5071,7 @@ async function fetchWithRetry(payload, typingId, maxAttempts) {
 
     try {
       var controller = new AbortController();
-      var clientTimeout = setTimeout(function() { controller.abort(); }, 62000); // 62s — just past the 60s Netlify limit
+      var clientTimeout = setTimeout(function() { controller.abort(); }, 300000); // 5 min — Cloud Run supports long responses; Netlify's 30s cap still kills its own functions first
       var response = await fetch('/.netlify/functions/proxy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-target': 'anthropic', 'x-retry': String(attempt) },
