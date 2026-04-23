@@ -9,7 +9,7 @@ const https = require("https");
 const RATE_LIMIT = {
   windowMs: 10 * 60 * 1000,  // 10-minute rolling window
   maxAnthropic: 30,          // legitimate family: 3-5 sessions; 30 is abuse signal
-  maxPayloadBytes: 128 * 1024, // 128KB — well above any legit session payload
+  maxPayloadBytes: 512 * 1024, // Appeals card alone is ~99KB of KBs + base prompt + convo history; 512KB leaves headroom for long sessions while blocking genuine MB-scale abuse
 };
 const ipHits = new Map();    // ip -> [timestamp, timestamp, ...]
 
