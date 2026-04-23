@@ -41,7 +41,10 @@ exports.handler = async function (event) {
   const target = event.headers["x-target"];
 
   function httpsPost(url, headers, body, timeoutMs) {
-    timeoutMs = timeoutMs || 55000;
+    // 9.5 min default — raised from 55s as part of GCP Cloud Run migration.
+    // On Netlify the platform's sync function cap (~30s) still kills first;
+    // on Cloud Run this lets long Anthropic responses complete cleanly.
+    timeoutMs = timeoutMs || 570000;
     return new Promise((resolve, reject) => {
       const urlObj = new URL(url);
       const options = {
@@ -114,9 +117,9 @@ exports.handler = async function (event) {
       };
     }
     try {
-      // Give retries more time — first attempt 55s, retries 58s
+      // 9.5 min first attempt, 9.67 min on retry (post-GCP values).
       const retryNum = parseInt(event.headers["x-retry"] || "0", 10);
-      const timeout = retryNum > 0 ? 58000 : 55000;
+      const timeout = retryNum > 0 ? 580000 : 570000;
       const result = await httpsPost(
         "https://api.anthropic.com/v1/messages",
         {
