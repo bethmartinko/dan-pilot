@@ -5260,7 +5260,7 @@ async function danSendAfterTrim(userText) {
 
   const result = await fetchWithRetry({
     model: 'claude-sonnet-4-6',
-    max_tokens: 1800,
+    max_tokens: 2400,
     system: systemPrompt,
     messages: messages,
   }, typingId, 3);
@@ -5405,7 +5405,7 @@ async function sendMessage() {
 
   const result = await fetchWithRetry({
     model: 'claude-sonnet-4-6',
-    max_tokens: 1800,
+    max_tokens: 2400,
     system: systemPrompt,
     messages: messages,
   }, typingId, 3);
