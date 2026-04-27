@@ -67,6 +67,11 @@ const PII_PATTERNS = {
   dob:     /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/g,
   cc:      /\b(?:\d[ -]?){12,18}\d\b/g,
   caseId:  /\b(?:client|case|patient|account|RC)\s*(?:id|number|no\.?|#)\s*:?\s*([A-Z0-9-]{4,12})\b/gi,
+  // UCI = Universal Client Identifier (Regional Center client ID, typically 7 digits).
+  // Two forms: labeled ("UCI Number: 6845273", "UCI: X", "UCI X") and bare-parens
+  // ("Joshua L. (6845273)" — common IPP/NOA layout).
+  uciLabel:  /\bUCI(?:\s*(?:Number|No\.?|#))?\s*:?\s*(\d{6,9})\b/gi,
+  uciParens: /\((\d{6,9})\)/g,
 };
 
 function piiScrubString(s) {
@@ -89,7 +94,13 @@ function piiScrubString(s) {
     if (!piiLuhnValid(d)) return m;
     bump("cc"); return "[card]";
   });
-  out = out.replace(PII_PATTERNS.caseId, () => { bump("caseid"); return "[client-id]"; });
+  out = out.replace(PII_PATTERNS.caseId,   () => { bump("caseid"); return "[client-id]"; });
+  out = out.replace(PII_PATTERNS.uciLabel, () => { bump("caseid"); return "[client-id]"; });
+  out = out.replace(PII_PATTERNS.uciParens, (m, digits) => {
+    // Only scrub if the parens-wrapped digits look like a UCI (6-9 digits standalone).
+    // Already guaranteed by the regex; bump and replace.
+    bump("caseid"); return "[client-id]";
+  });
 
   return { value: out, counts };
 }
