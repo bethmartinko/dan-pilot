@@ -967,38 +967,27 @@
   <div class="landing-inner" style="max-width:720px;">
     <p class="stuck-prompt" data-en="Which of these sounds like your situation?" data-es="¿Cuál de estas situaciones se parece a la suya?">Which of these sounds like your situation?</p>
     <div class="stuck-grid">
-      <div class="stuck-card featured" onclick="startStuck('delay')">
-        <div class="stuck-quote" data-en="We're waiting for an answer" data-es="Estamos esperando una respuesta">We're waiting for an answer</div>
-        <div class="stuck-desc" data-en="RC said they'd look into it -- and then went quiet. Or your SDP year end is coming and nothing is moving." data-es="El RC dijo que lo revisaría -- y luego no respondió. O su año de SDP está por terminar y nada avanza.">RC said they'd look into it -- and then went quiet. Or your SDP year end is coming and nothing is moving.</div>
+      <div class="stuck-card featured" onclick="startStuck('proactive')">
+        <div class="stuck-quote" data-en="I want to ask for a service or prepare for an IPP meeting" data-es="Quiero solicitar un servicio o prepararme para una reunión de IPP">I want to ask for a service or prepare for an IPP meeting</div>
+        <div class="stuck-desc" data-en="You're not stuck -- you want to know what's available, how to ask for it, or how to prepare for a meeting." data-es="No está bloqueado/a -- quiere saber qué está disponible, cómo pedirlo, o cómo prepararse para una reunión.">You're not stuck -- you want to know what's available, how to ask for it, or how to prepare for a meeting.</div>
+      </div>
+      <div class="stuck-card" onclick="startStuck('pushback')">
+        <div class="stuck-quote" data-en="RC said no -- and we're still talking, or they haven't responded" data-es="El RC dijo que no -- y todavía estamos hablando, o no han respondido">RC said no -- and we're still talking, or they haven't responded</div>
+        <div class="stuck-desc" data-en="They denied something, reframed your ask, pointed to a community resource, or stopped responding." data-es="Negaron algo, reencuadraron su solicitud, le señalaron un recurso comunitario, o dejaron de responder.">They denied something, reframed your ask, pointed to a community resource, or stopped responding.</div>
+      </div>
+      <div class="stuck-card" onclick="startStuck('noa')">
+        <div class="stuck-quote" data-en="I got a denial letter (Notice of Action / NOA)" data-es="Recibí una carta de denegación (Aviso de Acción / NOA)">I got a denial letter (Notice of Action / NOA)</div>
+        <div class="stuck-desc" data-en="A formal letter that starts a 60-day appeal clock -- DAN can walk through it with you and help you prepare your response." data-es="Una carta formal que inicia un plazo de 60 días para apelar -- DAN puede revisarla con usted y ayudarle a preparar su respuesta.">A formal letter that starts a 60-day appeal clock -- DAN can walk through it with you and help you prepare your response.</div>
       </div>
       <div class="stuck-card" onclick="startStuck('sdp')">
-        <div class="stuck-quote" data-en="My SDP year is ending and things aren't in place" data-es="Mi año de SDP está por terminar y las cosas no están listas">My SDP year is ending and things aren't in place</div>
-        <div class="stuck-desc" data-en="Spending plan not approved, FMS authorization not sent, or RC hasn't started the renewal -- and your year end is coming" data-es="El plan de gastos no está aprobado, la autorización al FMS no se ha enviado, o el RC no ha iniciado la renovación -- y su año está por terminar">Spending plan not approved, FMS authorization not sent, or RC hasn't started the renewal -- and your year end is coming</div>
+        <div class="stuck-quote" data-en="Self-Determination Program (SDP)" data-es="Programa de Autodeterminación (SDP)">Self-Determination Program (SDP)</div>
+        <div class="stuck-desc" data-en="Whether you're exploring SDP, getting started, building your spending plan, or running into issues -- DAN can help." data-es="Ya sea que esté explorando el SDP, empezando, armando su plan de gastos, o enfrentando problemas -- DAN puede ayudar.">Whether you're exploring SDP, getting started, building your spending plan, or running into issues -- DAN can help.</div>
       </div>
-      <div class="stuck-card" onclick="startStuck('generic')">
-        <div class="stuck-quote" data-en="&quot;There's a generic resource for that&quot;" data-es="&quot;Hay un recurso comunitario para eso&quot;">"There's a generic resource for that"</div>
-        <div class="stuck-desc" data-en="RC points to a community option that doesn't actually work for your person" data-es="El RC señala una opción comunitaria que en realidad no funciona para su familiar">RC points to a community option that doesn't actually work for your person</div>
-      </div>
-      <div class="stuck-card" onclick="startStuck('ipp')">
-        <div class="stuck-quote" data-en="&quot;That goal isn't in the IPP&quot;" data-es="&quot;Esa meta no está en el IPP&quot;">"That goal isn't in the IPP"</div>
-        <div class="stuck-desc" data-en="Service denied because the IPP language doesn't match what was requested" data-es="Se niega el servicio porque el lenguaje del IPP no coincide con lo que se solicitó">Service denied because the IPP language doesn't match what was requested</div>
-      </div>
-      <div class="stuck-card" onclick="startStuck('spending')">
-        <div class="stuck-quote" data-en="SDP Spending Plan" data-es="Plan de Gastos del SDP">SDP Spending Plan</div>
-        <div class="stuck-desc" data-en="RC won't allow flexibility in how the budget is spent, or a specific service isn't being approved" data-es="El RC no permite flexibilidad en cómo se gasta el presupuesto, o un servicio específico no está siendo aprobado">RC won't allow flexibility in how the budget is spent, or a specific service isn't being approved</div>
-      </div>
-      <div class="stuck-card" onclick="startStuck('preference')">
-        <div class="stuck-quote" data-en="&quot;That's a preference, not a need&quot;" data-es="&quot;Eso es una preferencia, no una necesidad&quot;">"That's a preference, not a need"</div>
-        <div class="stuck-desc" data-en="RC reframes a genuine support need as something you just want" data-es="El RC reencuadra una necesidad genuina de apoyo como algo que usted simplemente desea">RC reframes a genuine support need as something you just want</div>
-      </div>
-      <div class="stuck-card" onclick="startStuck('proactive')">
-        <div class="stuck-quote" data-en="I want to request a service or understand my options" data-es="Quiero solicitar un servicio o entender mis opciones">I want to request a service or understand my options</div>
-        <div class="stuck-desc" data-en="You're not stuck yet -- you want to know what's available, how to ask for it, or how to prepare for an IPP meeting" data-es="Aún no está bloqueado/a -- quiere saber qué está disponible, cómo pedirlo, o cómo prepararse para una reunión de IPP">You're not stuck yet -- you want to know what's available, how to ask for it, or how to prepare for an IPP meeting</div>
+      <div class="stuck-card" onclick="startStuck('unsure')">
+        <div class="stuck-quote" data-en="Something else -- help me figure it out" data-es="Otra cosa -- ayúdeme a averiguarlo">Something else -- help me figure it out</div>
+        <div class="stuck-desc" data-en="Tell DAN what's happening in your own words and we'll sort it out together." data-es="Cuéntele a DAN qué está pasando con sus propias palabras y lo resolveremos juntos.">Tell DAN what's happening in your own words and we'll sort it out together.</div>
       </div>
     </div>
-    <p class="landing-note" style="margin-top:1.5rem;">
-      <span data-en="Not sure which fits?" data-es="¿No está seguro/a cuál le corresponde?">Not sure which fits?</span> <a href="#" onclick="startStuck('unsure'); return false;" style="color:var(--teal);text-decoration:underline;" data-en="Tell DAN what's happening" data-es="Cuéntele a DAN lo que está pasando">Tell DAN what's happening</a> <span data-en="and we'll figure it out together." data-es="y lo resolveremos juntos.">and we'll figure it out together.</span>
-    </p>
   </div>
 </div>
 
@@ -3599,15 +3588,20 @@ HIGIENE DEL LENGUAJE: DAN no puede buscar en leginfo, consultar decisiones de OA
 // -- KNOWLEDGE LOADING MAP --
 // Maps stuck card types and free-text topic detections to relevant KB modules
 const KB_BY_CARD = {
-  // Card names (from startStuck)
+  // Card names (from startStuck) — 5 user-visible cards: proactive, pushback, noa, sdp, unsure.
+  // delay/ipp/preference/generic/spending remain as INTERNAL routing keys that the pushback
+  // and sdp welcomes reroute into when the user picks a sub-button.
+  proactive:  [KB_GENERIC_RESOURCE, KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION, KB_DUTY_TO_SECURE, KB_PARENT_PAID_PROVIDER, KB_EMERGENCY_IPP, KB_LANGUAGE_ACCESS],
+  pushback:   [KB_WAITING, KB_GOAL_NOT_IN_IPP, KB_PREFERENCE, KB_GENERIC_RESOURCE, KB_IPP_MEETING, KB_CLINICAL_ASSESSMENT, KB_INFO_NAVIGATION, KB_ADVOCACY_ROUTING, KB_DUTY_TO_SECURE, KB_AUTHORITY_HIERARCHY, KB_EMERGENCY_IPP, KB_LANGUAGE_ACCESS],
+  noa:        [KB_NOA_DECODER, KB_ADVOCACY_ROUTING, KB_AUTHORITY_HIERARCHY, KB_RECORDS_ACCESS],
+  sdp:        [KB_SDP_RENEWAL, KB_SDP_SPENDING, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING, KB_PARENT_PAID_PROVIDER, KB_SDP_DISSUASION],
+  unsure:     [],
+  // Internal routing keys (sub-paths of pushback / sdp / unsure) — kept for free-text detector and sub-button reroutes.
   delay:      [KB_WAITING, KB_ADVOCACY_ROUTING, KB_DUTY_TO_SECURE, KB_EMERGENCY_IPP, KB_LANGUAGE_ACCESS],
-  sdp:        [KB_SDP_RENEWAL, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING, KB_PARENT_PAID_PROVIDER, KB_SDP_DISSUASION],
   generic:    [KB_GENERIC_RESOURCE, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION, KB_EMERGENCY_IPP, KB_LANGUAGE_ACCESS, KB_AUTHORITY_HIERARCHY],
   ipp:        [KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING, KB_CLINICAL_ASSESSMENT, KB_INFO_NAVIGATION, KB_DUTY_TO_SECURE, KB_EMERGENCY_IPP, KB_LANGUAGE_ACCESS],
   spending:   [KB_SDP_SPENDING, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING, KB_PARENT_PAID_PROVIDER],
   preference: [KB_PREFERENCE, KB_CLINICAL_ASSESSMENT, KB_DUTY_TO_SECURE, KB_AUTHORITY_HIERARCHY],
-  proactive:  [KB_GENERIC_RESOURCE, KB_GOAL_NOT_IN_IPP, KB_IPP_MEETING, KB_ADVOCACY_ROUTING, KB_INFO_NAVIGATION, KB_DUTY_TO_SECURE, KB_PARENT_PAID_PROVIDER, KB_EMERGENCY_IPP, KB_LANGUAGE_ACCESS],
-  unsure:     [],
   // Topic names (from free-text detector in sendMessage)
   'SDP':             [KB_SDP_RENEWAL, KB_VENDOR_BILLING, KB_PROVIDER_ONBOARDING, KB_PARENT_PAID_PROVIDER, KB_SDP_DISSUASION],
   'Appeals':         [KB_NOA_DECODER, KB_ADVOCACY_ROUTING, KB_AUTHORITY_HIERARCHY, KB_RECORDS_ACCESS],
@@ -3624,14 +3618,16 @@ const KB_BY_CARD = {
 };
 
 const KB_BY_CARD_ES = {
+  proactive:  [KB_GENERIC_RESOURCE_ES, KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES, KB_DUTY_TO_SECURE_ES, KB_PARENT_PAID_PROVIDER_ES, KB_EMERGENCY_IPP_ES, KB_LANGUAGE_ACCESS_ES],
+  pushback:   [KB_WAITING_ES, KB_GOAL_NOT_IN_IPP_ES, KB_PREFERENCE_ES, KB_GENERIC_RESOURCE_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_INFO_NAVIGATION_ES, KB_ADVOCACY_ROUTING_ES, KB_DUTY_TO_SECURE_ES, KB_AUTHORITY_HIERARCHY_ES, KB_EMERGENCY_IPP_ES, KB_LANGUAGE_ACCESS_ES],
+  noa:        [KB_NOA_DECODER_ES, KB_ADVOCACY_ROUTING_ES, KB_AUTHORITY_HIERARCHY_ES, KB_RECORDS_ACCESS_ES],
+  sdp:        [KB_SDP_RENEWAL_ES, KB_SDP_SPENDING_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES, KB_PARENT_PAID_PROVIDER_ES, KB_SDP_DISSUASION_ES],
+  unsure:     [],
   delay:      [KB_WAITING_ES, KB_ADVOCACY_ROUTING_ES, KB_DUTY_TO_SECURE_ES, KB_EMERGENCY_IPP_ES, KB_LANGUAGE_ACCESS_ES],
-  sdp:        [KB_SDP_RENEWAL_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES, KB_PARENT_PAID_PROVIDER_ES, KB_SDP_DISSUASION_ES],
   generic:    [KB_GENERIC_RESOURCE_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES, KB_EMERGENCY_IPP_ES, KB_LANGUAGE_ACCESS_ES, KB_AUTHORITY_HIERARCHY_ES],
   ipp:        [KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_INFO_NAVIGATION_ES, KB_DUTY_TO_SECURE_ES, KB_EMERGENCY_IPP_ES, KB_LANGUAGE_ACCESS_ES],
   spending:   [KB_SDP_SPENDING_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES, KB_PARENT_PAID_PROVIDER_ES],
   preference: [KB_PREFERENCE_ES, KB_CLINICAL_ASSESSMENT_ES, KB_DUTY_TO_SECURE_ES, KB_AUTHORITY_HIERARCHY_ES],
-  proactive:  [KB_GENERIC_RESOURCE_ES, KB_GOAL_NOT_IN_IPP_ES, KB_IPP_MEETING_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES, KB_DUTY_TO_SECURE_ES, KB_PARENT_PAID_PROVIDER_ES, KB_EMERGENCY_IPP_ES, KB_LANGUAGE_ACCESS_ES],
-  unsure:     [],
   'SDP':             [KB_SDP_RENEWAL_ES, KB_VENDOR_BILLING_ES, KB_PROVIDER_ONBOARDING_ES, KB_PARENT_PAID_PROVIDER_ES, KB_SDP_DISSUASION_ES],
   'Appeals':         [KB_NOA_DECODER_ES, KB_ADVOCACY_ROUTING_ES, KB_AUTHORITY_HIERARCHY_ES, KB_RECORDS_ACCESS_ES],
   'Getting Services': [KB_GOAL_NOT_IN_IPP_ES, KB_PREFERENCE_ES, KB_GENERIC_RESOURCE_ES, KB_IPP_MEETING_ES, KB_CLINICAL_ASSESSMENT_ES, KB_ADVOCACY_ROUTING_ES, KB_INFO_NAVIGATION_ES, KB_DUTY_TO_SECURE_ES, KB_PARENT_PAID_PROVIDER_ES, KB_EMERGENCY_IPP_ES, KB_LANGUAGE_ACCESS_ES],
@@ -4582,7 +4578,11 @@ const STUCK_WELCOMES = {
 
   generic: `RC is actually required by law to consider generic resources before they can fund a service -- so this isn't a brushoff, it's a real step in the process. The question worth asking together is: does this resource genuinely work for your person, either on its own or in combination with RC support?\n\nSometimes a free or low-cost resource combined with an RC-funded aide can actually open more doors than a funded service alone. And other families are often the best source of knowledge about what's really available locally.\n\nLet me ask one thing at a time. What resource did RC point to?\n\n[Insurance] [The school system] [A community program or service] [Something else]`,
 
-  sdp: `Planning ahead or in the middle of it -- either way, let's figure out where you are so I can point you in the right direction.\n\nWhat's your situation?\n\n[I want to plan ahead -- my renewal is several months away] [Something isn't moving and my year end is coming] [It already ended or I'm past my year end] [I'm not sure when my year ends]`,
+  sdp: `SDP gives you control, but families come here from a lot of different starting points. Let me figure out where you are so I can help.\n\nWhat's your situation?\n\n[I'm exploring SDP -- want to learn how it works] [I'm getting started -- spending plan or budget setup] [A specific service on my plan isn't being approved] [Something isn't moving and my year end is coming] [Something else]`,
+
+  pushback: `That's frustrating, especially when you know what your person needs. Let me figure out which kind of "no" this is so I can point you the right way.\n\nWhich is closest?\n\n[They said it's a preference, not a need] [They said the goal isn't in the IPP] [They pointed to a community resource instead] [They went quiet -- no answer yet] [Something else]`,
+
+  noa: `A Notice of Action is a formal letter that starts a clock -- the 60-day appeal window is the one that matters most. Here's how I can help: I'll walk through what each section means, flag anything that looks off, and help you prepare your response if you want to appeal.\n\nPaste the letter (cover any private details if you want), or tell me what it says. If you don't have it in front of you, just describe what happened and we'll work from there.`,
 
   unsure: `No problem -- let's figure it out together.\n\nTo point you in the right direction, it helps to know what's going on. Pick whichever fits, or just tell me in your own words:\n\n[I've been waiting and not hearing back] [Something was denied or cut] [I need help asking for something new] [I got a letter I don't understand] [It's complicated -- I'll just tell you]`,
 
@@ -4600,7 +4600,11 @@ const STUCK_WELCOMES_ES = {
 
   generic: `El RC está legalmente obligado a considerar recursos genéricos antes de poder financiar un servicio -- así que esto no es un rechazo, es un paso real en el proceso. La pregunta que vale la pena responder juntos es: ¿este recurso realmente funciona para su familiar, solo o en combinación con apoyo del RC?\n\nA veces un programa gratuito o de bajo costo combinado con un asistente financiado por el RC puede abrir más puertas que un servicio financiado solo. Y otras familias suelen ser la mejor fuente de información sobre lo que realmente está disponible en la comunidad.\n\nDéjeme preguntarle una cosa a la vez. ¿A qué recurso señaló el RC?\n\n[Seguro médico] [El sistema escolar] [Un programa o servicio comunitario] [Algo más]`,
 
-  sdp: `Planificando con anticipación o en medio del proceso -- de cualquier manera, averigüemos dónde está para poder orientarle mejor.\n\n¿Cuál es su situación?\n\n[Quiero planificar con anticipación -- mi renovación es en varios meses] [Algo no avanza y mi año de SDP está por terminar] [Ya terminó o ya pasé mi fecha de vencimiento] [No estoy seguro/a de cuándo vence mi año]`,
+  sdp: `El SDP le da control, pero las familias llegan aquí desde muchos puntos de partida diferentes. Déjeme averiguar dónde está usted para poder ayudarle.\n\n¿Cuál es su situación?\n\n[Estoy explorando el SDP -- quiero aprender cómo funciona] [Estoy empezando -- plan de gastos o configuración del presupuesto] [Un servicio específico en mi plan no está siendo aprobado] [Algo no avanza y mi año está por terminar] [Otra cosa]`,
+
+  pushback: `Eso es muy frustrante, especialmente cuando usted sabe lo que su familiar necesita. Déjeme entender qué tipo de "no" es para poder orientarle mejor.\n\n¿Cuál se parece más a su situación?\n\n[Dijeron que es una preferencia, no una necesidad] [Dijeron que la meta no está en el IPP] [Le señalaron un recurso comunitario] [Se quedaron callados -- aún sin respuesta] [Otra cosa]`,
+
+  noa: `Un Aviso de Acción es una carta formal que inicia un plazo -- la ventana de 60 días para apelar es la más importante. Así puedo ayudarle: revisaré qué dice cada sección, le señalaré cualquier cosa que parezca fuera de lugar, y le ayudaré a preparar su respuesta si quiere apelar.\n\nPegue la carta (puede ocultar detalles privados si quiere), o cuénteme lo que dice. Si no la tiene a mano, simplemente describa qué pasó y trabajaremos desde ahí.`,
 
   unsure: `No hay problema -- vamos a resolverlo juntos.\n\nPara orientarle mejor, me ayuda saber qué está pasando. Escoja lo que mejor describa su situación, o cuéntemelo con sus propias palabras:\n\n[Estoy esperando y no recibo respuesta] [Me negaron o cortaron algo] [Necesito ayuda para solicitar algo nuevo] [Recibí una carta que no entiendo] [Es complicado -- se lo cuento yo]`,
 
@@ -4742,6 +4746,7 @@ function goBack() {
   draftDeliveredLogged = false;
   outcomeLogged = false;
   userRoundCount = 0;
+  lastPatchedTopic = null;
 }
 
 function startStuck(type) {
@@ -4750,7 +4755,7 @@ function startStuck(type) {
   sessionId    = 'family-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
   sessionTopic = type;
   // Start breadcrumb trail with the entry card label
-  const cardLabels2 = { delay:"We're waiting for an answer", 'sdp-gap':'SDP renewal gap', generic:'Generic resource deflection', ipp:'Goal not in IPP', spending:'SDP Spending Plan', preference:'Preference not a need', unsure:'Not sure / open' };
+  const cardLabels2 = { proactive:'Asking for a service / IPP prep', pushback:"RC said no -- still talking or no response", noa:'Got a Notice of Action (NOA)', sdp:'Self-Determination Program (SDP)', unsure:"Something else -- help me figure it out", delay:"We're waiting for an answer", 'sdp-gap':'SDP renewal gap', generic:'Generic resource deflection', ipp:'Goal not in IPP', spending:'SDP Spending Plan', preference:'Preference not a need' };
   pathTrail.length = 0;
   pathTrail.push(cardLabels2[type] || type);
 
@@ -4786,6 +4791,60 @@ function openChat(type) {
 // Holds the Airtable record ID for the current session so we can patch it later
 let sessionAirtableId = null;
 
+// Topic auto-population. Maps both card-IDs and free-text-detector results to the
+// Airtable Topic singleSelect. Lets the analysis layer (cards by topic, draft rate
+// by topic, "what unsure sessions actually wanted") run without manual coding.
+const SESSION_TOPIC_TO_AIRTABLE = {
+  // User-visible cards with clean topic semantics
+  noa:        'Appeals',
+  sdp:        'SDP',
+  // Internal sub-routes (set by sub-buttons inside pushback / unsure)
+  spending:   'SDP',
+  preference: 'Getting Services',
+  ipp:        'Getting Services',
+  generic:    'Getting Services',
+  delay:      'Getting Services',
+  // Free-text-detector outputs (pass through; detector already uses these strings)
+  'SDP':              'SDP',
+  'Appeals':          'Appeals',
+  'Getting Services': 'Getting Services',
+  'Legal Status':     'Legal Status',
+  'Language Access':  'Language Access',
+  'Safety/SIR':       'Safety/SIR',
+  'Employment':       'Employment',
+  'Authority':        'Authority',
+  'Records':          'Records',
+  'Intake':           'Intake',
+  'AAC':              'AAC',
+  'Other':            'Other',
+};
+let lastPatchedTopic = null;
+
+function mapToAirtableTopic(stateValue) {
+  if (!stateValue) return null;
+  return SESSION_TOPIC_TO_AIRTABLE[stateValue] || null;
+}
+
+// Patches the Topic field on the current session row. typecast:true tells Airtable
+// to auto-create the singleSelect option if it does not exist yet, so the field
+// fills out organically instead of requiring manual setup.
+function patchSessionTopic(stateValue) {
+  if (!sessionAirtableId) return;
+  const topic = mapToAirtableTopic(stateValue);
+  if (!topic) return;
+  if (topic === lastPatchedTopic) return;
+  lastPatchedTopic = topic;
+  fetch('/.netlify/functions/proxy', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-target': 'airtable-patch' },
+    body: JSON.stringify({
+      url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}/${sessionAirtableId}`,
+      fields: { 'Topic': topic },
+      typecast: true,
+    }),
+  }).catch(function(e) { console.error('Topic patch failed', e); });
+}
+
 async function writeSessionRecord(cardType) {
   try {
     var fields = {
@@ -4801,12 +4860,23 @@ async function writeSessionRecord(cardType) {
     if (demoData.race) fields['Race / Ethnicity']   = demoData.race;
     fields['Language'] = currentLang;  // 'en' or 'es' — equity tracking
     fields['Outcome Tracking'] = true;  // marks session as having outcome detection active
+    // Pre-fill Topic when the entry card maps cleanly (noa→Appeals, sdp→SDP).
+    // Cards without a fixed topic (proactive, pushback, unsure) leave Topic blank;
+    // sub-button reroutes or the free-text detector will patch it later.
+    var initialTopic = mapToAirtableTopic(cardType);
+    if (initialTopic) {
+      fields['Topic'] = initialTopic;
+      lastPatchedTopic = initialTopic;
+    } else {
+      lastPatchedTopic = null;
+    }
     const res = await fetch('/.netlify/functions/proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-target': 'airtable-post' },
       body: JSON.stringify({
         url: `https://api.airtable.com/v0/${CONFIG.AIRTABLE_BASE_ID}/${encodeURIComponent(CONFIG.AIRTABLE_SESSION_TABLE)}`,
         fields,
+        typecast: true,
       }),
     });
     const data = await res.json();
@@ -4920,6 +4990,7 @@ document.addEventListener('click', function(e) {
     updateRoadmap();
     messages.push({ role: 'user', content: label });
     sessionTopic = 'delay';
+    patchSessionTopic(sessionTopic);
     var msg = currentLang === 'es'
       ? 'Entendido -- esperar sin respuesta es muy frustrante. Déjeme hacerle una pregunta para orientarle mejor.\n\n¿Cuánto tiempo lleva esperando?\n\n[Menos de una semana] [Una o dos semanas] [Más de un mes] [Varios meses]'
       : 'Got it -- waiting without hearing back is really frustrating. Let me ask one thing so I can point you in the right direction.\n\nHow long have you been waiting?\n\n[Less than a week] [A week or two] [More than a month] [Several months]';
@@ -5004,10 +5075,11 @@ document.addEventListener('click', function(e) {
     return;
   }
 
-  // ── UNSURE "denied or cut" sub-buttons — reroute sessionTopic so correct KB loads ──
-  // These buttons appear after "Something was denied or cut" on the unsure path.
-  // Without this, sessionTopic stays 'unsure' and zero KB modules load.
-  if (sessionTopic === 'unsure') {
+  // ── UNSURE / PUSHBACK "denied or cut" sub-buttons — reroute sessionTopic so correct KB loads ──
+  // These buttons appear after "Something was denied or cut" (unsure) OR directly from the
+  // pushback card's diagnostic. Without this reroute, sessionTopic stays generic and the
+  // narrow KB doesn't load.
+  if (sessionTopic === 'unsure' || sessionTopic === 'pushback') {
     if (labelLower.indexOf("they said it's a preference") === 0 || labelLower.indexOf('dijeron que es una preferencia') === 0 || labelLower.indexOf('me dijeron que es una preferencia') === 0) {
       sessionTopic = 'preference';
     } else if (labelLower.indexOf('they said the goal') === 0 || labelLower.indexOf('dijeron que la meta') === 0) {
@@ -5017,7 +5089,15 @@ document.addEventListener('click', function(e) {
     } else if (labelLower.indexOf('they said there') === 0 && labelLower.indexOf('community resource') !== -1 || labelLower.indexOf('dijeron que hay un recurso') === 0) {
       sessionTopic = 'generic';
     }
-    // "I got a letter" sub-buttons
+    // Pushback card: "They pointed to a community resource instead" / "Le señalaron un recurso comunitario"
+    else if (labelLower.indexOf('they pointed to a community resource') === 0 || labelLower.indexOf('le señalaron un recurso comunitario') === 0) {
+      sessionTopic = 'generic';
+    }
+    // Pushback card: "They went quiet -- no answer yet" / "Se quedaron callados -- aún sin respuesta"
+    else if (labelLower.indexOf('they went quiet') === 0 || labelLower.indexOf('se quedaron callados') === 0) {
+      sessionTopic = 'delay';
+    }
+    // "I got a letter" sub-buttons (unsure path only)
     else if (labelLower.indexOf('it says something about a change') === 0 || labelLower.indexOf('dice algo sobre un cambio') === 0) {
       sessionTopic = 'spending';
     } else if (labelLower.indexOf('it says something was denied') === 0 || labelLower.indexOf('dice que algo fue denegado') === 0) {
@@ -5028,6 +5108,7 @@ document.addEventListener('click', function(e) {
     }
     // Note: "I'm not sure what it says" / "I'm not sure -- I'll explain" stay unsure —
     // free-text detector will catch them on next typed message (see fix below).
+    patchSessionTopic(sessionTopic);
   }
 
   // ── END unsure path routing ──
@@ -5061,6 +5142,7 @@ document.addEventListener('click', function(e) {
     appendUserMessage(label);
     messages.push({ role: 'user', content: label });
     sessionTopic = 'SDP';
+    patchSessionTopic(sessionTopic);
     var sdpWelcome = currentLang === 'es' ? STUCK_WELCOMES_ES['sdp'] : STUCK_WELCOMES['sdp'];
     messages.push({ role: 'assistant', content: sdpWelcome });
     appendDanMessage(sdpWelcome, false);
@@ -5479,6 +5561,10 @@ async function sendMessage() {
     else if (sessionTopic === 'unsure' || sessionTopic === 'Other')            sessionTopic = 'Other';
     // If sessionTopic was null and nothing matched, set Other
     else                                                                        sessionTopic = 'Other';
+    // Persist the detected topic to Airtable so analysis can read it without
+    // manual coding. typecast:true (in patchSessionTopic) auto-creates the
+    // singleSelect option if it does not exist yet.
+    patchSessionTopic(sessionTopic);
   }
 
   const systemPrompt = currentLang === 'es' ? buildSystemPromptES() : buildSystemPrompt();
