@@ -147,13 +147,15 @@ exports.handler = async function (event) {
 
   if (target === "airtable-post") {
     const payload = JSON.parse(event.body);
+    const airtableBody = { fields: payload.fields };
+    if (payload.typecast === true) airtableBody.typecast = true;
     const result = await httpsPost(
       payload.url,
       {
         "Authorization": `Bearer ${process.env.AIRTABLE_TOKEN}`,
         "Content-Type": "application/json",
       },
-      JSON.stringify({ fields: payload.fields })
+      JSON.stringify(airtableBody)
     );
     return {
       statusCode: result.status,
@@ -164,13 +166,15 @@ exports.handler = async function (event) {
 
   if (target === "airtable-patch") {
     const payload = JSON.parse(event.body);
+    const airtableBody = { fields: payload.fields };
+    if (payload.typecast === true) airtableBody.typecast = true;
     const result = await httpsPatch(
       payload.url,
       {
         "Authorization": `Bearer ${process.env.AIRTABLE_TOKEN}`,
         "Content-Type": "application/json",
       },
-      JSON.stringify({ fields: payload.fields })
+      JSON.stringify(airtableBody)
     );
     return {
       statusCode: result.status,
