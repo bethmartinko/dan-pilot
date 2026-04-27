@@ -969,7 +969,7 @@
     <div class="stuck-grid">
       <div class="stuck-card featured" onclick="startStuck('proactive')">
         <div class="stuck-quote" data-en="I want to ask for a service or prepare for an IPP meeting" data-es="Quiero solicitar un servicio o prepararme para una reunión de IPP">I want to ask for a service or prepare for an IPP meeting</div>
-        <div class="stuck-desc" data-en="You're not stuck -- you want to know what's available, how to ask for it, or how to prepare for a meeting." data-es="No está bloqueado/a -- quiere saber qué está disponible, cómo pedirlo, o cómo prepararse para una reunión.">You're not stuck -- you want to know what's available, how to ask for it, or how to prepare for a meeting.</div>
+        <div class="stuck-desc" data-en="Ask for a service, prep for a meeting, or paste your IPP for a goal-by-goal review." data-es="Solicite un servicio, prepárese para una reunión, o pegue su IPP para una revisión meta por meta.">Ask for a service, prep for a meeting, or paste your IPP for a goal-by-goal review.</div>
       </div>
       <div class="stuck-card" onclick="startStuck('sdp')">
         <div class="stuck-quote" data-en="Self-Determination Program (SDP)" data-es="Programa de Autodeterminación (SDP)">Self-Determination Program (SDP)</div>
@@ -5014,6 +5014,31 @@ document.addEventListener('click', function(e) {
       : 'Got it -- that is frustrating. Let me understand what happened.\n\nWhat exactly did they tell you?\n\n[They said it\'s a preference, not a need] [They said the goal isn\'t in the IPP] [My budget was reduced or cut] [They said there\'s a community resource for that] [I\'m not sure -- I\'ll explain]';
     messages.push({ role: 'assistant', content: msg });
     appendDanMessage(msg, true);
+    return;
+  }
+
+  // "I'm preparing for an IPP meeting" / "Me estoy preparando para una reunión de IPP"
+  // Fired from the proactive card welcome. Invites the family to paste their IPP for a
+  // goal-by-goal review and walks them through the locked-PDF workaround (RCs commonly
+  // restrict copy on PDF IPPs; print-to-PDF defeats the permissions password).
+  if (labelLower.indexOf("i'm preparing for an ipp") === 0 || labelLower.indexOf('me estoy preparando para una reuni') === 0) {
+    if (groupId) {
+      var group = document.getElementById(groupId);
+      if (group) group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.add('used'); });
+    }
+    appendUserMessage(label);
+    pathTrail.push(label);
+    updateRoadmap();
+    messages.push({ role: 'user', content: label });
+    sessionTopic = 'Getting Services';
+    patchSessionTopic(sessionTopic);
+    var msg = currentLang === 'es'
+      ? 'Excelente -- la preparación del IPP es una de las cosas más valiosas que podemos hacer juntos.\n\nSi tiene su IPP, péguelo aquí mismo. Revisaré cada meta con usted -- qué es sólido, qué es vulnerable, y qué quizás quiera actualizar para la reunión.\n\n**Aviso:** Los RC suelen bloquear los PDFs del IPP para que no se pueda copiar el texto. Solución -- "imprima" el PDF a un *nuevo* PDF primero (Mac/Windows: Archivo → Imprimir → Guardar como PDF; iPhone: aplicación Archivos → Compartir → Imprimir → Guardar en Archivos). La nueva copia permitirá seleccionar y pegar.\n\n¿No lo tiene a la mano? Cuénteme qué viene en la reunión y trabajaremos desde ahí.'
+      : 'Great -- IPP prep is one of the highest-value things we can do together.\n\nIf you have your IPP, paste it right here. I\'ll walk through each goal with you -- what\'s strong, what\'s vulnerable, and what you might want to update for the meeting.\n\n**Heads up:** RCs often lock IPP PDFs so the text won\'t copy. Workaround -- "print" the PDF to a *new* PDF first (Mac/Windows: File → Print → Save as PDF; iPhone: Files app → Share → Print → Save to Files). The new copy will let you select and paste.\n\nDon\'t have it handy? Just tell me what\'s coming up at the meeting and we\'ll work from there.';
+    messages.push({ role: 'assistant', content: msg });
+    appendDanMessage(msg, false);
+    document.getElementById('input-row-wrap').style.display = 'flex';
+    document.getElementById('user-input').focus();
     return;
   }
 
