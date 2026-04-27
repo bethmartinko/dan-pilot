@@ -1,5 +1,127 @@
 const https = require("https");
 
+// ===== PII SCRUBBER (Tracker 2.52) =====
+// Scrubs free-text fields in Airtable writes before they leave the proxy.
+// The live chat window is unaffected — only the persisted record is scrubbed.
+// Categories: email, US phone, SSN, street address, ZIP+4, DOB-shaped date,
+// credit card (Luhn-validated), RC case-id (contextual). Counts are logged
+// per request for telemetry.
+
+// Phone numbers DAN itself publishes — must NOT be scrubbed when DAN echoes
+// them back. Sourced from index.html: OCRA, DRC, fair hearing, DDS Ombudsperson,
+// 21 RC mains + branches. (OAH decision 2025070280 also safelisted — would
+// otherwise match the phone shape.)
+const PII_SAFE_PHONES = new Set([
+  "2025070280",  // OAH decision (not a phone)
+  "8003907032",  // OCRA
+  "8007438525",  // Fair hearing
+  "8007765746",  // DRC
+  "8004144614",
+  "8008841594",
+  "8776589731",  // DDS Ombudsperson
+  "2099553255", "2094730951", "2097234245",
+  "2133831300", "2137447000",
+  "3102584000", "3105401711", "3105430100",
+  "4083749960",
+  "4155174503", "4155469222",
+  "5106186100",
+  "5302224791",
+  "5592764300", "5597382200",
+  "6194893200",
+  "6262994700",
+  "6613278531", "6613286749", "6617758450", "6619456761",
+  "7072561100", "7074450893", "7079958103",
+  "7147965100",
+  "8059224640", "8059627881",
+  "8187781900",
+  "8319003636", "8319003737",
+  "8585762996", "8589248700",
+  "9096207722", "9098903000",
+  "9166543641", "9169786400",
+  "9256912300", "9257983001",
+]);
+
+function piiNormalizePhone(s) {
+  const d = s.replace(/\D/g, "");
+  return d.length === 11 && d.startsWith("1") ? d.slice(1) : d;
+}
+
+function piiLuhnValid(digits) {
+  let sum = 0;
+  let alt = false;
+  for (let i = digits.length - 1; i >= 0; i--) {
+    let n = +digits[i];
+    if (alt) { n *= 2; if (n > 9) n -= 9; }
+    sum += n;
+    alt = !alt;
+  }
+  return sum % 10 === 0;
+}
+
+const PII_PATTERNS = {
+  email:   /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
+  ssn:     /\b\d{3}-\d{2}-\d{4}\b/g,
+  phone:   /\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
+  zip4:    /\b\d{5}-\d{4}\b/g,
+  address: /\b\d+\s+[A-Z][a-zA-Z]*(?:\s+[A-Z][a-zA-Z]*){0,3}\s+(?:St|Street|Ave|Avenue|Rd|Road|Blvd|Boulevard|Ln|Lane|Dr|Drive|Way|Ct|Court|Pl|Place|Hwy|Highway|Pkwy|Parkway)\b\.?/g,
+  dob:     /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/g,
+  cc:      /\b(?:\d[ -]?){12,18}\d\b/g,
+  caseId:  /\b(?:client|case|patient|account|RC)\s*(?:id|number|no\.?|#)\s*:?\s*([A-Z0-9-]{4,12})\b/gi,
+};
+
+function piiScrubString(s) {
+  const counts = {};
+  const bump = (k) => { counts[k] = (counts[k] || 0) + 1; };
+  let out = s;
+
+  out = out.replace(PII_PATTERNS.email, () => { bump("email"); return "[email]"; });
+  out = out.replace(PII_PATTERNS.ssn,   () => { bump("ssn");   return "[ssn]";   });
+  out = out.replace(PII_PATTERNS.phone, (m) => {
+    if (PII_SAFE_PHONES.has(piiNormalizePhone(m))) return m;
+    bump("phone"); return "[phone]";
+  });
+  out = out.replace(PII_PATTERNS.zip4,    () => { bump("zip");     return "[zip]";       });
+  out = out.replace(PII_PATTERNS.address, () => { bump("address"); return "[address]";   });
+  out = out.replace(PII_PATTERNS.dob,     () => { bump("dob");     return "[date]";      });
+  out = out.replace(PII_PATTERNS.cc, (m) => {
+    const d = m.replace(/\D/g, "");
+    if (d.length < 13 || d.length > 19) return m;
+    if (!piiLuhnValid(d)) return m;
+    bump("cc"); return "[card]";
+  });
+  out = out.replace(PII_PATTERNS.caseId, () => { bump("caseid"); return "[client-id]"; });
+
+  return { value: out, counts };
+}
+
+// Field names that are intentionally collected and should pass through
+// unscrubbed. "Session ID" contains 13-digit ms-timestamps that would
+// falsely match the phone pattern; "Email" is the user's opted-in signup
+// email; the rest are system-generated metadata.
+const PII_SKIP_FIELDS = new Set([
+  "Email",
+  "Session ID",
+  "Last Active",
+  "Timestamp",
+]);
+
+function piiScrubFields(fields) {
+  if (!fields || typeof fields !== "object") return { fields, totals: {} };
+  const totals = {};
+  const out = {};
+  for (const [key, val] of Object.entries(fields)) {
+    if (PII_SKIP_FIELDS.has(key) || typeof val !== "string") {
+      out[key] = val;
+      continue;
+    }
+    const { value, counts } = piiScrubString(val);
+    out[key] = value;
+    for (const [cat, n] of Object.entries(counts)) totals[cat] = (totals[cat] || 0) + n;
+  }
+  return { fields: out, totals };
+}
+// ===== END PII SCRUBBER =====
+
 // -- ADVERSARIAL-COST MITIGATION (Risk Mitigation Framework #12) --
 // Netlify Functions are stateless across cold starts, but warm containers
 // reuse module-level memory for minutes to hours. That's enough to blunt
@@ -147,7 +269,11 @@ exports.handler = async function (event) {
 
   if (target === "airtable-post") {
     const payload = JSON.parse(event.body);
-    const airtableBody = { fields: payload.fields };
+    const { fields: scrubbedFields, totals } = piiScrubFields(payload.fields);
+    if (Object.keys(totals).length > 0) {
+      console.log(JSON.stringify({ pii_scrub: totals, op: "post", url: payload.url }));
+    }
+    const airtableBody = { fields: scrubbedFields };
     if (payload.typecast === true) airtableBody.typecast = true;
     const result = await httpsPost(
       payload.url,
@@ -166,7 +292,11 @@ exports.handler = async function (event) {
 
   if (target === "airtable-patch") {
     const payload = JSON.parse(event.body);
-    const airtableBody = { fields: payload.fields };
+    const { fields: scrubbedFields, totals } = piiScrubFields(payload.fields);
+    if (Object.keys(totals).length > 0) {
+      console.log(JSON.stringify({ pii_scrub: totals, op: "patch", url: payload.url }));
+    }
+    const airtableBody = { fields: scrubbedFields };
     if (payload.typecast === true) airtableBody.typecast = true;
     const result = await httpsPatch(
       payload.url,
@@ -185,3 +315,8 @@ exports.handler = async function (event) {
 
   return { statusCode: 400, body: "Unknown target" };
 };
+
+// Exposed for unit testing (dan_pii_scrub_test.js). Not used by the Netlify
+// or Cloud Run runtimes, which only invoke .handler.
+exports.piiScrubFields = piiScrubFields;
+exports.piiScrubString = piiScrubString;
