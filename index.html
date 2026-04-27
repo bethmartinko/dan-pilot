@@ -617,6 +617,23 @@
   }
   #dan-expand-content { font-size: 1rem; line-height: 1.6; color: var(--text, #222); }
   #dan-expand-content .btn-fh-link { font-size: .9375rem; padding: .5rem 1rem; }
+  #dan-expand-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border, #e0e0e0);
+    text-align: center;
+  }
+  .btn-expand-close-bottom {
+    background: none;
+    border: 1px solid var(--border, #e0e0e0);
+    color: var(--muted, #666);
+    padding: .5rem 1.25rem;
+    border-radius: 99px;
+    font-size: .875rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-expand-close-bottom:hover { background: var(--bg-soft, #f5f5f5); color: var(--text, #222); }
   .fb-general-wrap {
     padding: .4rem 1.25rem .6rem;
     border-top: none;
@@ -5609,10 +5626,12 @@ function appendDanMessage(text, showFeedback) {
     .trim();
   const bubbleHtml = formatDanText(bubbleSource).replace(/@@FH_LINK_INLINE@@/g, fhLinkInlineHtml);
 
-  // Long-response expand: surface a button under the bubble that opens the
-  // full content in a wider modal. ~800-char threshold = roughly when the
-  // bubble starts feeling cramped for scanning.
-  const isLong = text.length > 800;
+  // Expand button: surface a button under the bubble that opens the full
+  // content in a wider modal. ~300-char threshold catches anything beyond a
+  // brief acknowledgment — including the NOA decoder's step-3 walkthrough,
+  // which compresses below the old 800-char threshold once EMAIL-wrapped
+  // appeal text is stripped from the visible portion.
+  const isLong = text.length > 300;
   const expandHtml = isLong ? `
     <div style="padding: 0 .125rem;">
       <button class="btn-expand-dan" onclick="openDanExpand(document.getElementById('bubble-${msgId}').innerHTML)">
@@ -5697,12 +5716,25 @@ function appendDanMessage(text, showFeedback) {
 // scrollable card so families can read long NOA decoder responses without
 // fighting the chat bubble's width. Triggered by the ↗ button beneath any
 // DAN bubble whose text length exceeds the threshold (see appendDanMessage).
+let danModalAutoCloseHandler = null;
 function openDanExpand(content) {
   const modal = document.getElementById('dan-expand-modal');
   if (!modal) return;
-  document.getElementById('dan-expand-content').innerHTML = content;
+  const contentEl = document.getElementById('dan-expand-content');
+  contentEl.innerHTML = content;
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
+  // Auto-close when the family clicks an option button inside the modal —
+  // otherwise the modal stays open over DAN's next response and the family
+  // has to manually close to see what came back. Only fires for .option-btn
+  // (prompt-response buttons), not for FH link / Copy / Helpful buttons.
+  danModalAutoCloseHandler = function(e) {
+    if (e.target.closest && e.target.closest('.option-btn')) {
+      // Let the button's own click handler send the message, then close.
+      setTimeout(closeDanExpand, 100);
+    }
+  };
+  contentEl.addEventListener('click', danModalAutoCloseHandler);
   const closeBtn = document.getElementById('dan-expand-close');
   if (closeBtn) closeBtn.focus();
 }
@@ -5710,6 +5742,11 @@ function closeDanExpand() {
   const modal = document.getElementById('dan-expand-modal');
   if (modal) modal.style.display = 'none';
   document.body.style.overflow = '';
+  if (danModalAutoCloseHandler) {
+    const contentEl = document.getElementById('dan-expand-content');
+    if (contentEl) contentEl.removeEventListener('click', danModalAutoCloseHandler);
+    danModalAutoCloseHandler = null;
+  }
 }
 document.addEventListener('keydown', function(e) {
   if (e.key !== 'Escape') return;
@@ -6247,6 +6284,9 @@ document.addEventListener('DOMContentLoaded', () => {
     <button id="dan-expand-close" aria-label="Close full view" onclick="closeDanExpand()">&times;</button>
     <h2 id="dan-expand-title">DAN — Full view</h2>
     <div id="dan-expand-content"></div>
+    <div id="dan-expand-footer">
+      <button class="btn-expand-close-bottom" onclick="closeDanExpand()">Close this window to continue ↩</button>
+    </div>
   </div>
 </div>
 </body>
