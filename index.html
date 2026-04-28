@@ -313,6 +313,11 @@
   .msg-row { display: flex; gap: .75rem; max-width: 640px; }
   .msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
   .msg-row.dan  { align-self: flex-start; }
+  /* When DAN's response has a nav header at the top (i.e. it contains a Case
+     Summary), float the avatar to the bottom-left so it labels the whole
+     two-part artifact rather than only the nav header. */
+  .msg-row.dan.has-nav-header { align-items: flex-end; }
+  .msg-row.dan.has-nav-header .msg-avatar { margin-top: 0; margin-bottom: 2px; }
   .msg-avatar {
     width: 32px; height: 32px;
     border-radius: 50%;
@@ -5923,6 +5928,11 @@ function appendDanMessage(text, showFeedback) {
   // Detect case summary block (at most one per response per the prompt rule)
   const caseSummaryMatch = text.match(/---CASE SUMMARY START---([\s\S]+?)---CASE SUMMARY END---/i);
   const caseSummaryText = caseSummaryMatch ? caseSummaryMatch[1].trim() : '';
+
+  // Tag rows that have a nav header so the avatar can float to the bottom-left
+  // (CSS .msg-row.dan.has-nav-header) — labels the whole two-part artifact
+  // rather than just the nav header at the top.
+  if (caseSummaryText) row.classList.add('has-nav-header');
 
   // FH LINK marker: swap the marker to a placeholder token BEFORE formatDanText
   // (which escHtml-escapes raw HTML), then after formatting replace the placeholder
