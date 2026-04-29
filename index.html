@@ -5976,11 +5976,11 @@ function appendDanMessage(text, showFeedback) {
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button onclick="expandFullResponse('${msgId}')"
                 style="padding:10px 16px;border:1px solid var(--navy,#1f3864);background:#fff;color:var(--navy,#1f3864);border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;min-height:44px;flex:1;min-width:200px;">
-          📖 ${isES ? "Leer respuesta completa de DAN" : "Read DAN's full response"}
+          📖 ${isES ? "Abrir el mensaje en vista más grande" : "Open the message in larger view"}
         </button>
-        <button onclick="openDanExpand(document.getElementById('cs-content-${msgId}').innerHTML)"
+        <button onclick="openCaseSummaryExpand('${msgId}')"
                 style="padding:10px 16px;border:1px solid var(--teal,#2a9d8f);background:#fff;color:var(--teal,#2a9d8f);border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;min-height:44px;flex:1;min-width:200px;">
-          📋 ${isES ? 'Ver e imprimir el Resumen del Caso' : 'View and print the Case Summary'}
+          📋 ${isES ? 'Guardar e imprimir el Resumen del Caso' : 'Save and print the Case Summary'}
         </button>
       </div>
     </div>` : '';
@@ -6004,9 +6004,9 @@ function appendDanMessage(text, showFeedback) {
       <div id="cs-content-${msgId}" class="case-summary-content"
            style="font-size:.9rem;line-height:1.6;color:var(--text,#1a1a1a);white-space:pre-wrap;">${formatDanText(caseSummaryText)}</div>
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border,#d4cfc4);display:flex;gap:10px;flex-wrap:wrap;">
-        <button id="cs-expand-${msgId}" onclick="openDanExpand(document.getElementById('cs-content-${msgId}').innerHTML)"
+        <button id="cs-expand-${msgId}" onclick="openCaseSummaryExpand('${msgId}')"
                 style="padding:8px 16px;border:1px solid var(--navy,#1f3864);background:#fff;color:var(--navy,#1f3864);border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;min-height:44px;">
-          ↗ ${isES ? 'Expandir resumen' : 'Expand summary'}
+          ↗ ${isES ? 'Vista más grande' : 'Open in larger view'}
         </button>
         <button id="cs-copy-${msgId}" onclick="copyCaseSummary('${msgId}')"
                 style="padding:8px 16px;border:1px solid var(--teal,#2a9d8f);background:#fff;color:var(--teal,#2a9d8f);border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;min-height:44px;">
@@ -6055,7 +6055,7 @@ function appendDanMessage(text, showFeedback) {
   const expandHtml = isLong ? `
     <div style="padding: 0 .125rem;">
       <button class="btn-expand-dan" onclick="expandFullResponse('${msgId}')">
-        ↗ ${isES ? 'Ver respuesta completa' : 'Open full response'}
+        ↗ ${isES ? 'Vista más grande' : 'Open in larger view'}
       </button>
     </div>` : '';
 
@@ -6148,22 +6148,42 @@ function appendDanMessage(text, showFeedback) {
 // fighting the chat bubble's width. Triggered by the ↗ button beneath any
 // DAN bubble whose text length exceeds the threshold (see appendDanMessage).
 let danModalAutoCloseHandler = null;
-// Show the full DAN response in the modal — bubble text + email blocks +
-// case summary, in DAN's authored order. Pulls from row.dataset.text which
-// stores the full response (markers stripped, content preserved). Used by
-// the bubble's "Open full response" button so families don't miss artifacts
-// that render as separate cards outside the bubble.
+// Open the bubble (the "message" content — coaching, walkthrough, email
+// drafts) in the larger modal view. Excludes the Case Summary content,
+// which has its own action-button modal via openCaseSummaryExpand. Clean
+// content separation so the family always knows which block they are
+// looking at.
 function expandFullResponse(msgId) {
+  const bubble = document.getElementById(`bubble-${msgId}`);
+  if (!bubble) return;
+  openDanExpand(bubble.innerHTML);
+}
+
+// Open the Case Summary in the larger modal view, with Copy and Download
+// buttons embedded inside the modal so families do not have to scroll
+// back to the card to act on it.
+function openCaseSummaryExpand(msgId) {
   const row = document.querySelector(`[data-msg-id="${msgId}"]`);
   if (!row) return;
-  const fullText = (row.dataset && row.dataset.text) || '';
-  if (!fullText) {
-    // Fallback to whatever is in the bubble if dataset is missing
-    const bubble = document.getElementById(`bubble-${msgId}`);
-    openDanExpand(bubble ? bubble.innerHTML : '');
-    return;
-  }
-  const html = (typeof formatDanText === 'function') ? formatDanText(fullText) : fullText.replace(/\n/g, '<br>');
+  const csText = row.dataset && row.dataset.caseSummaryText;
+  if (!csText) return;
+  const cardContent = document.getElementById(`cs-content-${msgId}`);
+  const contentHtml = cardContent
+    ? cardContent.innerHTML
+    : ((typeof formatDanText === 'function') ? formatDanText(csText) : csText);
+  const isES = (typeof currentLang !== 'undefined' && currentLang === 'es');
+  const html = `
+    <div style="font-size:.95rem;line-height:1.65;color:var(--text,#1a1a1a);">${contentHtml}</div>
+    <div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--border,#d4cfc4);display:flex;gap:10px;flex-wrap:wrap;">
+      <button id="cs-modal-copy-${msgId}" onclick="copyCaseSummary('${msgId}', 'cs-modal-copy-${msgId}')"
+              style="padding:10px 18px;border:1px solid var(--teal,#2a9d8f);background:#fff;color:var(--teal,#2a9d8f);border-radius:6px;cursor:pointer;font-size:.9rem;font-weight:600;min-height:44px;">
+        📋 ${isES ? 'Copiar' : 'Copy'}
+      </button>
+      <button id="cs-modal-dl-${msgId}" onclick="downloadCaseSummary('${msgId}', 'cs-modal-dl-${msgId}')"
+              style="padding:10px 18px;border:1px solid var(--teal,#2a9d8f);background:#fff;color:var(--teal,#2a9d8f);border-radius:6px;cursor:pointer;font-size:.9rem;font-weight:600;min-height:44px;">
+        ⬇ ${isES ? 'Descargar' : 'Download'}
+      </button>
+    </div>`;
   openDanExpand(html);
 }
 
@@ -6379,11 +6399,11 @@ function downloadConversation() {
   URL.revokeObjectURL(url);
 }
 
-function copyCaseSummary(msgId) {
+function copyCaseSummary(msgId, btnId) {
   const row  = document.querySelector(`[data-msg-id="${msgId}"]`);
   const text = row ? (row.dataset.caseSummaryText || '') : '';
   if (!text) return;
-  const btn  = document.getElementById(`cs-copy-${msgId}`);
+  const btn  = document.getElementById(btnId || `cs-copy-${msgId}`);
   const isES = (typeof currentLang !== 'undefined' && currentLang === 'es');
 
   const doCopy = () => {
@@ -6434,7 +6454,7 @@ function copyCaseSummary(msgId) {
   }, 0);
 }
 
-function downloadCaseSummary(msgId) {
+function downloadCaseSummary(msgId, btnId) {
   const row  = document.querySelector(`[data-msg-id="${msgId}"]`);
   const text = row ? (row.dataset.caseSummaryText || '') : '';
   if (!text) return;
@@ -6446,7 +6466,7 @@ function downloadCaseSummary(msgId) {
   a.click();
   URL.revokeObjectURL(url);
 
-  const btn = document.getElementById(`cs-dl-${msgId}`);
+  const btn = document.getElementById(btnId || `cs-dl-${msgId}`);
   if (btn) {
     const isES = (typeof currentLang !== 'undefined' && currentLang === 'es');
     btn.innerHTML = isES ? '✓ Descargado' : '✓ Downloaded';
