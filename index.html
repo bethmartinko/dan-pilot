@@ -978,7 +978,7 @@
       </div>
       <div class="stuck-card" onclick="startStuck('sdp')">
         <div class="stuck-quote" data-en="Self-Determination Program (SDP)" data-es="Programa de Autodeterminación (SDP)">Self-Determination Program (SDP)</div>
-        <div class="stuck-desc" data-en="Whether you're exploring SDP, getting started, building your spending plan, or running into issues -- DAN can help." data-es="Ya sea que esté explorando el SDP, empezando, armando su plan de gastos, o enfrentando problemas -- DAN puede ayudar.">Whether you're exploring SDP, getting started, building your spending plan, or running into issues -- DAN can help.</div>
+        <div class="stuck-desc" data-en="Whether you're exploring SDP, getting started, building or revising your spending plan, or running into issues -- DAN can help." data-es="Ya sea que esté explorando el SDP, empezando, armando o revisando su plan de gastos, o enfrentando problemas -- DAN puede ayudar.">Whether you're exploring SDP, getting started, building or revising your spending plan, or running into issues -- DAN can help.</div>
       </div>
       <div class="stuck-card" onclick="startStuck('pushback')">
         <div class="stuck-quote" data-en="RC said no -- and we're still talking, or they haven't responded" data-es="El RC dijo que no -- y todavía estamos hablando, o no han respondido">RC said no -- and we're still talking, or they haven't responded</div>
@@ -5805,6 +5805,34 @@ async function sendMessage() {
     // Persist the detected topic to Airtable so analysis can read it without
     // manual coding. typecast:true (in patchSessionTopic) auto-creates the
     // singleSelect option if it does not exist yet.
+    patchSessionTopic(sessionTopic);
+  }
+
+  // -- HIGH-CONFIDENCE WRONG-CARD INTENT OVERRIDE --
+  // Fires on EVERY typed message regardless of current sessionTopic. Curated,
+  // narrow regex that only matches unambiguous intent phrases — the kind of
+  // language that strongly indicates the family picked the wrong entry card
+  // and is now describing what they actually need. Overrides whatever topic
+  // they were routed into so the right KB modules load on the next turn.
+  // Add new phrases here as wrong-card patterns surface in Airtable feedback.
+  // Source incident: Apr 28 — family on Accura FMS clicked "I've been waiting"
+  // (delay), typed "I need to reallocate funds, transfer between categories,"
+  // and DAN responded with renewal-flow buttons because delay+SDP routed to
+  // renewal. Two thumbs-down. Override below catches this on the next turn.
+  const overrideTopic = (() => {
+    const t = (text || '').toLowerCase();
+    // SDP spending-plan modification / reallocation
+    if (t.match(/\breallocat\w*|move (?:funds|money|dollars) (?:between|from|across|out of|over to)|transfer (?:funds|money|dollars) (?:between|from|across)|(?:revise|revising|modify|modifying|change|changing|update|updating)(?: the| my| our)? spending plan|move (?:money|funds|dollars) from (?:one )?(?:code|category|service|line item)|shift (?:funds|money|dollars|hours)(?: between| from| across)/)) {
+      return 'spending';
+    }
+    // Got an NOA / fair hearing path — overrides if family didn't pick NOA card
+    if (t.match(/(?:i|we) got (?:an|a) noa|notice of action (?:dated|i got|came in|arrived)|just received (?:a |an )?(?:noa|notice of action|denial letter)|filed (?:a |the )?fair hearing|fair hearing (?:paperwork|deadline|window)/)) {
+      return 'Appeals';
+    }
+    return null;
+  })();
+  if (overrideTopic && overrideTopic !== sessionTopic) {
+    sessionTopic = overrideTopic;
     patchSessionTopic(sessionTopic);
   }
 
