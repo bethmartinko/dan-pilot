@@ -5814,7 +5814,7 @@ async function sendMessage() {
     else if (t.match(/sdp|self.?deter|spending plan|facilitator|fms|enroll|autodetermin|plan de gastos|facilitador|presupuesto (de sdp|individual)|inscrib[a-záéíóúñ]* (?:en|al|a) (?:el )?sdp/)) sessionTopic = 'SDP';
     else if (t.match(/appeal|hearing|noa|ocra|deny|denial|denied|denial letter|pursuant to|cited|code section|legal reason|legal basis|notice of action|carta de (negaci|denegaci)|conforme a|citando|raz[oó]n legal|aviso de acci[oó]n/)) sessionTopic = 'Appeals';
     else if (t.match(/conservator|sdm|supported decision|authorized rep|ds.?1819/)) sessionTopic = 'Legal Status';
-    else if (t.match(/service|ipp|iep|request|dental|therapy|respite|ihss|vendor|no provider|camp|social rec|social recreation|waiting list/))  sessionTopic = 'Getting Services';
+    else if (t.match(/service|ipp|iep|request|dental|therapy|respite|ihss|vendor|no provider|camp|social rec|social recreation|waiting list|servicio|servicios|solicit[a-záéíóúñ]*|pedir|pidi[a-záéíóúñ]*|respiro|terapia|dentista|apoyo|apoyos|vida independiente|vivir solo|salir a (?:la )?comunidad|niñera|campamento|lista de espera|necesita ayuda|necesitamos ayuda|qu[eé] (?:pedir|solicitar)|c[oó]mo (?:pedir|solicitar|conseguir)/))  sessionTopic = 'Getting Services';
     else if (t.match(/school|tutor|iep|504|education|classroom/))             sessionTopic = 'Getting Services';
     else if (t.match(/wait|delay|no response|haven.t heard|not hearing/))     sessionTopic = 'delay';
     else if (t.match(/preference|not a need|recreation/))                      sessionTopic = 'preference';
